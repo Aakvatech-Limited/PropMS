@@ -7,7 +7,7 @@ def get_data():
 		{
 			"module_name": "Property Management Solution",
 			"color": "grey",
-			"icon": "octicon octicon-file-directory",
+			"icon": "octicon home",
 			"type": "module",
 			"label": _("Property Management Solution")
 		}

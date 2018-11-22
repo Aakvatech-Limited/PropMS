@@ -9,7 +9,7 @@
  "custom": 0, 
  "docstatus": 0, 
  "doctype": "DocType", 
- "document_type": "", 
+ "document_type": "Document", 
  "editable_grid": 1, 
  "engine": "InnoDB", 
  "fields": [
@@ -184,7 +184,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-22 16:19:13.707584", 
+ "modified": "2018-11-22 20:35:48.104682", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Apartment Status", 

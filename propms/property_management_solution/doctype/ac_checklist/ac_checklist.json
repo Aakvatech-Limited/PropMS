@@ -9,7 +9,7 @@
  "custom": 0, 
  "docstatus": 0, 
  "doctype": "DocType", 
- "document_type": "", 
+ "document_type": "Document", 
  "editable_grid": 1, 
  "engine": "InnoDB", 
  "fields": [
@@ -254,7 +254,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-22 16:18:19.661594", 
+ "modified": "2018-11-22 20:26:21.669773", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "AC Checklist", 

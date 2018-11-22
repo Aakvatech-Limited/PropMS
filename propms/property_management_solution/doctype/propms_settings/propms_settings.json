@@ -9,7 +9,7 @@
  "custom": 0, 
  "docstatus": 0, 
  "doctype": "DocType", 
- "document_type": "System", 
+ "document_type": "Setup", 
  "editable_grid": 1, 
  "engine": "InnoDB", 
  "fields": [
@@ -123,7 +123,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-20 00:15:15.335434", 
+ "modified": "2018-11-22 21:02:22.436559", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "PropMS Settings", 

@@ -11,7 +11,7 @@
  "default_print_format": "", 
  "docstatus": 0, 
  "doctype": "DocType", 
- "document_type": "", 
+ "document_type": "Document", 
  "editable_grid": 1, 
  "engine": "InnoDB", 
  "fields": [
@@ -190,7 +190,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-22 16:18:02.058472", 
+ "modified": "2018-11-22 20:25:49.324613", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Daily Checklist", 
