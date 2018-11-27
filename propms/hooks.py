@@ -79,6 +79,20 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
+
+doc_events = {
+	"Issue": {
+		"validate": "propms.auto_custom.makeSalesInvoice"
+	},
+	"Material Request": {
+		"validate": "propms.auto_custom.makeSalesInvoice",
+		"on_update":"propms.auto_custom.makeSalesInvoice",
+		"on_change":"propms.auto_custom.makeSalesInvoice"
+
+	}
+
+}
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
