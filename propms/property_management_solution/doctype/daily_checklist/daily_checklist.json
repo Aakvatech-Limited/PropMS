@@ -190,7 +190,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-27 19:59:49.252694", 
+ "modified": "2018-11-30 01:19:06.351569", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Daily Checklist", 
@@ -251,7 +251,7 @@
    "role": "Maintenance Job in-charge", 
    "set_user_permissions": 0, 
    "share": 1, 
-   "submit": 0, 
+   "submit": 1, 
    "write": 1
   }, 
   {
@@ -270,7 +270,7 @@
    "role": "Maintenance Manager", 
    "set_user_permissions": 0, 
    "share": 1, 
-   "submit": 0, 
+   "submit": 1, 
    "write": 1
   }
  ], 

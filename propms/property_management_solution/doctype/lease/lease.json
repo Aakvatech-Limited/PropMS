@@ -4,6 +4,7 @@
  "allow_guest_to_view": 0, 
  "allow_import": 0, 
  "allow_rename": 1, 
+ "autoname": "format:{property}-###", 
  "beta": 0, 
  "creation": "2018-05-01 22:11:38.457329", 
  "custom": 0, 
@@ -679,7 +680,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-11-23 00:36:34.700980", 
+ "modified": "2018-11-28 00:20:35.495083", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Lease", 
@@ -721,7 +722,7 @@
    "role": "Property Manager", 
    "set_user_permissions": 0, 
    "share": 1, 
-   "submit": 0, 
+   "submit": 1, 
    "write": 1
   }
  ], 

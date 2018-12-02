@@ -72,6 +72,8 @@ def makeSalesInvoice(self,method):
 								)).insert()
 								if sales_invoice.name:
 									assignInvoiceNameInMR(sales_invoice.name,material_request_details.name)
+			
+			changeStatusIssue(self.name,self.status)
 		else:
 			if self.customer:
 				if not len(self.materials_required)==0:
@@ -124,9 +126,31 @@ def checkIssue(name):
 
 def assignInvoiceNameInMR(invoice,pr):
 	frappe.db.sql("""update `tabMaterial Request` set sales_invoice=%s where name=%s""",(invoice,pr))
+
+
+
+@frappe.whitelist()
+def changeStatusIssue(name,status):
+	try:
+		issue_name=getIssueName(name)
+		if issue_name:
+			doc=frappe.get_doc("Issue Materials Detail",issue_name)
+			doc.material_status=status
+			doc.save()
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
 	
 
-
+def getIssueName(name):
+	data=frappe.db.sql("""select name from `tabIssue Materials Detail` where material_request=%s""",name)
+	if data:
+		if not data[0][0]==None:
+			return data[0][0]
+		else:
+			return False
+	else:
+		return False
 
 
 
