@@ -79,6 +79,8 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
+fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format"]
+
 
 doc_events = {
 	"Issue": {
@@ -92,6 +94,9 @@ doc_events = {
 	}
 
 }
+
+
+
 
 # doc_events = {
 # 	"*": {

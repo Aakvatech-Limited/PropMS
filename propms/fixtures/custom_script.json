@@ -1,0 +1,11 @@
+[
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Issue", 
+  "modified": "2018-12-03 22:51:50.489177", 
+  "name": "Issue-Client", 
+  "script": "cur_frm.add_fetch('person_in_charge', 'employee_name', 'person_in_charge_name');\n\ncur_frm.set_query(\"person_in_charge\", function () {\n    return{\n        filters: { 'Department':'Maintenance - VPL'}\n    }\n});\n\ncur_frm.set_query(\"sub_contractor_contact\", function () {\n    return{\n        filters: { 'supplier_group':'Sub-Contractor'}\n    }\n});", 
+  "script_type": "Client"
+ }
+]
