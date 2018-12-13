@@ -1,0 +1,4357 @@
+[
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Serial No.modified\", \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [[\"Serial No\", \"delivery_document_type\", \"in\", [\"Delivery Note\", \"Sales Invoice\"]], [\"Serial No\", \"warehouse\", \"=\", \"\"]], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Serial No\"], [\"item_code\", \"Serial No\"], [\"warranty_expiry_date\", \"Serial No\"], [\"warranty_period\", \"Serial No\"], [\"maintenance_status\", \"Serial No\"], [\"purchase_document_no\", \"Serial No\"], [\"purchase_date\", \"Serial No\"], [\"supplier\", \"Serial No\"], [\"supplier_name\", \"Serial No\"], [\"delivery_document_no\", \"Serial No\"], [\"delivery_date\", \"Serial No\"], [\"customer\", \"Serial No\"], [\"customer_name\", \"Serial No\"], [\"item_name\", \"Serial No\"], [\"description\", \"Serial No\"], [\"item_group\", \"Serial No\"], [\"brand\", \"Serial No\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:01:53.097456", 
+  "module": "Stock", 
+  "name": "Serial No Warranty Expiry", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Serial No", 
+  "report_name": "Serial No Warranty Expiry", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Serial No.name\", \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Serial No\"], [\"item_code\", \"Serial No\"], [\"warehouse\", \"Serial No\"], [\"item_name\", \"Serial No\"], [\"description\", \"Serial No\"], [\"item_group\", \"Serial No\"], [\"brand\", \"Serial No\"], [\"purchase_document_type\", \"Serial No\"], [\"purchase_document_no\", \"Serial No\"], [\"purchase_date\", \"Serial No\"], [\"customer\", \"Serial No\"], [\"customer_name\", \"Serial No\"], [\"purchase_rate\", \"Serial No\"], [\"delivery_document_type\", \"Serial No\"], [\"delivery_document_no\", \"Serial No\"], [\"delivery_date\", \"Serial No\"], [\"supplier\", \"Serial No\"], [\"supplier_name\", \"Serial No\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 19:54:21.392265", 
+  "module": "Stock", 
+  "name": "Serial No Status", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Serial No", 
+  "report_name": "Serial No Status", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Serial No.modified\", \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [[\"Serial No\", \"delivery_document_type\", \"in\", [\"Delivery Note\", \"Sales Invoice\"]], [\"Serial No\", \"warehouse\", \"=\", \"\"]], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Serial No\"], [\"item_code\", \"Serial No\"], [\"amc_expiry_date\", \"Serial No\"], [\"maintenance_status\", \"Serial No\"], [\"delivery_document_no\", \"Serial No\"], [\"customer\", \"Serial No\"], [\"customer_name\", \"Serial No\"], [\"item_name\", \"Serial No\"], [\"description\", \"Serial No\"], [\"item_group\", \"Serial No\"], [\"brand\", \"Serial No\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:02:00.706889", 
+  "module": "Stock", 
+  "name": "Serial No Service Contract Expiry", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Serial No", 
+  "report_name": "Serial No Service Contract Expiry", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-06 13:04:51.559061", 
+  "module": "Accounts", 
+  "name": "Ordered Items To Be Billed", 
+  "prepared_report": 0, 
+  "query": "select \n `tabSales Order`.`name` as \"Sales Order:Link/Sales Order:120\",\n `tabSales Order`.`customer` as \"Customer:Link/Customer:120\",\n  `tabSales Order`.`customer_name` as \"Customer Name:150\",\n`tabSales Order`.`status` as \"Status\",\n `tabSales Order`.`transaction_date` as \"Date:Date\",\n `tabSales Order`.`project` as \"Project\",\n `tabSales Order Item`.item_code as \"Item:Link/Item:120\",\n `tabSales Order Item`.base_amount as \"Amount:Currency:110\",\n (`tabSales Order Item`.billed_amt * ifnull(`tabSales Order`.conversion_rate, 1)) as \"Billed Amount:Currency:110\",\n (`tabSales Order Item`.base_amount - (`tabSales Order Item`.billed_amt * ifnull(`tabSales Order`.conversion_rate, 1))) as \"Pending Amount:Currency:120\",\n `tabSales Order Item`.item_name as \"Item Name::150\",\n `tabSales Order Item`.description as \"Description::200\",\n `tabSales Order`.`company` as \"Company:Link/Company:\"\nfrom\n `tabSales Order`, `tabSales Order Item`\nwhere\n `tabSales Order Item`.`parent` = `tabSales Order`.`name`\n and `tabSales Order`.docstatus = 1\n and `tabSales Order`.status != \"Closed\"\n and `tabSales Order Item`.amount > 0\n and `tabSales Order Item`.billed_amt < `tabSales Order Item`.amount\norder by `tabSales Order`.transaction_date asc", 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Ordered Items To Be Billed", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:18:04.317397", 
+  "module": "HR", 
+  "name": "Employee Leave Balance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Employee", 
+  "report_name": "Employee Leave Balance", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:04:20.699195", 
+  "module": "Stock", 
+  "name": "Purchase Order Items To Be Received", 
+  "prepared_report": 0, 
+  "query": "select \n    `tabPurchase Order`.`name` as \"Purchase Order:Link/Purchase Order:120\",\n\t`tabPurchase Order`.`transaction_date` as \"Date:Date:100\",\n\t`tabPurchase Order Item`.`schedule_date` as \"Reqd by Date:Date:110\",\n\t`tabPurchase Order`.`supplier` as \"Supplier:Link/Supplier:120\",\n\t`tabPurchase Order`.`supplier_name` as \"Supplier Name::150\",\n\t`tabPurchase Order Item`.`project` as \"Project\",\n\t`tabPurchase Order Item`.item_code as \"Item Code:Link/Item:120\",\n\t`tabPurchase Order Item`.qty as \"Qty:Float:100\",\n\t`tabPurchase Order Item`.received_qty as \"Received Qty:Float:100\", \n\t(`tabPurchase Order Item`.qty - ifnull(`tabPurchase Order Item`.received_qty, 0)) as \"Qty to Receive:Float:100\",\n    `tabPurchase Order Item`.warehouse as \"Warehouse:Link/Warehouse:150\",\n\t`tabPurchase Order Item`.item_name as \"Item Name::150\",\n\t`tabPurchase Order Item`.description as \"Description::200\",\n    `tabPurchase Order Item`.brand as \"Brand::100\",\n\t`tabPurchase Order`.`company` as \"Company:Link/Company:\"\nfrom\n\t`tabPurchase Order`, `tabPurchase Order Item`\nwhere\n\t`tabPurchase Order Item`.`parent` = `tabPurchase Order`.`name`\n\tand `tabPurchase Order`.docstatus = 1\n\tand `tabPurchase Order`.status not in (\"Stopped\", \"Closed\")\n\tand ifnull(`tabPurchase Order Item`.received_qty, 0) < ifnull(`tabPurchase Order Item`.qty, 0)\norder by `tabPurchase Order`.transaction_date asc", 
+  "ref_doctype": "Purchase Receipt", 
+  "report_name": "Purchase Order Items To Be Received", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-06-21 18:18:50.748793", 
+  "module": "Desk", 
+  "name": "ToDo", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "ToDo", 
+  "report_name": "ToDo", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:12:22.464240", 
+  "module": "Accounts", 
+  "name": "Gross Profit", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Gross Profit", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-03-06 05:52:06.235584", 
+  "module": "Accounts", 
+  "name": "Accounts Receivable", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Accounts Receivable", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:09:46.150861", 
+  "module": "Accounts", 
+  "name": "Accounts Payable", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Accounts Payable", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-08-06 11:41:50.218737", 
+  "module": "Healthcare", 
+  "name": "Lab Test Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Lab Test", 
+  "report_name": "Lab Test Report", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:14:35.208989", 
+  "module": "Accounts", 
+  "name": "Sales Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Sales Register", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:15:45.590238", 
+  "module": "Accounts", 
+  "name": "Purchase Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Purchase Register", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:19:19.231541", 
+  "module": "Accounts", 
+  "name": "Bank Reconciliation Statement", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Journal Entry", 
+  "report_name": "Bank Reconciliation Statement", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:19:26.257552", 
+  "module": "Accounts", 
+  "name": "Bank Clearance Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Journal Entry", 
+  "report_name": "Bank Clearance Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:03:47.710828", 
+  "module": "Selling", 
+  "name": "Sales Person-wise Transaction Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Sales Person-wise Transaction Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:08:57.446613", 
+  "module": "Buying", 
+  "name": "Item-wise Purchase History", 
+  "prepared_report": 0, 
+  "query": "select\n    po_item.item_code as \"Item Code:Link/Item:120\",\n\tpo_item.item_name as \"Item Name::120\",\n        po_item.item_group as \"Item Group:Link/Item Group:120\",\n\tpo_item.description as \"Description::150\",\n\tpo_item.qty as \"Qty:Float:100\",\n\tpo_item.uom as \"UOM:Link/UOM:80\",\n\tpo_item.base_rate as \"Rate:Currency:120\",\n\tpo_item.base_amount as \"Amount:Currency:120\",\n\tpo.name as \"Purchase Order:Link/Purchase Order:120\",\n\tpo.transaction_date as \"Transaction Date:Date:140\",\n\tpo.supplier as \"Supplier:Link/Supplier:130\",\n        sup.supplier_name as \"Supplier Name::150\",\n\tpo_item.project as \"Project:Link/Project:130\",\n\tifnull(po_item.received_qty, 0) as \"Received Qty:Float:120\",\n\tpo.company as \"Company:Link/Company:\"\nfrom\n\t`tabPurchase Order` po, `tabPurchase Order Item` po_item, `tabSupplier` sup\nwhere\n\tpo.name = po_item.parent and po.supplier = sup.name and po.docstatus = 1\norder by po.name desc", 
+  "ref_doctype": "Purchase Order", 
+  "report_name": "Item-wise Purchase History", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-13 04:56:57.040163", 
+  "module": "Manufacturing", 
+  "name": "Issued Items Against Work Order", 
+  "prepared_report": 0, 
+  "query": "select\n    ste.work_order as \"Work Order:Link/Work Order:120\",\n    ste.posting_date as \"Issue Date:Date:140\",\n    ste_item.item_code as \"Item Code:Link/Item:120\",\n\tste_item.description as \"Description::150\",\n\tste_item.transfer_qty as \"Qty:Float:100\",\n\tste_item.stock_uom as \"UOM:Link/UOM:80\",\n\tste_item.amount as \"Amount:Currency:120\",\n\tste_item.serial_no as \"Serial No:Link/Serial No:80\",\n\tste_item.s_warehouse as \"Source Warehouse:Link/Warehouse:120\",\n\tste_item.t_warehouse as \"Target Warehouse:Link/Warehouse:120\",\n\two.production_item as \"Finished Goods:Link/Item:120\", \n\tste.name as \"Stock Entry:Link/Stock Entry:120\",\n\tste.company as \"Company:Link/Company:\",\n\t(select bin.projected_qty from `tabBin` bin \n\t\t\twhere  bin.item_code= ste_item.item_code and bin.warehouse= ste_item.s_warehouse) as \"Projected Quantity as Source:Float:200\"\nfrom\t`tabStock Entry` ste, `tabStock Entry Detail` ste_item, `tabWork Order` wo\nwhere\n\tifnull(ste.work_order, '') != '' and ste.name = ste_item.parent \n\tand ste.work_order = wo.name and ste.docstatus = 1\n\tand ste.purpose = 'Material Transfer for Manufacture'\norder by ste.posting_date, ste.work_order, ste_item.item_code", 
+  "ref_doctype": "Work Order", 
+  "report_name": "Issued Items Against Work Order", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-03-06 05:52:57.645281", 
+  "module": "Accounts", 
+  "name": "Sales Partners Commission", 
+  "prepared_report": 0, 
+  "query": "SELECT\n    sales_partner as \"Sales Partner:Link/Sales Partner:150\",\n\tsum(base_net_total) as \"Invoiced Amount (Exclusive Tax):Currency:210\",\n\tsum(total_commission) as \"Total Commission:Currency:150\",\n\tsum(total_commission)*100/sum(base_net_total) as \"Average Commission Rate:Currency:170\"\nFROM\n\t`tabSales Invoice`\nWHERE\n\tdocstatus = 1 and ifnull(base_net_total, 0) > 0 and ifnull(total_commission, 0) > 0\nGROUP BY\n\tsales_partner\nORDER BY\n\t\"Total Commission:Currency:120\"", 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Sales Partners Commission", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2014-06-29 08:18:17.144598", 
+  "module": "Support", 
+  "name": "Maintenance Schedules", 
+  "prepared_report": 0, 
+  "query": "SELECT\n    ms_sch.scheduled_date as \"Schedule Date:Date:120\",\n\tms_sch.item_code as \"Item Code:Link/Item:120\",\n\tms_sch.item_name as \"Item Name::120\",\n\tms_sch.serial_no as \"Serial No::120\",\n\tms_sch.sales_person as \"Sales Person::120\",\n\tms.customer_name as \"Customer:Link/Customer:120\",\n\tms.address_display as \"Customer Address::120\",\n\tms_item.sales_order as \"Sales Order:Link/Sales Order:120\",\n\tms.company as \"Company:Link/Company:120\"\n\t\nFROM\n\t`tabMaintenance Schedule` ms, \n    `tabMaintenance Schedule Detail` ms_sch, \n    `tabMaintenance Schedule Item` ms_item\nWHERE\n\tms.name = ms_sch.parent and ms.name = ms_item.parent and ms.docstatus = 1\nORDER BY\n\tms_sch.scheduled_date asc, ms_sch.item_code asc", 
+  "ref_doctype": "Maintenance Schedule", 
+  "report_name": "Maintenance Schedules", 
+  "report_type": "Query Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:18:13.011024", 
+  "module": "HR", 
+  "name": "Employee Birthday", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Employee", 
+  "report_name": "Employee Birthday", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Employee"
+   }, 
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Employee.bank_ac_no\", \"sort_order\": \"desc\", \"sort_by_next\": \"\", \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Employee\"], [\"employee_number\", \"Employee\"], [\"date_of_joining\", \"Employee\"], [\"branch\", \"Employee\"], [\"department\", \"Employee\"], [\"designation\", \"Employee\"], [\"gender\", \"Employee\"], [\"status\", \"Employee\"], [\"company\", \"Employee\"], [\"employment_type\", \"Employee\"], [\"reports_to\", \"Employee\"], [\"company_email\", \"Employee\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:01:38.681441", 
+  "module": "HR", 
+  "name": "Employee Information", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Employee", 
+  "report_name": "Employee Information", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:16:50.550242", 
+  "module": "HR", 
+  "name": "Monthly Attendance Sheet", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Attendance", 
+  "report_name": "Monthly Attendance Sheet", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }, 
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-10 19:42:43.376658", 
+  "module": "Education", 
+  "name": "Student Monthly Attendance Sheet", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Student Attendance", 
+  "report_name": "Student Monthly Attendance Sheet", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-10 19:42:36.457449", 
+  "module": "Education", 
+  "name": "Absent Student Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Student Attendance", 
+  "report_name": "Absent Student Report", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:10:53.005589", 
+  "module": "Buying", 
+  "name": "Requested Items To Be Ordered", 
+  "prepared_report": 0, 
+  "query": "select \n    mr.name as \"Material Request:Link/Material Request:120\",\n\tmr.transaction_date as \"Date:Date:100\",\n\tmr_item.item_code as \"Item Code:Link/Item:120\",\n\tsum(ifnull(mr_item.qty, 0)) as \"Qty:Float:100\",\n\tsum(ifnull(mr_item.ordered_qty, 0)) as \"Ordered Qty:Float:100\", \n\t(sum(mr_item.qty) - sum(ifnull(mr_item.ordered_qty, 0))) as \"Qty to Order:Float:100\",\n\tmr_item.item_name as \"Item Name::150\",\n\tmr_item.description as \"Description::200\",\n\tmr.company as \"Company:Link/Company:\"\nfrom\n\t`tabMaterial Request` mr, `tabMaterial Request Item` mr_item\nwhere\n\tmr_item.parent = mr.name\n\tand mr.material_request_type = \"Purchase\"\n\tand mr.docstatus = 1\n\tand mr.status != \"Stopped\"\ngroup by mr.name, mr_item.item_code\nhaving\n\tsum(ifnull(mr_item.ordered_qty, 0)) < sum(ifnull(mr_item.qty, 0))\norder by mr.transaction_date asc", 
+  "ref_doctype": "Purchase Order", 
+  "report_name": "Requested Items To Be Ordered", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:07:57.880462", 
+  "module": "Stock", 
+  "name": "Requested Items To Be Transferred", 
+  "prepared_report": 0, 
+  "query": "select \n    mr.name as \"Material Request:Link/Material Request:120\",\n\tmr.transaction_date as \"Date:Date:100\",\n\tmr_item.item_code as \"Item Code:Link/Item:120\",\n\tmr_item.qty as \"Qty:Float:100\",\n\tmr_item.ordered_qty as \"Transferred Qty:Float:100\", \n\t(mr_item.qty - ifnull(mr_item.ordered_qty, 0)) as \"Qty to Transfer:Float:100\",\n\tmr_item.item_name as \"Item Name::150\",\n\tmr_item.description as \"Description::200\",\n\tmr.company as \"Company:Link/Company:\"\nfrom\n\t`tabMaterial Request` mr, `tabMaterial Request Item` mr_item\nwhere\n\tmr_item.parent = mr.name\n\tand mr.material_request_type in (\"Material Transfer\", \"Material Issue\")\n\tand mr.docstatus = 1\n\tand mr.status != \"Stopped\"\n\tand ifnull(mr_item.ordered_qty, 0) < ifnull(mr_item.qty, 0)\norder by mr.transaction_date asc", 
+  "ref_doctype": "Stock Entry", 
+  "report_name": "Requested Items To Be Transferred", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:17:17.638545", 
+  "module": "Accounts", 
+  "name": "Item-wise Sales Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Item-wise Sales Register", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-06-18 16:42:05.860309", 
+  "module": "Selling", 
+  "name": "Item-wise Sales History", 
+  "prepared_report": 0, 
+  "query": "select\n    so_item.item_code as \"Item Code:Link/Item:120\",\n\tso_item.item_name as \"Item Name::120\",\n        so_item.item_group as \"Item Group:Link/Item Group:120\",\n\tso_item.description as \"Description::150\",\n\tso_item.qty as \"Qty:Data:100\",\n\tso_item.uom as \"UOM:Link/UOM:80\",\n\tso_item.base_rate as \"Rate:Currency:120\",\n\tso_item.base_amount as \"Amount:Currency:120\",\n\tso.name as \"Sales Order:Link/Sales Order:120\",\n\tso.transaction_date as \"Transaction Date:Date:140\",\n\tso.customer as \"Customer:Link/Customer:130\",\n        cu.customer_name as \"Customer Name::150\",\n\tso.territory as \"Territory:Link/Territory:130\",\n    so.project as \"Project:Link/Project:130\",\n\tifnull(so_item.delivered_qty, 0) as \"Delivered Qty:Float:120\",\n\tifnull(so_item.billed_amt, 0) as \"Billed Amount:Currency:120\",\n\tso.company as \"Company:Link/Company:\"\nfrom\n\t`tabSales Order` so, `tabSales Order Item` so_item, `tabCustomer` cu\nwhere\n\tso.name = so_item.parent and so.customer=cu.name\n\tand so.docstatus = 1\norder by so.name desc", 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Item-wise Sales History", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:00:24.302988", 
+  "module": "Accounts", 
+  "name": "Purchase Order Items To Be Billed", 
+  "prepared_report": 0, 
+  "query": "select \n    `tabPurchase Order`.`name` as \"Purchase Order:Link/Purchase Order:120\",\n    `tabPurchase Order`.`transaction_date` as \"Date:Date:100\",\n\t`tabPurchase Order`.`supplier` as \"Supplier:Link/Supplier:120\",\n\t`tabPurchase Order`.`supplier_name` as \"Supplier Name::150\",\n\t`tabPurchase Order Item`.`project` as \"Project\",\n\t`tabPurchase Order Item`.item_code as \"Item Code:Link/Item:120\",\n\t`tabPurchase Order Item`.base_amount as \"Amount:Currency:100\",\n\t(`tabPurchase Order Item`.billed_amt * ifnull(`tabPurchase Order`.conversion_rate, 1)) as \"Billed Amount:Currency:100\", \n\t(`tabPurchase Order Item`.base_amount - (`tabPurchase Order Item`.billed_amt * ifnull(`tabPurchase Order`.conversion_rate, 1))) as \"Amount to Bill:Currency:100\",\n\t`tabPurchase Order Item`.item_name as \"Item Name::150\",\n\t`tabPurchase Order Item`.description as \"Description::200\",\n\t`tabPurchase Order`.company as \"Company:Link/Company:\"\nfrom\n\t`tabPurchase Order`, `tabPurchase Order Item`\nwhere\n\t`tabPurchase Order Item`.`parent` = `tabPurchase Order`.`name`\n\tand `tabPurchase Order`.docstatus = 1\n\tand `tabPurchase Order`.status != \"Closed\"\n        and `tabPurchase Order Item`.amount > 0\n\tand (`tabPurchase Order Item`.billed_amt * ifnull(`tabPurchase Order`.conversion_rate, 1)) < `tabPurchase Order Item`.base_amount\norder by `tabPurchase Order`.transaction_date asc", 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Purchase Order Items To Be Billed", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Auditor"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:20:07.593667", 
+  "module": "Projects", 
+  "name": "Project wise Stock Tracking", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Project", 
+  "report_name": "Project wise Stock Tracking ", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Projects User"
+   }, 
+   {
+    "role": "Projects Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-20 18:20:49.229153", 
+  "module": "Stock", 
+  "name": "Batch-Wise Balance History", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Batch-Wise Balance History", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:17:45.178533", 
+  "module": "Stock", 
+  "name": "Item Prices", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Item Prices", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:17:31.238117", 
+  "module": "Accounts", 
+  "name": "Item-wise Purchase Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Item-wise Purchase Register", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Auditor"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:17:06.151929", 
+  "module": "Stock", 
+  "name": "Itemwise Recommended Reorder Level", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item", 
+  "report_name": "Itemwise Recommended Reorder Level", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:14.928929", 
+  "module": "Selling", 
+  "name": "Quotation Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Quotation", 
+  "report_name": "Quotation Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:47.049042", 
+  "module": "Stock", 
+  "name": "Delivery Note Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Delivery Note", 
+  "report_name": "Delivery Note Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-20 08:05:46.191588", 
+  "module": "Selling", 
+  "name": "Sales Order Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Sales Order Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:03.622485", 
+  "module": "Accounts", 
+  "name": "Sales Invoice Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Sales Invoice Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:37.416562", 
+  "module": "Buying", 
+  "name": "Purchase Order Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Order", 
+  "report_name": "Purchase Order Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:22.682161", 
+  "module": "Stock", 
+  "name": "Purchase Receipt Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Receipt", 
+  "report_name": "Purchase Receipt Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-21 01:28:31.261299", 
+  "module": "Accounts", 
+  "name": "Purchase Invoice Trends", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Purchase Invoice Trends", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:19:06.964033", 
+  "module": "Accounts", 
+  "name": "Budget Variance Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Cost Center", 
+  "report_name": "Budget Variance Report", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:14:50.589149", 
+  "module": "Selling", 
+  "name": "Sales Person Target Variance Item Group-Wise", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Sales Person Target Variance Item Group-Wise", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:13:29.705321", 
+  "module": "Selling", 
+  "name": "Territory Target Variance Item Group-Wise", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Territory Target Variance Item Group-Wise", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:09:56.200184", 
+  "module": "Selling", 
+  "name": "Available Stock for Packing Items", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Product Bundle", 
+  "report_name": "Available Stock for Packing Items", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Sales User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:08:11.744036", 
+  "module": "Selling", 
+  "name": "Pending SO Items For Purchase Request", 
+  "prepared_report": 0, 
+  "query": "select  so_item.item_code as \"Item Code:Link/Item:120\",\n so_item.item_name as \"Item Name::120\",\n so_item.description as \"Description::120\",\n so.`name` as \"S.O. No.:Link/Sales Order:120\",\n so.`transaction_date` as \"Date:Date:120\",\n mr.name as \"Material Request:Link/Material Request:120\",\n so.customer as \"Customer:Link/Customer:120\",\n so.territory as \"Terretory:Link/Territory:120\",\n sum(so_item.qty) as \"SO Qty:Float:100 \",\n sum(mr_item.qty) as \"Requested Qty:Float:100\",\n sum(so_item.qty) - sum(mr_item.qty) as \"Pending Qty:Float:100 \", \n so.company as \"Company:Link/Company:\"\nfrom\n `tabSales Order` so, `tabSales Order Item` so_item, \n `tabMaterial Request` mr, `tabMaterial Request Item` mr_item\nwhere \n so_item.`parent` = so.`name` \n and mr_item.parent = mr.name\n and mr_item.sales_order = so.name\n and mr_item.item_code = so_item.item_code\n and so.docstatus = 1 and so.status != \"Closed\" \n and mr.docstatus = 1 and mr.status != \"Stopped\"\ngroup by so.name, so_item.item_code\nhaving sum(so_item.qty) > sum(mr_item.qty)\norder by so.name desc, so_item.item_code asc", 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Pending SO Items For Purchase Request", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-06 13:04:36.338268", 
+  "module": "Accounts", 
+  "name": "Delivered Items To Be Billed", 
+  "prepared_report": 0, 
+  "query": "select\n    `tabDelivery Note`.`name` as \"Delivery Note:Link/Delivery Note:120\",\n\t`tabDelivery Note`.`customer` as \"Customer:Link/Customer:120\",\n\t`tabDelivery Note`.`customer_name` as \"Customer Name::150\",\n\t`tabDelivery Note`.`posting_date` as \"Date:Date\",\n\t`tabDelivery Note`.`project` as \"Project\",\n\t`tabDelivery Note Item`.`item_code` as \"Item:Link/Item:120\",\n\t(`tabDelivery Note Item`.`base_amount` - `tabDelivery Note Item`.`billed_amt`*ifnull(`tabDelivery Note`.conversion_rate, 1)) as \"Pending Amount:Currency:110\",\n\t`tabDelivery Note Item`.`item_name` as \"Item Name::150\",\n\t`tabDelivery Note Item`.`description` as \"Description::200\",\n\t`tabDelivery Note`.`company` as \"Company:Link/Company:\"\nfrom `tabDelivery Note`, `tabDelivery Note Item`\nwhere  \n    `tabDelivery Note`.name = `tabDelivery Note Item`.parent \n    and `tabDelivery Note`.docstatus = 1 \n    and `tabDelivery Note`.`status` not in (\"Stopped\", \"Closed\") \n    and `tabDelivery Note Item`.amount > 0\n    and `tabDelivery Note Item`.billed_amt < `tabDelivery Note Item`.amount\norder by `tabDelivery Note`.`name` desc", 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Delivered Items To Be Billed", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-06 13:04:26.094432", 
+  "module": "Accounts", 
+  "name": "Received Items To Be Billed", 
+  "prepared_report": 0, 
+  "query": "select\n    `tabPurchase Receipt`.`name` as \"Purchase Receipt:Link/Purchase Receipt:120\",\n    `tabPurchase Receipt`.`supplier` as \"Supplier:Link/Supplier:120\",\n\t`tabPurchase Receipt`.`supplier_name` as \"Supplier Name::150\",\n\t`tabPurchase Receipt`.`posting_date` as \"Date:Date\",\n\t`tabPurchase Receipt Item`.`project` as \"Project\",\n\t`tabPurchase Receipt Item`.`item_code` as \"Item:Link/Item:120\",\n\t(`tabPurchase Receipt Item`.`base_amount` - `tabPurchase Receipt Item`.`billed_amt`*ifnull(`tabPurchase Receipt`.conversion_rate, 1)) as \"Pending Amount:Currency:110\",\n\t`tabPurchase Receipt Item`.`item_name` as \"Item Name::150\",\n\t`tabPurchase Receipt Item`.`description` as \"Description::200\",\n\t`tabPurchase Receipt`.`company` as \"Company:Link/Company:\"\nfrom `tabPurchase Receipt`, `tabPurchase Receipt Item`\nwhere\n    `tabPurchase Receipt`.name = `tabPurchase Receipt Item`.parent \n    and `tabPurchase Receipt`.docstatus = 1 \n    and `tabPurchase Receipt`.status != \"Closed\" \n    and `tabPurchase Receipt Item`.amount > 0\n    and `tabPurchase Receipt Item`.billed_amt < `tabPurchase Receipt Item`.amount\norder by `tabPurchase Receipt`.`name` desc", 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Received Items To Be Billed", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:05:31.066151", 
+  "module": "Stock", 
+  "name": "Material Requests for which Supplier Quotations are not created", 
+  "prepared_report": 0, 
+  "query": "select \n    mr.name as \"Material Request:Link/Material Request:120\",\n    mr.transaction_date as \"Date:Date:100\",\n\tmr_item.item_code as \"Item Code:Link/Item:120\",\n\tmr_item.qty as \"Qty:Float:100\",\n\tmr_item.item_name as \"Item Name::150\",\n\tmr_item.description as \"Description::200\",\n\tmr.company as \"Company:Link/Company:\"\nfrom\n\t`tabMaterial Request` mr, `tabMaterial Request Item` mr_item\nwhere\n\tmr_item.parent = mr.name\n\tand mr.material_request_type = \"Purchase\"\n\tand mr.docstatus = 1\n\tand mr.status != \"Stopped\"\n\tand not exists(select name from `tabSupplier Quotation Item` where material_request=mr.name)\norder by mr.transaction_date asc", 
+  "ref_doctype": "Material Request", 
+  "report_name": "Material Requests for which Supplier Quotations are not created", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-13 04:58:29.780472", 
+  "module": "Manufacturing", 
+  "name": "Open Work Orders", 
+  "prepared_report": 0, 
+  "query": "SELECT\n  `tabWork Order`.name as \"Work Order:Link/Work Order:200\",\n  `tabWork Order`.creation as \"Date:Date:120\",\n  `tabWork Order`.production_item as \"Item:Link/Item:150\",\n  `tabWork Order`.qty as \"To Produce:Int:100\",\n  `tabWork Order`.produced_qty as \"Produced:Int:100\",\n  `tabWork Order`.company as \"Company:Link/Company:\"\nFROM\n  `tabWork Order`\nWHERE\n  `tabWork Order`.docstatus=1\n  AND ifnull(`tabWork Order`.produced_qty,0) < `tabWork Order`.qty\n  AND NOT EXISTS (SELECT name from `tabStock Entry` where work_order =`tabWork Order`.name) ", 
+  "ref_doctype": "Work Order", 
+  "report_name": "Open Work Orders", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-18 12:24:38.684995", 
+  "module": "Manufacturing", 
+  "name": "Work Orders in Progress", 
+  "prepared_report": 0, 
+  "query": "SELECT\n  `tabWork Order`.name as \"Work Order:Link/Work Order:200\",\n  `tabWork Order`.creation as \"Date:Date:120\",\n  `tabWork Order`.production_item as \"Item:Link/Item:150\",\n  `tabWork Order`.qty as \"To Produce:Int:100\",\n  `tabWork Order`.produced_qty as \"Produced:Int:100\",\n  `tabWork Order`.company as \"Company:Link/Company:\"\nFROM\n  `tabWork Order`\nWHERE\n  `tabWork Order`.docstatus=1\n  AND `tabWork Order`.status != 'Stopped'\n  AND ifnull(`tabWork Order`.produced_qty,0) < `tabWork Order`.qty\n  AND EXISTS (SELECT name from `tabStock Entry` where work_order =`tabWork Order`.name) ", 
+  "ref_doctype": "Work Order", 
+  "report_name": "Work Orders in Progress", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-13 04:58:51.549413", 
+  "module": "Manufacturing", 
+  "name": "Completed Work Orders", 
+  "prepared_report": 0, 
+  "query": "SELECT\n  `tabWork Order`.name as \"Work Order:Link/Work Order:200\",\n  `tabWork Order`.creation as \"Date:Date:120\",\n  `tabWork Order`.production_item as \"Item:Link/Item:150\",\n  `tabWork Order`.qty as \"To Produce:Int:100\",\n  `tabWork Order`.produced_qty as \"Produced:Int:100\",\n  `tabWork Order`.company as \"Company:Link/Company:\"\nFROM\n  `tabWork Order`\nWHERE\n  `tabWork Order`.docstatus=1\n  AND ifnull(`tabWork Order`.produced_qty,0) = `tabWork Order`.qty", 
+  "ref_doctype": "Work Order", 
+  "report_name": "Completed Work Orders", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Bin.projected_qty\", \"sort_order\": \"asc\", \"sort_by_next\": \"\", \"filters\": [[\"Bin\", \"projected_qty\", \"<\", \"0\"]], \"sort_order_next\": \"desc\", \"columns\": [[\"warehouse\", \"Bin\"], [\"item_code\", \"Bin\"], [\"actual_qty\", \"Bin\"], [\"ordered_qty\", \"Bin\"], [\"planned_qty\", \"Bin\"], [\"reserved_qty\", \"Bin\"], [\"projected_qty\", \"Bin\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:00:46.439935", 
+  "module": "Stock", 
+  "name": "Item Shortage Report", 
+  "prepared_report": 0, 
+  "query": "SELECT  bin.warehouse as \"Warehouse:Link/Warehouse:150\",\n\tbin.item_code as \"Item Code:Link/Item:100\",\n\tbin.actual_qty as \"Actual Quantity:Float:120\",\n\tbin.ordered_qty as \"Ordered Quantity:Float:120\",\n\tbin.planned_qty as \"Planned Quantity:Float:120\",\n\tbin.reserved_qty as \"Reserved Quantity:Float:120\",\n\tbin.projected_qty as \"Project Quantity:Float:120\",\n\titem.item_name as \"Item Name:Data:150\",\n\titem.description as \"Description::200\"\nFROM tabBin as bin\nINNER JOIN tabItem as item\nON bin.item_code=item.name\nWHERE bin.projected_qty<0\nORDER BY bin.projected_qty;", 
+  "ref_doctype": "Bin", 
+  "report_name": "Item Shortage Report", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:06:00.761719", 
+  "module": "Stock", 
+  "name": "Items To Be Requested", 
+  "prepared_report": 0, 
+  "query": "SELECT\n    tabBin.item_code as \"Item:Link/Item:120\",\n    tabBin.warehouse as \"Warehouse:Link/Warehouse:120\",\n    tabBin.actual_qty as \"Actual:Float:90\",\n    tabBin.indented_qty as \"Requested:Float:90\",\n    tabBin.reserved_qty as \"Reserved:Float:90\",\n    tabBin.ordered_qty as \"Ordered:Float:90\",\n    tabBin.projected_qty as \"Projected:Float:90\"\nFROM\n    tabBin, tabItem\nWHERE\n    tabBin.item_code = tabItem.name\n   AND tabBin.projected_qty < 0\nORDER BY\n    tabBin.projected_qty ASC", 
+  "ref_doctype": "Material Request", 
+  "report_name": "Items To Be Requested", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"fields\": [[\"name\", \"Item Price\"], [\"price_list\", \"Item Price\"], [\"currency\", \"Item Price\"], [\"item_code\", \"Item Price\"], [\"brand\", \"Item Price\"], [\"price_list_rate\", \"Item Price\"], [\"docstatus\", \"Item Price\"]], \"order_by\": \"`tabItem Price`.`modified` asc\", \"add_total_row\": 0, \"filters\": []}", 
+  "letter_head": null, 
+  "modified": "2018-05-03 12:48:39.802088", 
+  "module": "Stock", 
+  "name": "Item-wise Price List Rate", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item Price", 
+  "report_name": "Item-wise Price List Rate", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Sales Master Manager"
+   }, 
+   {
+    "role": "Purchase Master Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-26 18:59:46.520731", 
+  "module": "CRM", 
+  "name": "Lead Details", 
+  "prepared_report": 0, 
+  "query": "SELECT\n    `tabLead`.name as \"Lead Id:Link/Lead:120\",\n    `tabLead`.lead_name as \"Lead Name::120\",\n\t`tabLead`.company_name as \"Company Name::120\",\n\t`tabLead`.status as \"Status::120\",\n\tconcat_ws(', ', \n\t\ttrim(',' from `tabAddress`.address_line1), \n\t\ttrim(',' from tabAddress.address_line2)\n\t) as 'Address::180',\n\t`tabAddress`.state as \"State::100\",\n\t`tabAddress`.pincode as \"Pincode::70\",\n\t`tabAddress`.country as \"Country::100\",\n\t`tabLead`.phone as \"Phone::100\",\n\t`tabLead`.mobile_no as \"Mobile No::100\",\n\t`tabLead`.email_id as \"Email Id::120\",\n\t`tabLead`.lead_owner as \"Lead Owner::120\",\n\t`tabLead`.source as \"Source::120\",\n\t`tabLead`.territory as \"Territory::120\",\n\t`tabLead`.notes as \"Notes::360\",\n    `tabLead`.owner as \"Owner:Link/User:120\"\nFROM\n\t`tabLead`\n\tleft join `tabDynamic Link` on (\n\t\t`tabDynamic Link`.link_name=`tabLead`.name\n\t)\n\tleft join `tabAddress` on (\n\t\t`tabAddress`.name=`tabDynamic Link`.parent\n\t)\nWHERE\n\t`tabLead`.docstatus<2\nORDER BY\n\t`tabLead`.name asc", 
+  "ref_doctype": "Lead", 
+  "report_name": "Lead Details", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:18:54.950255", 
+  "module": "Selling", 
+  "name": "Customer Acquisition and Loyalty", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Customer", 
+  "report_name": "Customer Acquisition and Loyalty", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Sales Master Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:13:38.914651", 
+  "module": "Stock", 
+  "name": "Supplier-Wise Sales Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Supplier-Wise Sales Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:14:07.626391", 
+  "module": "Stock", 
+  "name": "Stock Ledger", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Stock Ledger", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:16:43.005325", 
+  "module": "Accounts", 
+  "name": "Payment Period Based On Invoice Date", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Journal Entry", 
+  "report_name": "Payment Period Based On Invoice Date", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:14:20.184693", 
+  "module": "Stock", 
+  "name": "Stock Ageing", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item", 
+  "report_name": "Stock Ageing", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:14:00.850349", 
+  "module": "Stock", 
+  "name": "Stock Projected Qty", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item", 
+  "report_name": "Stock Projected Qty", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:17:51.995451", 
+  "module": "Accounts", 
+  "name": "General Ledger", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "General Ledger", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-06-29 15:46:42.805039", 
+  "module": "Core", 
+  "name": "Permitted Documents For User", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "User", 
+  "report_name": "Permitted Documents For User", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-07 12:18:21.850851", 
+  "module": "Accounts", 
+  "name": "Balance Sheet", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Balance Sheet", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:12:40.282376", 
+  "module": "Accounts", 
+  "name": "Profit and Loss Statement", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Profit and Loss Statement", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:12:33.520866", 
+  "module": "Accounts", 
+  "name": "Trial Balance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Trial Balance", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:12:08.631210", 
+  "module": "Selling", 
+  "name": "Customer Credit Balance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Customer", 
+  "report_name": "Customer Credit Balance", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Sales Master Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-08-14 15:24:41.395557", 
+  "module": "Stock", 
+  "name": "Stock Balance", 
+  "prepared_report": 1, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Stock Balance", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-03-06 05:52:23.751082", 
+  "module": "Accounts", 
+  "name": "Accounts Receivable Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Accounts Receivable Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:11:35.655834", 
+  "module": "Accounts", 
+  "name": "Accounts Payable Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "Accounts Payable Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"DocShare.modified\", \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"DocShare\"], [\"user\", \"DocShare\"], [\"share_doctype\", \"DocShare\"], [\"share_name\", \"DocShare\"], [\"read\", \"DocShare\"], [\"write\", \"DocShare\"], [\"share\", \"DocShare\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:01:16.232286", 
+  "module": "Core", 
+  "name": "Document Share Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "DocShare", 
+  "report_name": "Document Share Report", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:19:57.286857", 
+  "module": "Stock", 
+  "name": "BOM Search", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "BOM", 
+  "report_name": "BOM Search", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:09:30.979664", 
+  "module": "Accounts", 
+  "name": "Trial Balance for Party", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Trial Balance for Party", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:09:19.748690", 
+  "module": "Accounts", 
+  "name": "Cash Flow", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Cash Flow", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:09:10.287960", 
+  "module": "Selling", 
+  "name": "Inactive Customers", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Inactive Customers", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:08:26.084484", 
+  "module": "Accounts", 
+  "name": "Asset Depreciation Ledger", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Asset", 
+  "report_name": "Asset Depreciation Ledger", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:08:18.660476", 
+  "module": "Accounts", 
+  "name": "Asset Depreciations and Balances", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Asset", 
+  "report_name": "Asset Depreciations and Balances", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:06:18.391100", 
+  "module": "Support", 
+  "name": "Minutes to First Response for Issues", 
+  "prepared_report": 0, 
+  "query": "select date(creation) as creation_date, avg(mins_to_first_response) from tabIssue where creation > '2016-05-01' group by date(creation) order by creation_date;", 
+  "ref_doctype": "Issue", 
+  "report_name": "Minutes to First Response for Issues", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Support Team"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:06:08.801109", 
+  "module": "CRM", 
+  "name": "Minutes to First Response for Opportunity", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Opportunity", 
+  "report_name": "Minutes to First Response for Opportunity", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-10 19:41:37.320224", 
+  "module": "Education", 
+  "name": "Student Fee Collection", 
+  "prepared_report": 0, 
+  "query": "SELECT\n student as \"Student:Link/Student:200\",\n student_name as \"Student Name::200\",\n sum(paid_amount) as \"Paid Amount:Currency:150\",\n sum(outstanding_amount) as \"Outstanding Amount:Currency:150\",\n sum(grand_total) as \"Grand Total:Currency:150\"\nFROM\n `tabFees` \nGROUP BY\n student", 
+  "ref_doctype": "Fees", 
+  "report_name": "Student Fee Collection", 
+  "report_type": "Query Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:05:46.782115", 
+  "module": "Projects", 
+  "name": "Daily Timesheet Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Timesheet", 
+  "report_name": "Daily Timesheet Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Projects User"
+   }, 
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:05:17.833885", 
+  "module": "HR", 
+  "name": "Employees working on a holiday", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Attendance", 
+  "report_name": "Employees working on a holiday", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }, 
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:04:58.784351", 
+  "module": "Buying", 
+  "name": "Quoted Item Comparison", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Supplier Quotation", 
+  "report_name": "Quoted Item Comparison", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:03:58.156580", 
+  "module": "Accounts", 
+  "name": "Profitability Analysis", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Profitability Analysis", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 19:59:18.641284", 
+  "module": "HR", 
+  "name": "Vehicle Expenses", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Vehicle", 
+  "report_name": "Vehicle Expenses", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Fleet Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-10 19:41:12.328346", 
+  "module": "Education", 
+  "name": "Student Batch-Wise Attendance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Student Attendance", 
+  "report_name": "Student Batch-Wise Attendance", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 20:00:30.392287", 
+  "module": "Stock", 
+  "name": "Batch Item Expiry Status", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Batch Item Expiry Status", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 19:59:29.747039", 
+  "module": "Accounts", 
+  "name": "Unpaid Expense Claim", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Expense Claim", 
+  "report_name": "Unpaid Expense Claim", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "HR Manager"
+   }, 
+   {
+    "role": "Expense Approver"
+   }, 
+   {
+    "role": "HR User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2017-06-23 04:46:43.209008", 
+  "module": "Manufacturing", 
+  "name": "BOM Stock Report", 
+  "prepared_report": 0, 
+  "query": "SELECT \n\tbom_item.item_code as \"Item:Link/Item:200\",\n\tbom_item.description as \"Description:Data:300\",\n\tbom_item.qty as \"Required Qty:Float:100\",\n\tledger.actual_qty  as \"In Stock Qty:Float:100\",\n\tFLOOR(ledger.actual_qty /bom_item.qty) as \"Enough Parts to Build:Int:100\"\nFROM\n\t`tabBOM Item` AS bom_item \n\tLEFT JOIN `tabBin` AS ledger\t\n\t\tON bom_item.item_code = ledger.item_code  \n\t\tAND ledger.warehouse = %(warehouse)s\nWHERE\n\tbom_item.parent=%(bom)s\n\nGROUP BY bom_item.item_code", 
+  "ref_doctype": "BOM", 
+  "report_name": "BOM Stock Report", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2018-02-13 04:47:04.158213", 
+  "module": "Manufacturing", 
+  "name": "Work Order Stock Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Work Order", 
+  "report_name": "Work Order Stock Report", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 19:58:33.143974", 
+  "module": "HR", 
+  "name": "Salary Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Salary Slip", 
+  "report_name": "Salary Register", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-04-10 15:04:12.498920", 
+  "module": "Contacts", 
+  "name": "Addresses And Contacts", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Address", 
+  "report_name": "Addresses And Contacts", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-02-24 19:56:51.141147", 
+  "module": "Core", 
+  "name": "Feedback Ratings", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Feedback Trigger", 
+  "report_name": "Feedback Ratings", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-10 19:42:30.300729", 
+  "module": "Education", 
+  "name": "Student and Guardian Contact Details", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Program Enrollment", 
+  "report_name": "Student and Guardian Contact Details", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-04-04 10:00:10.253224", 
+  "module": "CRM", 
+  "name": "Prospects Engaged But Not Converted", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Lead", 
+  "report_name": "Prospects Engaged But Not Converted", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2017-04-17 00:20:27.248275", 
+  "module": "CRM", 
+  "name": "Campaign Efficiency", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Lead", 
+  "report_name": "Campaign Efficiency", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2017-04-17 00:45:10.139004", 
+  "module": "CRM", 
+  "name": "Lead Owner Efficiency", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Lead", 
+  "report_name": "Lead Owner Efficiency", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-08 15:11:24.904628", 
+  "module": "Education", 
+  "name": "Course wise Assessment Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Assessment Result", 
+  "report_name": "Course wise Assessment Report", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-08-04 15:39:33.401936", 
+  "module": "Regional", 
+  "name": "GST Sales Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "GST Sales Register", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-08-04 15:39:53.123814", 
+  "module": "Regional", 
+  "name": "GST Purchase Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "GST Purchase Register", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-08-04 15:39:46.998093", 
+  "module": "Regional", 
+  "name": "GST Itemised Sales Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "GST Itemised Sales Register", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-08-04 15:39:41.671851", 
+  "module": "Regional", 
+  "name": "GST Itemised Purchase Register", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "GST Itemised Purchase Register", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-06-26 14:05:50.256693", 
+  "module": "Stock", 
+  "name": "Total Stock Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Entry", 
+  "report_name": "Total Stock Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2017-07-13 17:14:40.408706", 
+  "module": "Support", 
+  "name": "Support Hour Distribution", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Issue", 
+  "report_name": "Support Hour Distribution", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Support Team"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": "{\"add_total_row\": 0, \"sort_by\": \"Asset Maintenance.modified\", \"add_totals_row\": 0, \"sort_order\": \"desc\", \"sort_by_next\": null, \"filters\": [], \"sort_order_next\": \"desc\", \"columns\": [[\"name\", \"Asset Maintenance\"], [\"asset_name\", \"Asset Maintenance\"], [\"item_code\", \"Asset Maintenance\"], [\"maintenance_type\", \"Asset Maintenance Task\"], [\"maintenance_task\", \"Asset Maintenance Task\"], [\"description\", \"Asset Maintenance Task\"], [\"assign_to_name\", \"Asset Maintenance Task\"], [\"maintenance_status\", \"Asset Maintenance Task\"], [\"next_due_date\", \"Asset Maintenance Task\"], [\"last_completion_date\", \"Asset Maintenance Task\"]]}", 
+  "letter_head": null, 
+  "modified": "2017-10-27 22:49:56.286781", 
+  "module": "Assets", 
+  "name": "Asset Maintenance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Asset Maintenance", 
+  "report_name": "Asset Maintenance", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-04 05:15:35.892659", 
+  "module": "Accounts", 
+  "name": "Sales Payment Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Sales Payment Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-28 18:35:44.903665", 
+  "module": "Education", 
+  "name": "Assessment Plan Status", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Assessment Plan", 
+  "report_name": "Assessment Plan Status", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-11-16 06:24:10.818276", 
+  "module": "Stock", 
+  "name": "Item Variant Details", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item", 
+  "report_name": "Item Variant Details", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Item Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-12-06 17:01:48.727970", 
+  "module": "Stock", 
+  "name": "Item Price Stock", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Item", 
+  "report_name": "Item Price Stock", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Item Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-12-09 14:31:26.306705", 
+  "module": "Hotels", 
+  "name": "Hotel Room Occupancy", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Hotel Room Reservation", 
+  "report_name": "Hotel Room Occupancy", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-12-27 16:46:54.422356", 
+  "module": "Accounts", 
+  "name": "Share Ledger", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Share Transfer", 
+  "report_name": "Share Ledger", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Administrator"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2017-12-28 16:12:37.155649", 
+  "module": "Accounts", 
+  "name": "Share Balance", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Share Transfer", 
+  "report_name": "Share Balance", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-01-02 17:56:15.379347", 
+  "module": "Regional", 
+  "name": "GSTR-1", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "GSTR-1", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-01-15 15:04:15.340151", 
+  "module": "Stock", 
+  "name": "Ordered Items To Be Delivered", 
+  "prepared_report": 0, 
+  "query": "select \n `tabSales Order`.`name` as \"Sales Order:Link/Sales Order:120\",\n `tabSales Order`.`customer` as \"Customer:Link/Customer:120\",\n `tabSales Order`.`customer_name` as \"Customer Name::150\",\n `tabSales Order`.`transaction_date` as \"Date:Date\",\n `tabSales Order`.`project` as \"Project:Link/Project:120\",\n `tabSales Order Item`.item_code as \"Item:Link/Item:120\",\n `tabSales Order Item`.qty as \"Qty:Float:140\",\n `tabSales Order Item`.delivered_qty as \"Delivered Qty:Float:140\",\n (`tabSales Order Item`.qty - ifnull(`tabSales Order Item`.delivered_qty, 0)) as \"Qty to Deliver:Float:140\",\n `tabSales Order Item`.base_rate as \"Rate:Float:140\",\n `tabSales Order Item`.base_amount as \"Amount:Float:140\",\n ((`tabSales Order Item`.qty - ifnull(`tabSales Order Item`.delivered_qty, 0))*`tabSales Order Item`.base_rate) as \"Amount to Deliver:Float:140\",\n `tabBin`.actual_qty as \"Available Qty:Float:120\",\n `tabBin`.projected_qty as \"Projected Qty:Float:120\",\n `tabSales Order Item`.`delivery_date` as \"Item Delivery Date:Date:120\",\n  DATEDIFF(CURDATE(),`tabSales Order Item`.`delivery_date`) as \"Delay Days:Int:120\",\n `tabSales Order Item`.item_name as \"Item Name::150\",\n `tabSales Order Item`.description as \"Description::200\",\n `tabSales Order Item`.item_group as \"Item Group:Link/Item Group:120\",\n `tabSales Order Item`.warehouse as \"Warehouse:Link/Warehouse:200\"\nfrom\n `tabSales Order` JOIN `tabSales Order Item` \n LEFT JOIN `tabBin` ON (`tabBin`.item_code = `tabSales Order Item`.item_code\n and `tabBin`.warehouse = `tabSales Order Item`.warehouse)\nwhere\n `tabSales Order Item`.`parent` = `tabSales Order`.`name`\n and `tabSales Order`.docstatus = 1\n and `tabSales Order`.status not in (\"Stopped\", \"Closed\")\n and ifnull(`tabSales Order Item`.delivered_qty,0) < ifnull(`tabSales Order Item`.qty,0)\norder by `tabSales Order`.transaction_date asc", 
+  "ref_doctype": "Delivery Note", 
+  "report_name": "Ordered Items To Be Delivered", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-01-11 10:27:25.595485", 
+  "module": "Regional", 
+  "name": "Fichier des Ecritures Comptables [FEC]", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Fichier des Ecritures Comptables [FEC]", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Shishuvan Secondary School", 
+  "modified": "2018-02-08 15:11:35.339434", 
+  "module": "Education", 
+  "name": "Final Assessment Grades", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Assessment Result", 
+  "report_name": "Final Assessment Grades", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-01-29 12:59:55.650445", 
+  "module": "Regional", 
+  "name": "GSTR-2", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "GL Entry", 
+  "report_name": "GSTR-2", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-12 17:45:04.627654", 
+  "module": "Stock", 
+  "name": "Warehouse wise Item Balance Age and Value", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Ledger Entry", 
+  "report_name": "Warehouse wise Item Balance Age and Value", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Sales User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-19 12:03:53.902167", 
+  "module": "Stock", 
+  "name": "Item Balance (Simple)", 
+  "prepared_report": 0, 
+  "query": "select a.item_code as \"Item:Link/Item:120\",\n\t  a.item_name as \"Item Name::150\",\n\t  a.item_group as \"Item Group:Link/Item Group:120\",\n\t  a.brand as \"Brand:Link/Brand:120\",\n\t  a.description as \"Description::150\",\n\t  b.warehouse as \"Warehouse:Link/Warehouse:120\",\n\t  b.actual_qty as \"Balance Qty:Float:140\"\n from `tabItem` a left join `tabBin` b\n ON a.item_code = b.item_code", 
+  "ref_doctype": "Bin", 
+  "report_name": "Item Balance (Simple)", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-02-22 13:33:41.532005", 
+  "module": "HR", 
+  "name": "Employee Advance Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Employee Advance", 
+  "report_name": "Employee Advance Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Employee"
+   }, 
+   {
+    "role": "Expense Approver"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-06-29 15:46:46.884862", 
+  "module": "Core", 
+  "name": "Transaction Log Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Transaction Log", 
+  "report_name": "Transaction Log Report", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Administrator"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-04-14 16:01:07.919565", 
+  "module": "Accounts", 
+  "name": "Consolidated Financial Statement", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Account", 
+  "report_name": "Consolidated Financial Statement", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Auditor"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Standard", 
+  "modified": "2018-04-26 12:59:38.603649", 
+  "module": "Regional", 
+  "name": "HSN-wise-summary of outward supplies", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "HSN-wise-summary of outward supplies", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-05-15 17:19:32.934321", 
+  "module": "HR", 
+  "name": "Department Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Employee", 
+  "report_name": "Department Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Employee"
+   }, 
+   {
+    "role": "HR User"
+   }, 
+   {
+    "role": "HR Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2018-06-18 13:33:18.103220", 
+  "module": "Manufacturing", 
+  "name": "BOM Stock Calculated", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "BOM", 
+  "report_name": "BOM Stock Calculated", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-05-21 11:06:11.920622", 
+  "module": "Selling", 
+  "name": "Customers Without Any Sales Transactions", 
+  "prepared_report": 0, 
+  "query": "SELECT\n\t`tabCustomer`.name as \"Customer:Link/Customer:120\",\n\t`tabCustomer`.customer_name as \"Customer Name::120\",\n\t`tabCustomer`.territory as \"Territory:Link/Territory:120\",\n\t`tabCustomer`.customer_group as \"Customer Group:Link/Customer Group:120\"\nFROM\n\t`tabCustomer`\nWHERE\n\tnot exists(select name from `tabSales Invoice` where `tabCustomer`.name = `tabSales Invoice`.customer and `tabSales Invoice`.docstatus=1 limit 1)\n\tand not exists(select name from `tabSales Order` where `tabCustomer`.name = `tabSales Order`.customer and `tabSales Order`.docstatus=1 limit 1)", 
+  "ref_doctype": "Sales Invoice", 
+  "report_name": "Customers Without Any Sales Transactions", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "System Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "ERPNext Foundation", 
+  "modified": "2018-05-24 11:44:08.942809", 
+  "module": "Non Profit", 
+  "name": "Expiring Memberships", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Membership", 
+  "report_name": "Expiring Memberships", 
+  "report_type": "Script Report", 
+  "roles": []
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Gadgets International", 
+  "modified": "2018-05-28 16:22:24.040106", 
+  "module": "Manufacturing", 
+  "name": "BOM Variance Report", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Entry", 
+  "report_name": "BOM Variance Report", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Test", 
+  "modified": "2018-06-01 09:39:39.604944", 
+  "module": "Selling", 
+  "name": "Address And Contacts", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Address", 
+  "report_name": "Address And Contacts", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-06-04 10:44:04.694509", 
+  "module": "HR", 
+  "name": "Daily Work Summary Replies", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Daily Work Summary", 
+  "report_name": "Daily Work Summary Replies", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Employee"
+   }, 
+   {
+    "role": "HR User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-07-19 12:08:07.400295", 
+  "module": "Regional", 
+  "name": "Eway Bill", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Delivery Note", 
+  "report_name": "Eway Bill", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Sales User"
+   }, 
+   {
+    "role": "Accounts User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Gadgets International", 
+  "modified": "2018-08-21 11:25:00.551823", 
+  "module": "Accounts", 
+  "name": "TDS Computation Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "TDS Computation Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "Gadgets International", 
+  "modified": "2018-08-21 11:33:40.804532", 
+  "module": "Accounts", 
+  "name": "TDS Payable Monthly", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Invoice", 
+  "report_name": "TDS Payable Monthly", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Purchase User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2018-09-17 14:40:52.035394", 
+  "module": "CRM", 
+  "name": "Lead Conversion Time", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Communication", 
+  "report_name": "Lead Conversion Time", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Sales User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-11 17:49:27.256304", 
+  "module": "Selling", 
+  "name": "Sales Person Commission Summary", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Sales Person Commission Summary", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Sales Manager"
+   }, 
+   {
+    "role": "Maintenance User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-09-21 12:46:29.451048", 
+  "module": "Selling", 
+  "name": "Sales Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Sales Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Maintenance User"
+   }, 
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Sales Manager"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-10-05 16:08:33.272201", 
+  "module": "Buying", 
+  "name": "Purchase Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Purchase Order", 
+  "report_name": "Purchase Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Purchase Manager"
+   }, 
+   {
+    "role": "Purchase User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-10-08 12:18:42.834270", 
+  "module": "Stock", 
+  "name": "Stock Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Stock Entry", 
+  "report_name": "Stock Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing Manager"
+   }, 
+   {
+    "role": "Stock Manager"
+   }, 
+   {
+    "role": "Stock User"
+   }, 
+   {
+    "role": "Manufacturing User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": "", 
+  "modified": "2018-10-11 19:28:37.085066", 
+  "module": "Manufacturing", 
+  "name": "Production Analytics", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Work Order", 
+  "report_name": "Production Analytics", 
+  "report_type": "Script Report", 
+  "roles": [
+   {
+    "role": "Manufacturing User"
+   }, 
+   {
+    "role": "Stock User"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 1, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "Yes", 
+  "javascript": null, 
+  "json": null, 
+  "letter_head": null, 
+  "modified": "2018-11-22 17:40:11.317567", 
+  "module": "Accounts", 
+  "name": "Trial Balance (Simple)", 
+  "prepared_report": 0, 
+  "query": "select fiscal_year as \"Fiscal Year:Data:80\",\n\tcompany as \"Company:Data:220\",\n\tposting_date as \"Posting Date:Date:100\",\n\taccount as \"Account:Data:380\",\n\tsum(debit) as \"Debit:Currency:140\",\n\tsum(credit) as \"Credit:Currency:140\"\nfrom `tabGL Entry`\ngroup by fiscal_year, company, posting_date, account\norder by fiscal_year, company, posting_date, account", 
+  "ref_doctype": "GL Entry", 
+  "report_name": "Trial Balance (Simple)", 
+  "report_type": "Query Report", 
+  "roles": [
+   {
+    "role": "Accounts User"
+   }, 
+   {
+    "role": "Accounts Manager"
+   }, 
+   {
+    "role": "Auditor"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "No", 
+  "javascript": null, 
+  "json": "{\"fields\": [[\"name\", \"Issue\"], [\"opening_date\", \"Issue\"], [\"resolution_date\", \"Issue\"], [\"property_name\", \"Issue\"], [\"status\", \"Issue\"], [\"issue_type\", \"Issue\"], [\"person_in_charge_name\", \"Issue\"], [\"sub_contractor_contact\", \"Issue\"], [\"description\", \"Issue\"], [\"defect_found\", \"Issue\"], [\"docstatus\", \"Issue\"], [\"resolution_details\", \"Issue\"]], \"add_totals_row\": true, \"order_by\": \"`tabIssue`.`modified` desc\", \"add_total_row\": 0, \"filters\": [[\"Issue\", \"resolution_date\", \"Between\", [\"2018-12-06\", \"2018-12-06\"], false], [\"Issue\", \"status\", \"=\", \"Closed\"]]}", 
+  "letter_head": "Viva Towers Internal Document", 
+  "modified": "2018-12-12 10:35:55.378882", 
+  "module": "Support", 
+  "name": "Viva Format (Closed)", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Issue", 
+  "report_name": "Viva Format (Closed)", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Floor Maintenance Supervisor"
+   }, 
+   {
+    "role": "Support Team"
+   }, 
+   {
+    "role": "Maintenance Manager"
+   }, 
+   {
+    "role": "Maintenance Job in-charge"
+   }
+  ]
+ }, 
+ {
+  "add_total_row": 0, 
+  "color": null, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Report", 
+  "icon": null, 
+  "is_standard": "No", 
+  "javascript": null, 
+  "json": "{\"fields\": [[\"name\", \"Issue\"], [\"opening_date\", \"Issue\"], [\"resolution_date\", \"Issue\"], [\"property_name\", \"Issue\"], [\"status\", \"Issue\"], [\"issue_type\", \"Issue\"], [\"person_in_charge_name\", \"Issue\"], [\"sub_contractor_contact\", \"Issue\"], [\"description\", \"Issue\"], [\"defect_found\", \"Issue\"], [\"docstatus\", \"Issue\"], [\"resolution_details\", \"Issue\"]], \"add_totals_row\": true, \"order_by\": \"`tabIssue`.`modified` desc\", \"add_total_row\": 0, \"filters\": [[\"Issue\", \"status\", \"=\", \"Open\"]]}", 
+  "letter_head": "Viva Towers Internal Document", 
+  "modified": "2018-12-12 10:36:41.505575", 
+  "module": "Support", 
+  "name": "Viva Format", 
+  "prepared_report": 0, 
+  "query": null, 
+  "ref_doctype": "Issue", 
+  "report_name": "Viva Format", 
+  "report_type": "Report Builder", 
+  "roles": [
+   {
+    "role": "Floor Maintenance Supervisor"
+   }, 
+   {
+    "role": "Support Team"
+   }, 
+   {
+    "role": "Maintenance Manager"
+   }, 
+   {
+    "role": "Maintenance Job in-charge"
+   }
+  ]
+ }
+]
