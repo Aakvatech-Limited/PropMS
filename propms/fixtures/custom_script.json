@@ -2,6 +2,42 @@
  {
   "docstatus": 0, 
   "doctype": "Custom Script", 
+  "dt": "Daily Checklist", 
+  "modified": "2018-12-07 17:24:34.808556", 
+  "name": "Daily Checklist-Client", 
+  "script": "frappe.ui.form.on('Daily Checklist', 'area', function (frm, cdt, cdn) {\n\tvar doc = locals[cdt][cdn];\n\tif (doc.area) {\n\t\tfrappe.call({\n\t\t\tmethod: \"frappe.client.get\",\n\t\t\targs: {\n\t\t\t\tname: doc.area,\n\t\t\t\tdoctype: \"Checklist Checkup Area\"\n\t\t\t},\n\t\t\tcallback(r) {\n\t\t\t\tconsole.log(r);\n\t\t\t\tif (r.message) {\n\t\t\t\t\tfor (var row in r.message.task) {\n\n\t\t\t\t\t\tvar child = frm.add_child(\"daily_checklist_detail\");\n\n\t\t\t\t\t\tfrappe.model.set_value(child.doctype, child.name, \"checklist_task\", r.message.task[row].task_name);\n\t\t\t\t\t\trefresh_field(\"daily_checklist_detail\");\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t})\n\t}\n})\n\ncur_frm.fields_dict['daily_checklist_detail'].grid.get_field('job_card').get_query = function(doc,cdt,cdn) {\nvar child=locals[cdt][cdn]\n        return {\n            filters: [[\n               'Issue', 'docstatus', '=', '0'\n            ],\n            [\n               'Issue', 'docstatus', '=', '1'\n            ]]\n        }\n    };\n\n\n", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Security Attendance", 
+  "modified": "2018-12-12 18:13:01.738875", 
+  "name": "Security Attendance-Client", 
+  "script": "cur_frm.add_fetch('guard_empid', 'employee_name', 'guard_name');\r\n\r\nfrappe.ui.form.on('Security Attendance', 'shift_name', function (frm, cdt, cdn) {\r\n\tvar doc = locals[cdt][cdn];\r\n\tif (doc.shift_name) {\r\n\t\tfrappe.call({\r\n\t\t\tmethod: \"frappe.client.get\",\r\n\t\t\targs: {\r\n\t\t\t\tname: doc.shift_name,\r\n\t\t\t\tdoctype: \"Guard Shift\"\r\n\t\t\t},\r\n\t\t\tcallback(r) {\r\n\t\t\t\tconsole.log(r);\r\n\t\t\t\tif (r.message) {\r\n\t\t\t\t\tfor (var row in r.message.shift_location) {\r\n\r\n\t\t\t\t\t\tvar child = frm.add_child(\"attendance_details\");\r\n\r\n\t\t\t\t\t\tfrappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\r\n\t\t\t\t\t\trefresh_field(\"attendance_details\");\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t})\r\n\t}\r\n})\r\n\r\nfrappe.ui.form.on(\"Security Attendance\", \"shift_name\", function (frm) {\r\n    cur_frm.set_query(\"guard_empid\", \"attendance_details\", function (frm) {\r\n        return {\r\n            \"filters\": {\r\n                \"department\": \"Security - VPL\"\r\n            }\r\n        }\r\n    });\r\n});", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Security Attendance Details", 
+  "modified": "2018-12-11 16:54:23.585260", 
+  "name": "Security Attendance Details-Client", 
+  "script": "cur_frm.set_query(\"guard_empid\", function () \n{\n    return{\n        filters: { 'Department':'Security - VPL'}\n    }\n}\n);", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Outsourcing Attendance", 
+  "modified": "2018-12-12 11:37:36.500542", 
+  "name": "Outsourcing Attendance-Client", 
+  "script": "\r\nfrappe.ui.form.on('Outsourcing Attendance', 'shift_name', function (frm, cdt, cdn) {\r\n\tvar doc = locals[cdt][cdn];\r\n\tif (doc.shift_name) {\r\n\t\tfrappe.call({\r\n\t\t\tmethod: \"frappe.client.get\",\r\n\t\t\targs: {\r\n\t\t\t\tname: doc.shift_name,\r\n\t\t\t\tdoctype: \"Outsourcing Shift\"\r\n\t\t\t},\r\n\t\t\tcallback(r) {\r\n\t\t\t\tconsole.log(r);\r\n\t\t\t\tif (r.message) {\r\n\t\t\t\t\tfor (var row in r.message.shift_location) {\r\n\r\n\t\t\t\t\t\tvar child = frm.add_child(\"attendance_details\");\r\n\r\n\t\t\t\t\t\tfrappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\r\n\t\t\t\t\t\trefresh_field(\"attendance_details\");\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t})\r\n\t}\r\n})\r\n", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
   "dt": "Issue", 
   "modified": "2018-12-03 22:51:50.489177", 
   "name": "Issue-Client", 
