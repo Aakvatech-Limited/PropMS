@@ -79,7 +79,7 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format", "Naming Series"]
+fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format",{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]} ]
 
 
 doc_events = {
