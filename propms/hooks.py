@@ -79,7 +79,7 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format"]
+fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format", "Naming Series"]
 
 
 doc_events = {
