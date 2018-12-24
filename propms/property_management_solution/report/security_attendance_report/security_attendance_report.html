@@ -1,0 +1,48 @@
+<style>
+.print-format {
+        padding-left: 10mm;
+        padding-right: 5mm;
+        padding-top: 15mm;
+        padding-bottom: 5mm;
+}
+</style>
+
+<h4 class="text-center">
+	{%= data[0][ __("Shift")] %} SHIFT SECURITY ATTENDANCE REPORT FOR {%= data[0][ __("Date")] %}<br>
+</h4>
+
+<table class="table table-bordered">
+        <thead>
+                <tr>
+                        <th style="text-align:center">{%= __("GUARD NAME") %}</th>
+                        <th style="text-align:center">{%= __("POSITION") %}</th>
+                        <th style="text-align:center">{%= __("PRESENT") %}</th>
+                        <th style="text-align:center">{%= __("ABSENT") %}</th>
+                        <th style="text-align:center">{%= __("DAY OFF") %}</th>
+                        <th style="text-align:center">{%= __("REMARKS") %}</th>
+                </tr>
+        </thead>
+        <tbody>
+        {% for(var i=0, l=data.length - 1; i<l; i++) { %}
+                <tr>
+                        <td>{%= data[i][ __("Guard Name")] %}</td>
+                        <td>{%= data[i][ __("Position")] %}</td>
+                        <td style="text-align:center">{%= data[i][ __("Present")] %} </td>
+                        <td style="text-align:center">{%= data[i][ __("Absent")] %} </td>
+                        <td style="text-align:center">{%= data[i][ __("Day off")] %} </td>
+						<td>{%= data[i][ __("Remarks")] %}</td>
+                </tr>
+        {% } %}
+        </tbody>
+		<tfoot>
+				<tr>
+                        <th>{%= __("TOTAL") %}</th>
+                        <th style="text-align:center">{%= data[l][ __("Total")] %} </th>
+                        <th style="text-align:center">{%= data[l][ __("Present")] %} </th>
+                        <th style="text-align:center">{%= data[l][ __("Absent")] %} </th>
+                        <th style="text-align:center">{%= data[l][ __("Day off")] %} </th>
+						<th>&nbsp;</th>
+                </tr>
+
+        </tfoot>
+</table>
