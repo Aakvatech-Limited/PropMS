@@ -91,6 +91,9 @@ doc_events = {
 		"on_update":"propms.auto_custom.makeSalesInvoice",
 		"on_change":"propms.auto_custom.makeSalesInvoice"
 
+	},
+	"Sales Order": {
+		"validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"
 	}
 
 }

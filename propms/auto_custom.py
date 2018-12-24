@@ -153,22 +153,11 @@ def getIssueName(name):
 		return False
 
 
+@frappe.whitelist()
+def validateSalesInvoiceItemDuplication(self,method):
+	for item in self.items:
+		for item_child in self.items:
+			if not item.name==item_child.name:
+				if item.item_code==item_child.item_code:
+					frappe.throw("Duplicate Item Exists - {0}. Duplications are not allowed.".format(item.item_code))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
