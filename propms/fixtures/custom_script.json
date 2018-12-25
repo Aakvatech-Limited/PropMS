@@ -3,9 +3,9 @@
   "docstatus": 0, 
   "doctype": "Custom Script", 
   "dt": "Issue", 
-  "modified": "2018-12-01 21:23:54.406329", 
+  "modified": "2018-12-25 14:24:12.618970", 
   "name": "Issue-Client", 
-  "script": "cur_frm.add_fetch('person_in_charge', 'employee_name', 'person_in_charge_name');\n\ncur_frm.set_query(\"person_in_charge\", function () {\n    return{\n        filters: { 'Department':'Maintenance - PrpMS'}\n    }\n});\n\n\ncur_frm.add_fetch('sub_contractor_contact', 'supplier_name', 'sub_contractor_name');\n\ncur_frm.set_query(\"sub_contractor_contact\", function () {\n    return{\n        filters: { 'supplier_group':'Sub-Contractor'}\n    }\n});\n\ncur_frm.fields_dict['materials_required'].grid.get_field('material_request').get_query = function(doc,cdt,cdn) {\nvar child=locals[cdt][cdn]\n        return {\n            filters: [[\n               'Material Request', 'docstatus', '=', '0'\n            ],\n            [\n               'Material Request', 'docstatus', '=', '1'\n            ]]\n        }\n}\n\nfrappe.ui.form.on('Issue Materials Detail', {\n    material_request:function(frm,cdt,cdn){\n        var material=locals[cdt][cdn];\n            if(material.material_request){\n                   frappe.call({\n                     \"method\": \"frappe.client.get_value\",\n                     \"args\": { doctype: \"Material Request\", filters: {\"name\":material.material_request} ,fieldname:\"status\"}, \n                    callback: function(r) { \n\t\t\t\tfrappe.model.set_value(cdt, cdn, \"material_status\",r.message.status);\n\t\t\t\t\n\t\t\t}\n\t\t});\n      }\n    }\n})\n\n\n", 
+  "script": "cur_frm.add_fetch('person_in_charge', 'employee_name', 'person_in_charge_name');\n\ncur_frm.set_query(\"person_in_charge\", function () {\n    return{\n        \"filters\": { \"department\": [\"like\", \"Maintenance - \"] }\n    }\n});\n\n\ncur_frm.add_fetch('sub_contractor_contact', 'supplier_name', 'sub_contractor_name');\n\ncur_frm.set_query(\"sub_contractor_contact\", function () {\n    return{\n        filters: { 'supplier_group':'Sub-Contractor'}\n    }\n});\n\ncur_frm.fields_dict['materials_required'].grid.get_field('material_request').get_query = function(doc,cdt,cdn) {\nvar child=locals[cdt][cdn]\n        return {\n            filters: [[\n               'Material Request', 'docstatus', '=', '0'\n            ],\n            [\n               'Material Request', 'docstatus', '=', '1'\n            ]]\n        }\n}\n\nfrappe.ui.form.on('Issue Materials Detail', {\n    material_request:function(frm,cdt,cdn){\n        var material=locals[cdt][cdn];\n            if(material.material_request){\n                   frappe.call({\n                     \"method\": \"frappe.client.get_value\",\n                     \"args\": { doctype: \"Material Request\", filters: {\"name\":material.material_request} ,fieldname:\"status\"}, \n                    callback: function(r) { \n\t\t\t\tfrappe.model.set_value(cdt, cdn, \"material_status\",r.message.status);\n\t\t\t\t\n\t\t\t}\n\t\t});\n      }\n    }\n})\n\n\n\nfrappe.ui.form.on('Issue', {\n    property_name: function(frm, cdt, cdn) {\n        if (frm.doc.property_name) {\n            frappe.call({\n                method: \"frappe.client.get_value\",\n                args: {\n                    doctype: \"Lease\",\n                    fieldname: \"customer\",\n                    filters: {\n                        property: frm.doc.property_name\n                    },\n                },\n                callback: function(r, rt) {\n                    if (r.message) {\n                        cur_frm.set_value(\"customer\", r.message.customer);\n                    }\n                }\n            });\n        }\n    }\n})", 
   "script_type": "Client"
  }, 
  {
@@ -24,6 +24,33 @@
   "modified": "2018-12-19 17:52:20.610111", 
   "name": "Key Set Detail-Client", 
   "script": "frappe.ui.form.on(\"Key Set Detail\", \"returned\", function(frm) {\n    if ( cur_frm.doc.returned ) cur_frm.set_value(\"return_date_and_time\", frappe.datetime.now_datetime());\n    else {\n        cur_frm.set_value(\"return_date_and_time\", \"\");\n    }\n        \n});", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Security Attendance", 
+  "modified": "2018-12-25 14:24:35.959918", 
+  "name": "Security Attendance-Client", 
+  "script": "cur_frm.add_fetch('guard_empid', 'employee_name', 'guard_name');\n\nfrappe.ui.form.on('Security Attendance', 'shift_name', function (frm, cdt, cdn) {\n\tvar doc = locals[cdt][cdn];\n\tif (doc.shift_name) {\n\t\tfrappe.call({\n\t\t\tmethod: \"frappe.client.get\",\n\t\t\targs: {\n\t\t\t\tname: doc.shift_name,\n\t\t\t\tdoctype: \"Guard Shift\"\n\t\t\t},\n\t\t\tcallback(r) {\n\t\t\t\tconsole.log(r);\n\t\t\t\tif (r.message) {\n\t\t\t\t\tfor (var row in r.message.shift_location) {\n\n\t\t\t\t\t\tvar child = frm.add_child(\"attendance_details\");\n\n\t\t\t\t\t\tfrappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\n\t\t\t\t\t\trefresh_field(\"attendance_details\");\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t})\n\t}\n})\n\nfrappe.ui.form.on(\"Security Attendance\", \"shift_name\", function (frm) {\n    cur_frm.set_query(\"guard_empid\", \"attendance_details\", function (frm) {\n        return {\n            \"filters\": { \"department\": [\"like\", \"Security - \"] }\n        }\n    });\n});\n", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Outsourcing Attendance", 
+  "modified": "2018-12-25 14:26:17.926148", 
+  "name": "Outsourcing Attendance-Client", 
+  "script": "frappe.ui.form.on('Outsourcing Attendance', 'shift_name', function (frm, cdt, cdn) {\n\tvar doc = locals[cdt][cdn];\n\tif (doc.shift_name) {\n\t\tfrappe.call({\n\t\t\tmethod: \"frappe.client.get\",\n\t\t\targs: {\n\t\t\t\tname: doc.shift_name,\n\t\t\t\tdoctype: \"Outsourcing Shift\"\n\t\t\t},\n\t\t\tcallback(r) {\n\t\t\t\tconsole.log(r);\n\t\t\t\tif (r.message) {\n\t\t\t\t\tfor (var row in r.message.shift_location) {\n\t\t\t\t\t\tvar child = frm.add_child(\"attendance_details\");\n\t\t\t\t\t\tfrappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\n\t\t\t\t\t\trefresh_field(\"attendance_details\");\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t})\n\t}\n})\n", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Security Attendance Details", 
+  "modified": "2018-12-25 14:27:24.090505", 
+  "name": "Security Attendance Details-Client", 
+  "script": "cur_frm.set_query(\"guard_empid\", function () \n{\n    return{\n            \"filters\": { \"department\": [\"like\", \"Security - \"] }\n    }\n}\n);", 
   "script_type": "Client"
  }
 ]
