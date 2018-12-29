@@ -1,0 +1,149 @@
+[
+ {
+  "attach_print": 0, 
+  "channel": null, 
+  "condition": null, 
+  "date_changed": null, 
+  "days_in_advance": 0, 
+  "docstatus": 0, 
+  "doctype": "Notification", 
+  "document_type": "Training Event", 
+  "enabled": 1, 
+  "event": "Submit", 
+  "is_standard": 1, 
+  "message": "<h3>{{_(\"Training Event\")}}</h3>\n\n<p>{{ doc.introduction }}</p>\n\n<h4>{{_(\"Details\")}}</h4>\n{{_(\"Event Name\")}}: {{ frappe.utils.get_link_to_form(doc.doctype, doc.name) }}\n<br>{{_(\"Event Location\")}}: {{ doc.location }}\n<br>{{_(\"Start Time\")}}: {{ doc.start_time }}\n<br>{{_(\"End Time\")}}: {{ doc.end_time }}\n", 
+  "method": null, 
+  "modified": "2017-08-13 22:49:42.338881", 
+  "module": "HR", 
+  "name": "Training Scheduled", 
+  "print_format": null, 
+  "property_value": null, 
+  "recipients": [
+   {
+    "bcc": null, 
+    "cc": null, 
+    "condition": null, 
+    "email_by_document_field": "employee_emails", 
+    "email_by_role": null
+   }
+  ], 
+  "sender": null, 
+  "sender_email": null, 
+  "set_property_after_alert": null, 
+  "slack_webhook_url": null, 
+  "subject": "Training Scheduled: {{ doc.name }}", 
+  "value_changed": null
+ }, 
+ {
+  "attach_print": 0, 
+  "channel": null, 
+  "condition": null, 
+  "date_changed": null, 
+  "days_in_advance": 0, 
+  "docstatus": 0, 
+  "doctype": "Notification", 
+  "document_type": "Training Result", 
+  "enabled": 1, 
+  "event": "Submit", 
+  "is_standard": 1, 
+  "message": "<h3>{{_(\"Training Event\")}}</h3>\n<p>{{ message }}</p>\n\n<h4>{{_(\"Details\")}}</h4>\n{{_(\"Event Name\")}}: <a href=\"{{ event_link }}\">{{ name }}</a>\n<br>{{_(\"Event Location\")}}: {{ location }}\n<br>{{_(\"Start Time\")}}: {{ start_time }}\n<br>{{_(\"End Time\")}}: {{ end_time }}\n<br>{{_(\"Attendance\")}}: {{ attendance }}\n", 
+  "method": null, 
+  "modified": "2017-08-11 04:26:58.194793", 
+  "module": "HR", 
+  "name": "Training Feedback", 
+  "print_format": null, 
+  "property_value": null, 
+  "recipients": [
+   {
+    "bcc": null, 
+    "cc": null, 
+    "condition": null, 
+    "email_by_document_field": "employee_emails", 
+    "email_by_role": null
+   }
+  ], 
+  "sender": null, 
+  "sender_email": null, 
+  "set_property_after_alert": null, 
+  "slack_webhook_url": null, 
+  "subject": "Please Share your Feedback For {{ doc.training_event }}", 
+  "value_changed": null
+ }, 
+ {
+  "attach_print": 0, 
+  "channel": null, 
+  "condition": "doc.auto_created", 
+  "date_changed": null, 
+  "days_in_advance": 0, 
+  "docstatus": 0, 
+  "doctype": "Notification", 
+  "document_type": "Fiscal Year", 
+  "enabled": 1, 
+  "event": "New", 
+  "is_standard": 1, 
+  "message": "<h3>{{_(\"Fiscal Year\")}}</h3>\n\n<p>{{ _(\"New fiscal year created :- \") }} {{ doc.name }}</p>", 
+  "method": null, 
+  "modified": "2018-04-25 14:30:38.588534", 
+  "module": "Accounts", 
+  "name": "Notification for new fiscal year", 
+  "print_format": null, 
+  "property_value": null, 
+  "recipients": [
+   {
+    "bcc": null, 
+    "cc": null, 
+    "condition": null, 
+    "email_by_document_field": null, 
+    "email_by_role": "Accounts User"
+   }, 
+   {
+    "bcc": null, 
+    "cc": null, 
+    "condition": null, 
+    "email_by_document_field": null, 
+    "email_by_role": "Accounts Manager"
+   }
+  ], 
+  "sender": null, 
+  "sender_email": null, 
+  "set_property_after_alert": null, 
+  "slack_webhook_url": null, 
+  "subject": "Notification for new fiscal year {{ doc.name }}", 
+  "value_changed": null
+ }, 
+ {
+  "attach_print": 0, 
+  "channel": null, 
+  "condition": "doc.docstatus==1", 
+  "date_changed": "bonus_payment_date", 
+  "days_in_advance": 14, 
+  "docstatus": 0, 
+  "doctype": "Notification", 
+  "document_type": "Retention Bonus", 
+  "enabled": 1, 
+  "event": "Days Before", 
+  "is_standard": 1, 
+  "message": "<p>{{ _(\"Hello\") }},</p>\n\n<p> {{ _(\"Retention Bonus for\") }} {{ doc.employee_name }} {{ _(\"due on\") }} {{ doc.bonus_payment_date }}</p>", 
+  "method": null, 
+  "modified": "2018-05-15 19:00:24.294418", 
+  "module": "HR", 
+  "name": "Retention Bonus", 
+  "print_format": null, 
+  "property_value": null, 
+  "recipients": [
+   {
+    "bcc": null, 
+    "cc": null, 
+    "condition": null, 
+    "email_by_document_field": null, 
+    "email_by_role": "HR Manager"
+   }
+  ], 
+  "sender": null, 
+  "sender_email": null, 
+  "set_property_after_alert": null, 
+  "slack_webhook_url": null, 
+  "subject": "Retention Bonus alert for {{ doc.employee }}", 
+  "value_changed": null
+ }
+]

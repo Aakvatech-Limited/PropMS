@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 import frappe
-from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,get_last_day
+from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
 from frappe import throw, msgprint, _
 from frappe.desk.reportview import get_match_cond, get_filters_cond
 from frappe.utils.password import update_password as _update_password
@@ -140,6 +140,9 @@ def changeStatusIssue(name,status):
 
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
+
+	
+
 	
 
 def getIssueName(name):
@@ -160,4 +163,35 @@ def validateSalesInvoiceItemDuplication(self,method):
 			if not item.name==item_child.name:
 				if item.item_code==item_child.item_code:
 					frappe.throw("Duplicate Item Exists - {0}. Duplications are not allowed.".format(item.item_code))
+
+
+@frappe.whitelist()
+def statusChangeBeforeLeaseExpire():
+	try:
+		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","Between",[str(today()),str(add_months(today(),3))]]],fields=["name","property"])
+		if lease_doclist:
+			for lease in lease_doclist:
+				property_doc=frappe.get_doc("Property",lease.property)
+				if not property_doc.status=="Off lease in 3 months":
+					frappe.db.set_value("Property",lease.property,"status","Off lease in 3 months")
+					
+
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+@frappe.whitelist()
+def statusChangeAfterLeaseExpire():
+	try:
+		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","=",add_days(today(),-1)]],fields=["name","property"])
+		if lease_doclist:
+			for lease in lease_doclist:
+				property_doc=frappe.get_doc("Property",lease.property)
+				if not property_doc.status=="Available":
+					frappe.db.set_value("Property",lease.property,"status","Available")
+
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
 

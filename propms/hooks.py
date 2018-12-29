@@ -79,7 +79,7 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format",{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, 'Workflow', 'Workflow State', 'Workflow Action' ]
+fixtures = ["Custom Field", "Custom Script", "Property Setter", "Print Format",{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, 'Workflow', 'Workflow State', 'Workflow Action', 'Notification' ]
 
 
 doc_events = {
@@ -97,6 +97,15 @@ doc_events = {
 	}
 
 }
+
+
+scheduler_events = {
+ 	"daily": [
+ 		"propms.auto_custom.statusChangeBeforeLeaseExpire",
+		"propms.auto_custom.statusChangeAfterLeaseExpire"
+ 	]
+}
+
 
 
 
