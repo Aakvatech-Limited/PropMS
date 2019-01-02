@@ -2820,5 +2820,22 @@
   "property": "read_only_onload", 
   "property_type": "Check", 
   "value": null
+ }, 
+ {
+  "_assign": null, 
+  "_comments": null, 
+  "_liked_by": null, 
+  "_user_tags": null, 
+  "default_value": null, 
+  "doc_type": "Price List", 
+  "docstatus": 0, 
+  "doctype": "Property Setter", 
+  "doctype_or_field": "DocType", 
+  "field_name": null, 
+  "modified": "2019-01-01 19:47:58.443668", 
+  "name": "Price List-read_only_onload", 
+  "property": "read_only_onload", 
+  "property_type": "Check", 
+  "value": null
  }
 ]
