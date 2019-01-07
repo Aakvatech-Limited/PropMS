@@ -1,0 +1,22 @@
+[
+ {
+  "data_modified_till": 24, 
+  "day_of_week": "Monday", 
+  "description": "<div>Please see the Job Card Report with records that were updated in the last 24 hours.</div>", 
+  "docstatus": 0, 
+  "doctype": "Auto Email Report", 
+  "email_to": "info@aakvatech.com\nvimalrathod@vvsdtz.com", 
+  "enabled": 1, 
+  "filter_meta": null, 
+  "filters": "", 
+  "format": "HTML", 
+  "frequency": "Daily", 
+  "modified": "2019-01-07 11:34:50.517965", 
+  "name": "All Maintenance Jobs", 
+  "no_of_rows": 100, 
+  "report": "All Maintenance Jobs", 
+  "report_type": "Report Builder", 
+  "send_if_data": 1, 
+  "user": "Administrator"
+ }
+]

@@ -521,7 +521,7 @@
  }, 
  {
   "allow_on_submit": 0, 
-  "bold": 0, 
+  "bold": 1, 
   "collapsible": 0, 
   "collapsible_depends_on": null, 
   "columns": 0, 
@@ -1161,7 +1161,7 @@
  }, 
  {
   "allow_on_submit": 0, 
-  "bold": 0, 
+  "bold": 1, 
   "collapsible": 0, 
   "collapsible_depends_on": null, 
   "columns": 0, 
