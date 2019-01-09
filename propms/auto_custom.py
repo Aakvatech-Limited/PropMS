@@ -8,6 +8,7 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe.desk.notifications import clear_notifications
 from frappe.utils.user import get_system_managers
 import frappe.permissions
+from frappe.model.mapper import get_mapped_doc
 import frappe.share
 import re
 import string
@@ -190,6 +191,38 @@ def statusChangeAfterLeaseExpire():
 				if not property_doc.status=="Available":
 					frappe.db.set_value("Property",lease.property,"status","Available")
 
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+
+@frappe.whitelist()
+def getCheckList():
+	checklist_doc=frappe.get_doc("Checklist Checkup Area","Takeover")
+	if checklist_doc:
+		check_list=[]
+		for task in checklist_doc.task:
+			check={}
+			check["checklist_task"]=task.task_name
+			check_list.append(check)
+		return check_list
+
+
+@frappe.whitelist()
+def makeDailyCheckListForTakeover(source_name, target_doc=None, ignore_permissions=True):
+	try:
+		def set_missing_values(source, target):
+			target.checkup_date=today()
+			target.area='Takeover'
+
+		doclist = get_mapped_doc("Lease",source_name,
+			{"Lease": {
+				"doctype": "Daily Checklist",
+				"field_map": {
+					"property":"property"
+				}
+			}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
+		return doclist
 
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
