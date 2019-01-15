@@ -745,11 +745,11 @@
  "idx": 0, 
  "image_view": 0, 
  "in_create": 0, 
- "is_submittable": 1, 
+ "is_submittable": 0, 
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2019-01-04 17:29:35.521204", 
+ "modified": "2019-01-13 20:50:12.698048", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Lease", 
@@ -791,7 +791,7 @@
    "role": "Property Manager", 
    "set_user_permissions": 0, 
    "share": 1, 
-   "submit": 1, 
+   "submit": 0, 
    "write": 1
   }
  ], 

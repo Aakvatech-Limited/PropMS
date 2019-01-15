@@ -1,33 +1,34 @@
 from __future__ import unicode_literals
-import frappe
-from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
-from frappe import throw, msgprint, _
-from frappe.desk.reportview import get_match_cond, get_filters_cond
-from frappe.utils.password import update_password as _update_password
+from collections import defaultdict
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
+from erpnext.accounts.utils import get_fiscal_year
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
+from frappe import throw, msgprint, _
+from frappe.client import delete
 from frappe.desk.notifications import clear_notifications
-from frappe.utils.user import get_system_managers
-import frappe.permissions
+from frappe.desk.reportview import get_match_cond, get_filters_cond
 from frappe.model.mapper import get_mapped_doc
+from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
+from frappe.utils.password import update_password as _update_password
+from frappe.utils.user import get_system_managers
+import collections
+import frappe
+import frappe.permissions
 import frappe.share
+import json
+import logging
+import math
+import random
 import re
 import string
-import random
-import json
 import time
-from datetime import datetime
-from datetime import date
-from datetime import timedelta
-import collections
-import math
-import logging
-from frappe.client import delete
 import traceback
 import urllib
 import urllib2
-from erpnext.accounts.utils import get_fiscal_year
-from collections import defaultdict
-
+from frappe.utils import flt, add_days
+from frappe.utils import get_datetime_str, nowdate
 
 @frappe.whitelist()
 def app_error_log(title,error):
@@ -227,4 +228,94 @@ def makeDailyCheckListForTakeover(source_name, target_doc=None, ignore_permissio
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
+
+@frappe.whitelist()
+def makeJournalEntry(customer,date,amount):
+	try:
+		propm_setting=frappe.get_doc("PropMS Settings","Propms Setting")
+		j_entry=[]
+		j_entry_debit={}
+		j_entry_debit["account"]='Debtors - PMC'
+		j_entry_debit["party_type"]='Customer'
+		j_entry_debit["party"]=customer
+		j_entry_debit["debit_in_account_currency"]=amount
+		j_entry.append(j_entry_debit)
+		j_entry_credit={}
+		j_entry_credit["account"]='Cash - PMC'
+		j_entry_credit["credit_in_account_currency"]=amount
+		j_entry.append(j_entry_credit)
+		j_entry=frappe.get_doc(dict(
+			doctype="Journal Entry",
+			posting_date=date,
+			company=propm_setting.company,
+			accounts=j_entry,
+			mode_of_payment=propm_setting.security_deposit_payment_type	
+		)).insert()
+		return j_entry.name
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+
+
+
+def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=None):
+	if not (from_currency and to_currency):
+		# manqala 19/09/2016: Should this be an empty return or should it throw and exception?
+		print 'No need to convert'
+		return
+	if from_currency == to_currency:
+		return 1
+
+	if not transaction_date:
+		transaction_date = nowdate()
+	currency_settings = frappe.get_doc("Accounts Settings").as_dict()
+	print transaction_date
+	allow_stale_rates = currency_settings.get("allow_stale")
+
+	filters = [
+		["date", "<=", get_datetime_str(transaction_date)],
+		["from_currency", "=", from_currency],
+		["to_currency", "=", to_currency]
+	]
+
+	if args == "for_buying":
+		filters.append(["for_buying", "=", "1"])
+	elif args == "for_selling":
+		filters.append(["for_selling", "=", "1"])
+
+	if not allow_stale_rates:
+		stale_days = currency_settings.get("stale_days")
+		checkpoint_date = add_days(transaction_date, -stale_days)
+		filters.append(["date", ">", get_datetime_str(checkpoint_date)])
+
+	# cksgb 19/09/2016: get last entry in Currency Exchange with from_currency and to_currency.
+	entries = frappe.get_all(
+		"Currency Exchange", fields=["exchange_rate"], filters=filters, order_by="date desc",
+		limit=1)
+	if entries:
+		return flt(entries[0].exchange_rate)
+
+	try:
+		cache = frappe.cache()
+		key = "currency_exchange_rate:{0}:{1}".format(from_currency, to_currency)
+		value = cache.get(key)
+
+		if not value:
+			import requests
+			print 'Trying to get from Frankfurter'
+			api_url = "https://frankfurter.erpnext.org/{0}".format(transaction_date)
+			response = requests.get(api_url, params={
+				"base": from_currency,
+				"symbols": to_currency
+			})
+			# expire in 6 hours
+			response.raise_for_status()
+			value = response.json()["rates"][to_currency]
+			print value
+			cache.setex(key, value, 6 * 60 * 60)
+		return flt(value)
+	except:
+		frappe.msgprint(_("Unable to find exchange rate for {0} to {1} for key date {2}. Please create a Currency Exchange record manually").format(from_currency, to_currency, transaction_date))
+		return 0.0
 
