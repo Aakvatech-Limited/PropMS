@@ -4,6 +4,7 @@
  "allow_guest_to_view": 0, 
  "allow_import": 0, 
  "allow_rename": 0, 
+ "autoname": "format:{key_set}-{taken_by}-{######}", 
  "beta": 0, 
  "color": "#ff0102", 
  "creation": "2018-12-19 15:33:36.946075", 
@@ -252,7 +253,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-12-24 19:40:36.012645", 
+ "modified": "2019-01-15 16:21:02.706494", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Key Set Detail", 
@@ -279,7 +280,7 @@
    "write": 1
   }
  ], 
- "quick_entry": 1, 
+ "quick_entry": 0, 
  "read_only": 0, 
  "read_only_onload": 0, 
  "show_name_in_global_search": 0, 

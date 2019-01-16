@@ -21,9 +21,9 @@
   "docstatus": 0, 
   "doctype": "Custom Script", 
   "dt": "Key Set Detail", 
-  "modified": "2018-12-25 14:32:30.386201", 
+  "modified": "2019-01-16 07:56:55.544395", 
   "name": "Key Set Detail-Client", 
-  "script": "frappe.ui.form.on(\"Key Set Detail\", \"returned\", function(frm) {\n    if (cur_frm.doc.returned) cur_frm.set_value(\"return_date_and_time\", frappe.datetime.now_datetime());\n    else {\n        cur_frm.set_value(\"return_date_and_time\", \"\");\n    }\n});", 
+  "script": "frappe.ui.form.on(\"Key Set Detail\", \"returned\", function(frm) {\n    if (cur_frm.doc.returned) cur_frm.set_value(\"return_date_and_time\", frappe.datetime.now_datetime());\n    else {\n        cur_frm.set_value(\"return_date_and_time\", \"\");\n    }\n});\n\ncur_frm.set_query(\"key_set\", function() {\n    return {\n        filters: {\n            'status': 'In'\n        }\n    }\n});", 
   "script_type": "Client"
  }, 
  {
@@ -39,9 +39,9 @@
   "docstatus": 0, 
   "doctype": "Custom Script", 
   "dt": "Outsourcing Attendance", 
-  "modified": "2019-01-10 20:07:38.893463", 
+  "modified": "2019-01-15 16:15:29.451719", 
   "name": "Outsourcing Attendance-Client", 
-  "script": "frappe.ui.form.on('Outsourcing Attendance', 'shift_name', function(frm, cdt, cdn) {\n    var doc = locals[cdt][cdn];\n    if (doc.shift_name) {\n        frappe.call({\n            method: \"frappe.client.get\",\n            args: {\n                name: doc.shift_name,\n                doctype: \"Outsourcing Shift\"\n            },\n            callback(r) {\n                console.log(r);\n                if (r.message) {\n                    for (var row in r.message.shift_location) {\n                        var child = frm.add_child(\"attendance_details\");\n                        frappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\n                        refresh_field(\"attendance_details\");\n                    }\n                }\n            }\n        })\n    }\n});\n\ncur_frm.fields_dict['attendance_details'].grid.get_field('person_name').get_query = function(doc, cdt, cdn) {\n    var child = locals[cdt][cdn]\n    return {\n        filters: [\n            ['Outsource Contact', 'parent', '=', 'security']\n        ]\n    }\n};", 
+  "script": "frappe.ui.form.on('Outsourcing Attendance', 'shift_name', function(frm, cdt, cdn) {\n    var doc = locals[cdt][cdn];\n    if (doc.shift_name) {\n        frappe.call({\n            method: \"frappe.client.get\",\n            args: {\n                name: doc.shift_name,\n                doctype: \"Outsourcing Shift\"\n            },\n            callback(r) {\n                console.log(r);\n                if (r.message) {\n                    for (var row in r.message.shift_location) {\n                        var child = frm.add_child(\"attendance_details\");\n                        frappe.model.set_value(child.doctype, child.name, \"position\", r.message.shift_location[row].location_name);\n                        refresh_field(\"attendance_details\");\n                    }\n                }\n            }\n        })\n    }\n});\n\ncur_frm.fields_dict['attendance_details'].grid.get_field('person_name').get_query = function(doc, cdt, cdn) {\n    var child = locals[cdt][cdn];\n    return {\n        filters: [\n            ['Outsource Contact', 'parent', '=', 'cleaning' ]\n        ]\n    }\n};", 
   "script_type": "Client"
  }, 
  {

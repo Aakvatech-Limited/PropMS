@@ -94,7 +94,11 @@ doc_events = {
 	},
 	"Sales Order": {
 		"validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"
+	},
+	"Key Set Detail": {
+		"on_change": "propms.auto_custom.changeStatusKeyset"
 	}
+
 
 }
 

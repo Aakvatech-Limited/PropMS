@@ -130,6 +130,33 @@ def assignInvoiceNameInMR(invoice,pr):
 	frappe.db.sql("""update `tabMaterial Request` set sales_invoice=%s where name=%s""",(invoice,pr))
 
 
+@frappe.whitelist()
+def changeStatusKeyset(self,method):
+	try:
+                keyset_name=getKeysetName(self.key_set)
+                if keyset_name:
+			doc=frappe.get_doc("Key Set",keyset_name)
+			if self.returned:
+				doc.status="In"
+			else:
+				doc.status="Out"
+			doc.save()
+		else:
+			frappe.throw("Key set not found - {0}.".format(self.key_set))
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+
+def getKeysetName(name):
+	data=frappe.db.sql("""select name from `tabKey Set` where name=%s""",name)
+	if data:
+		if not data[0][0]==None:
+			return data[0][0]
+		else:
+			return False
+	else:
+		return False
 
 @frappe.whitelist()
 def changeStatusIssue(name,status):
