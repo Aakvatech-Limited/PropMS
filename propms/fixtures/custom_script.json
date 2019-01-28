@@ -2,6 +2,15 @@
  {
   "docstatus": 0, 
   "doctype": "Custom Script", 
+  "dt": "Security Attendance Details", 
+  "modified": "2018-12-25 14:32:13.914746", 
+  "name": "Security Attendance Details-Client", 
+  "script": "cur_frm.set_query(\"guard_empid\", function() {\n    return {\n        \"filters\": {\n            \"department\": [\"like\", \"Security - \"]\n        }\n    }\n});", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
   "dt": "Issue", 
   "modified": "2018-12-27 17:16:50.361484", 
   "name": "Issue-Client", 

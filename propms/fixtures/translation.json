@@ -3,8 +3,62 @@
   "docstatus": 0, 
   "doctype": "Translation", 
   "language": "en", 
-  "modified": "2018-12-26 11:36:37.798637", 
-  "name": "cfa28b2b60", 
+  "modified": "2018-12-19 10:40:51.882741", 
+  "name": "ec386f5be8", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-07 17:41:04.704274", 
+  "name": "bf7d88b594", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-16 06:15:14.418852", 
+  "name": "09a322b578", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-16 14:29:13.252192", 
+  "name": "1e62a79a3d", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-16 15:21:10.783628", 
+  "name": "9eb5ab56c6", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-16 17:44:01.242424", 
+  "name": "ef04e9f723", 
+  "source_name": "Issue", 
+  "target_name": "Maintenance Job Card"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-01-21 13:02:40.487125", 
+  "name": "38a4c37d81", 
   "source_name": "Issue", 
   "target_name": "Maintenance Job Card"
  }
