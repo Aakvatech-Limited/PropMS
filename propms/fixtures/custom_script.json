@@ -30,9 +30,9 @@
   "docstatus": 0, 
   "doctype": "Custom Script", 
   "dt": "Key Set Detail", 
-  "modified": "2019-01-16 17:42:09.382828", 
+  "modified": "2019-01-30 15:39:35.546922", 
   "name": "Key Set Detail-Client", 
-  "script": "frappe.ui.form.on(\"Key Set Detail\", \"returned\", function(frm) {\n    if (cur_frm.doc.returned) {\n\tcur_frm.set_value(\"return_date_and_time\", frappe.datetime.now_datetime());\n\tcur_frm.set_df_property(\"returned\", \"read_only\", 1);\n    } else {\n        cur_frm.set_value(\"return_date_and_time\", \"\");\n    }\n});\n\nfrappe.ui.form.on(\"Key Set Detail\",\"onload\",function(){\n\tif (cur_frm.doc.returned) {\n\t\tcur_frm.set_df_property(\"returned\", \"read_only\", 1);\n\t}\n});\n\ncur_frm.set_query(\"key_set\", function() {\n    return {\n        filters: {\n            'status': 'In'\n        }\n    }\n});\n\n", 
+  "script": "frappe.ui.form.on(\"Key Set Detail\", \"returned\", function(frm) {\n    if (cur_frm.doc.returned) {\n\tcur_frm.set_value(\"return_date_and_time\", frappe.datetime.now_datetime());\n\tcur_frm.set_df_property(\"returned\", \"read_only\", 1);\n    } else {\n        cur_frm.set_value(\"return_date_and_time\", \"\");\n    }\n});\n\ncur_frm.add_fetch('key_set', 'set_name', 'set_name');\n\nfrappe.ui.form.on(\"Key Set Detail\",\"onload\",function(){\n\tif (cur_frm.doc.returned) {\n\t\tcur_frm.set_df_property(\"returned\", \"read_only\", 1);\n\t}\n});\n\ncur_frm.set_query(\"key_set\", function() {\n    return {\n        filters: {\n            'status': 'In'\n        }\n    }\n});\n\n", 
   "script_type": "Client"
  }, 
  {
@@ -69,6 +69,15 @@
   "modified": "2019-01-07 12:21:16.799713", 
   "name": "Journal Entry Account-Client", 
   "script": "frappe.ui.form.on('Journal Entry Account', {\n    property_name: function(frm, cdt, cdn) {\n        frappe.model.set_value(cdt, cdn, \"party\", \"\");\n\tif (frm.doc.cost_center) {\n            frappe.call({\n                method: \"frappe.client.get_value\",\n                args: {\n                    doctype: \"Property\",\n                    fieldname: \"status\",\n                    filters: {\n                        name: frm.doc.cost_center\n                    },\n                },\n                callback: function(r, rt) {\n                    if (r.message) {\n                        if (r.message.status == \"On lease\") {\n                            frappe.call({\n                                method: \"frappe.client.get_value\",\n                                args: {\n                                    doctype: \"Lease\",\n                                    fieldname: \"customer\",\n                                    filters: {\n                                        property: frm.doc.cost_center\n                                    },\n                                },\n                                callback: function(r, rt) {\n                                    if (r.message) {\n                                        frappe.model.set_value(cdt, cdn, \"party\", r.message.customer);\n                                    }\n                                }\n                            });\n                        }\n                    }\n                }\n            });\n        } else {\n            frappe.model.set_value(cdt, cdn, \"party\", \"\");\n        }\n    }\n})", 
+  "script_type": "Client"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Custom Script", 
+  "dt": "Lease", 
+  "modified": "2019-01-30 15:47:19.474640", 
+  "name": "Lease-Client", 
+  "script": "cur_frm.add_fetch('property', 'unit_owner', 'property_owner');", 
   "script_type": "Client"
  }
 ]
