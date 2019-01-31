@@ -133,9 +133,9 @@ def assignInvoiceNameInMR(invoice,pr):
 @frappe.whitelist()
 def changeStatusKeyset(self,method):
 	try:
-                keyset_name=getKeysetName(self.key_set)
-                if keyset_name:
-			doc=frappe.get_doc("Key Set",keyset_name)
+		keyset_name=getKeysetName(self.key_set)
+		if keyset_name:
+			doc=frappe.get_doc("Key Set", keyset_name)
 			if self.returned:
 				doc.status="In"
 			else:
@@ -289,7 +289,7 @@ def makeJournalEntry(customer,date,amount):
 def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=None):
 	if not (from_currency and to_currency):
 		# manqala 19/09/2016: Should this be an empty return or should it throw and exception?
-		print 'No need to convert'
+		print("No need to convert")
 		return
 	if from_currency == to_currency:
 		return 1
@@ -297,7 +297,7 @@ def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=No
 	if not transaction_date:
 		transaction_date = nowdate()
 	currency_settings = frappe.get_doc("Accounts Settings").as_dict()
-	print transaction_date
+	print(transaction_date)
 	allow_stale_rates = currency_settings.get("allow_stale")
 
 	filters = [
@@ -330,7 +330,7 @@ def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=No
 
 		if not value:
 			import requests
-			print 'Trying to get from Frankfurter'
+			print('Trying to get from Frankfurter')
 			api_url = "https://frankfurter.erpnext.org/{0}".format(transaction_date)
 			response = requests.get(api_url, params={
 				"base": from_currency,
@@ -339,7 +339,7 @@ def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=No
 			# expire in 6 hours
 			response.raise_for_status()
 			value = response.json()["rates"][to_currency]
-			print value
+			print(value)
 			cache.setex(key, value, 6 * 60 * 60)
 		return flt(value)
 	except:

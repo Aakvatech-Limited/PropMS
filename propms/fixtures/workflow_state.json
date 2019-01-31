@@ -1,29 +1,29 @@
 [
  {
-  "docstatus": 0, 
-  "doctype": "Workflow State", 
-  "icon": "question-sign", 
-  "modified": "2018-04-15 10:03:44.466619", 
-  "name": "Pending", 
-  "style": "", 
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2018-04-15 10:03:44.466619",
+  "name": "Pending",
+  "style": "",
   "workflow_state_name": "Pending"
- }, 
+ },
  {
-  "docstatus": 0, 
-  "doctype": "Workflow State", 
-  "icon": "ok-sign", 
-  "modified": "2018-04-15 10:03:44.471584", 
-  "name": "Approved", 
-  "style": "Success", 
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2018-04-15 10:03:44.471584",
+  "name": "Approved",
+  "style": "Success",
   "workflow_state_name": "Approved"
- }, 
+ },
  {
-  "docstatus": 0, 
-  "doctype": "Workflow State", 
-  "icon": "remove", 
-  "modified": "2018-04-15 10:03:44.477813", 
-  "name": "Rejected", 
-  "style": "Danger", 
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2018-04-15 10:03:44.477813",
+  "name": "Rejected",
+  "style": "Danger",
   "workflow_state_name": "Rejected"
  }
 ]

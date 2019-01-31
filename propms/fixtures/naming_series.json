@@ -1,13 +1,13 @@
 [
  {
-  "current_value": 0, 
-  "docstatus": 0, 
-  "doctype": "Naming Series", 
-  "modified": "2018-04-15 10:05:21.428430", 
-  "name": "Naming Series", 
-  "prefix": null, 
-  "select_doc_for_series": null, 
-  "set_options": null, 
+  "current_value": 0,
+  "docstatus": 0,
+  "doctype": "Naming Series",
+  "modified": "2018-04-15 10:05:21.428430",
+  "name": "Naming Series",
+  "prefix": null,
+  "select_doc_for_series": null,
+  "set_options": null,
   "user_must_always_select": 0
  }
 ]
