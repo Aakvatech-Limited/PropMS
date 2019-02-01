@@ -11,7 +11,9 @@ from datetime import datetime
 from datetime import date
 from datetime import timedelta
 import collections
+import json
 from propms.auto_custom import app_error_log
+from propms.lease_invoice import makeInvoice
 
 
 class Lease(Document):
@@ -34,3 +36,31 @@ class Lease(Document):
 				)).insert()
 		except Exception as e:
 			error_log=app_error_log(frappe.session.user,str(e))
+
+
+	def after_insert(self):
+		try:
+			frappe.msgprint("2")
+			if len(self.lease_item)>=1:
+				item_arr=[]
+				for item in self.lease_item:
+					if item.frequency=="Quarterly":
+						item_json={}
+						item_json["item_code"]=item.lease_item
+						item_json["qty"]=3
+						item_json["rate"]=item.amount
+						item_arr.append(item_json)
+						makeInvoice(self.start_date,item.paid_by,json.dumps(item_arr),item.currency_code)
+						del item_arr[:]
+					if item.frequency=="Monthly":
+						item_json={}
+						item_json["item_code"]=item.lease_item
+						item_json["qty"]=1
+						item_json["rate"]=item.amount
+						item_arr.append(item_json)
+						makeInvoice(self.start_date,item.paid_by,json.dumps(item_arr),item.currency_code)
+						del item_arr[:]
+					
+		except Exception as e:
+			error_log=app_error_log(frappe.session.user,str(e))
+

@@ -26,7 +26,6 @@ import string
 import time
 import traceback
 import urllib
-import urllib2
 from frappe.utils import flt, add_days
 from frappe.utils import get_datetime_str, nowdate
 
