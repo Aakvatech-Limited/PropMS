@@ -25,5 +25,32 @@
   "name": "Rejected",
   "style": "Danger",
   "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2019-02-01 16:10:01.861248",
+  "name": "OM Approved",
+  "style": "",
+  "workflow_state_name": "OM Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2019-02-01 16:14:57.645516",
+  "name": "GM Approved",
+  "style": "",
+  "workflow_state_name": "GM Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2019-02-01 17:14:53.336534",
+  "name": "Waiting for Approval",
+  "style": "",
+  "workflow_state_name": "Waiting for Approval"
  }
 ]

@@ -5,14 +5,16 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,get_last_day
+from frappe.utils import cint, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,get_last_day,add_months
 from frappe import throw, msgprint, _
 from datetime import datetime
 from datetime import date
 from datetime import timedelta
+
+import calendar
 import collections
 import json
-from propms.auto_custom import app_error_log
+from propms.auto_custom import app_error_log,makeInvoiceSchedule,getMonthNo
 from propms.lease_invoice import makeInvoice
 
 
@@ -40,11 +42,27 @@ class Lease(Document):
 
 	def after_insert(self):
 		try:
-			frappe.msgprint("2")
 			if len(self.lease_item)>=1:
 				item_arr=[]
 				for item in self.lease_item:
 					if item.frequency=="Quarterly":
+						end_date=self.end_date
+						start_date=self.start_date
+						while end_date>=start_date:
+							new_end_date=add_months(start_date,3)
+							frappe.msgprint("new_end_date"+str(new_end_date))
+							if new_end_date<=end_date:
+								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,3,item.amount)
+								start_date=add_days(add_months(new_end_date,3),-1)
+								frappe.msgprint("start_date"+str(start_date))	
+								if not start_date<=end_date:
+									frappe.msgprint(str(getMonthNo(new_end_date,end_date)))
+									makeInvoiceSchedule(new_end_date,item.lease_item,item.paid_by,item.lease_item,self.name,getMonthNo(end_date,new_end_date),item.amount)
+									break
+								else:
+									start_date=new_end_date
+									
+									
 						item_json={}
 						item_json["item_code"]=item.lease_item
 						item_json["qty"]=3
@@ -62,5 +80,6 @@ class Lease(Document):
 						del item_arr[:]
 					
 		except Exception as e:
+			frappe.msgprint("Test")
 			error_log=app_error_log(frappe.session.user,str(e))
 

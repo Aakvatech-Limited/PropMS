@@ -10,10 +10,12 @@ from frappe.client import delete
 from frappe.desk.notifications import clear_notifications
 from frappe.desk.reportview import get_match_cond, get_filters_cond
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import cint, get_gravatar, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
+from frappe.utils import cint, format_datetime,get_datetime_str,now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
 from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
+from dateutil import relativedelta
 import collections
+import calendar
 import frappe
 import frappe.permissions
 import frappe.share
@@ -26,8 +28,7 @@ import string
 import time
 import traceback
 import urllib
-from frappe.utils import flt, add_days
-from frappe.utils import get_datetime_str, nowdate
+
 
 @frappe.whitelist()
 def app_error_log(title,error):
@@ -281,6 +282,56 @@ def makeJournalEntry(customer,date,amount):
 
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
+
+
+@frappe.whitelist()
+def getMonthADD(date,month):
+	return add_months(getdate(date),int(month))
+
+@frappe.whitelist()
+def getDateDiff(date1,date2):
+	return date_diff(getdate(date1),getdate(date2))
+
+@frappe.whitelist()
+def getNumberOfDays(date):
+	return calendar.monthrange(getdate(date).year,getdate(date).month)[1]
+
+@frappe.whitelist()
+def getMonthNo(date1,date2):
+	d1=getdate(date1)
+	d2=getdate(date2)
+	return diff_month(datetime(d1.year,d1.month,d1.day), datetime(d2.year,d2.month,d2.day))
+
+@frappe.whitelist()
+def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate):
+	try:
+		doc=frappe.get_doc(dict(
+			doctype="Lease Invoice Schedule",
+			parent=name,
+			parentfield="lease_invoice_schedule",
+			parenttype="lease",
+			lease_item=item,
+			date_to_invoice=date,
+			paid_by=paid_by,
+			lease_item_name=item_name,
+			qty=qty,
+			rate=rate
+		)).insert()
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+
+
+
+
+
+def diff_month(d1, d2):
+	if d1.day>=d2.day-1:
+		return (d1.year - d2.year) * 12 + d1.month - d2.month
+	else:
+		return (d1.year - d2.year) * 12 + d1.month - d2.month-1
+		
+	
 
 
 
