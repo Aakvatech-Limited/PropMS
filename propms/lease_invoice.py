@@ -70,7 +70,7 @@ def makeLeaseInvoice(self,method):
 
 
 @frappe.whitelist()
-def makeInvoice(date,customer,items,currency):
+def makeInvoice(date,customer,items,currency=None):
 	try:
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
@@ -86,7 +86,29 @@ def makeInvoice(date,customer,items,currency):
 
 
 @frappe.whitelist()
-def test():
-	return "test"
+def leaseInvoiceAutoCreate():
+	try:
+		lease_invoice=frappe.get_all("Lease Invoice Schedule",filters={"date_to_invoice":today()},fields=["name"])
+		item_dict=[]
+		for row in lease_invoice:
+			invoice_item=frappe.get_doc("Lease Invoice Schedule",row.name)
+			item_json={}
+			item_json["item_code"]=invoice_item.lease_item
+			item_json["qty"]=invoice_item.qty
+			item_json["rate"]=invoice_item.rate
+			item_dict.append(item_json)
+			res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency)
+			if res:
+				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name,"invoice_number",res.name)
 
+
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+
+
+
+@frappe.whitelist()
+def test():
+	return today()
 

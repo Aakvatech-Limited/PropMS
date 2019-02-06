@@ -303,7 +303,7 @@ def getMonthNo(date1,date2):
 	return diff_month(datetime(d1.year,d1.month,d1.day), datetime(d2.year,d2.month,d2.day))
 
 @frappe.whitelist()
-def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate):
+def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None):
 	try:
 		doc=frappe.get_doc(dict(
 			doctype="Lease Invoice Schedule",
@@ -315,7 +315,8 @@ def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate):
 			paid_by=paid_by,
 			lease_item_name=item_name,
 			qty=qty,
-			rate=rate
+			rate=rate,
+			currency=currency
 		)).insert()
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
