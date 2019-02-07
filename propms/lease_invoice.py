@@ -50,6 +50,20 @@ def makeLeaseInvoice(self,method):
 			for item in self.lease_item:
 				frappe.msgprint("1")
 				item_json={}
+				if item.frequency=="Annually":
+					item_json["item_code"]=item.lease_item
+					item_json["qty"]=122
+					item_json["rate"]=item.amount
+					item_arr.append(item_json)
+					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
+					del item_arr[:]
+				if item.frequency=="6 months":
+					item_json["item_code"]=item.lease_item
+					item_json["qty"]=6
+					item_json["rate"]=item.amount
+					item_arr.append(item_json)
+					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
+					del item_arr[:]
 				if item.frequency=="Quarterly":
 					item_json["item_code"]=item.lease_item
 					item_json["qty"]=3
