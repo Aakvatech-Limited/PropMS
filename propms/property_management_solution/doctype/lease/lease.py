@@ -14,7 +14,7 @@ from datetime import timedelta
 import calendar
 import collections
 import json
-from propms.auto_custom import app_error_log,makeInvoiceSchedule,getMonthNo
+from propms.auto_custom import app_error_log,makeInvoiceSchedule,getMonthNo,getDateMonthDiff
 from propms.lease_invoice import makeInvoice
 
 
@@ -52,12 +52,13 @@ class Lease(Document):
 							new_end_date=add_days(add_months(start_date,3),-1)
 							#frappe.msgprint("new_end_date"+str(new_end_date))
 							if new_end_date<=end_date:
-								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,3,item.amount,item.currency_code)
+								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,3,item.amount,item.currency_code,item.witholding_tax)
 								start_date=add_months(new_end_date,3)
 								#frappe.msgprint("start_date"+str(start_date))	
 								if not start_date<end_date:
-									if not getMonthNo(end_date,new_end_date)==0:
-										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getMonthNo(end_date,new_end_date),item.amount,item.currency_code)
+									
+									if not new_end_date==end_date:
+										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getDateMonthDiff(new_end_date,end_date,3),item.amount,item.currency_code,item.witholding_tax)
 										break
 									else:
 										break
@@ -73,12 +74,12 @@ class Lease(Document):
 							new_end_date=add_days(add_months(start_date,1),-1)
 							#frappe.msgprint("new_end_date"+str(new_end_date))
 							if new_end_date<=end_date:
-								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,1,item.amount,item.currency_code)
+								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,1,item.amount,item.currency_code,item.witholding_tax)
 								start_date=add_months(new_end_date,1)
 								#frappe.msgprint("start_date"+str(start_date))	
 								if not start_date<end_date:
-									if not getMonthNo(end_date,new_end_date)==0:
-										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getMonthNo(end_date,new_end_date),item.amount,item.currency_code)
+									if not new_end_date==end_date:
+										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getDateMonthDiff(new_end_date,end_date,1),item.amount,item.currency_code,item.witholding_tax)
 										break
 									else:
 										break
@@ -95,12 +96,12 @@ class Lease(Document):
 							new_end_date=add_days(add_months(start_date,6),-1)
 							#frappe.msgprint("new_end_date"+str(new_end_date))
 							if new_end_date<=end_date:
-								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,6,item.amount,item.currency_code)
+								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,6,item.amount,item.currency_code,item.witholding_tax)
 								start_date=add_months(new_end_date,6)
 								#frappe.msgprint("start_date"+str(start_date))	
 								if not start_date<end_date:
-									if not getMonthNo(end_date,new_end_date)==0:
-										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getMonthNo(end_date,new_end_date),item.amount,item.currency_code)
+									if not new_end_date==end_date:
+										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getDateMonthDiff(new_end_date,end_date,6),item.amount,item.currency_code,item.witholding_tax)
 										break
 									else:
 										break
@@ -116,12 +117,12 @@ class Lease(Document):
 							new_end_date=add_days(add_months(start_date,12),-1)
 							#frappe.msgprint("new_end_date"+str(new_end_date))
 							if new_end_date<=end_date:
-								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,12,item.amount,item.currency_code)
+								makeInvoiceSchedule(start_date,item.lease_item,item.paid_by,item.lease_item,self.name,12,item.amount,item.currency_code,item.witholding_tax)
 								start_date=add_months(new_end_date,12)
 								#frappe.msgprint("start_date"+str(start_date))	
 								if not start_date<end_date:
-									if not getMonthNo(end_date,new_end_date)==0:
-										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getMonthNo(end_date,new_end_date),item.amount,item.currency_code)
+									if not new_end_date==end_date:
+										makeInvoiceSchedule(add_days(new_end_date,1),item.lease_item,item.paid_by,item.lease_item,self.name,getDateMonthDiff(new_end_date,end_date,12),item.amount,item.currency_code,item.witholding_tax)
 										break
 									else:
 										break
@@ -141,7 +142,7 @@ class Lease(Document):
 						item_json["qty"]=invoice_item.qty
 						item_json["rate"]=invoice_item.rate
 						item_dict.append(item_json)
-						res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency)
+						res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency,self.name,row.name,invoice_item.tax)
 						if res:
 							frappe.db.set_value("Lease Invoice Schedule",invoice_item.name,"invoice_number",res.name)
 					

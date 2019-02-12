@@ -52,7 +52,7 @@ def makeLeaseInvoice(self,method):
 				item_json={}
 				if item.frequency=="Annually":
 					item_json["item_code"]=item.lease_item
-					item_json["qty"]=122
+					item_json["qty"]=12
 					item_json["rate"]=item.amount
 					item_arr.append(item_json)
 					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
@@ -84,15 +84,20 @@ def makeLeaseInvoice(self,method):
 
 
 @frappe.whitelist()
-def makeInvoice(date,customer,items,currency=None):
+def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax=None):
 	try:
+		rate=tax
+		tax='[{"charge_type": "On Net Total","account_head": "VAT - PMC","description": "custom","rate":'+str(rate)+'}]'
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
 					posting_date=date,
 					items=json.loads(items),
 					customer=str(customer),
 					due_date=date,
-					currency=currency
+					currency=currency,
+					lease=lease,
+					lease_item=lease_item,
+					taxes=json.loads(tax)
 		)).insert()
 		return sales_invoice
 	except Exception as e:
@@ -111,7 +116,7 @@ def leaseInvoiceAutoCreate():
 			item_json["qty"]=invoice_item.qty
 			item_json["rate"]=invoice_item.rate
 			item_dict.append(item_json)
-			res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency)
+			res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency,lease_invoice.parent,lease_invoice.name,invoice_item.tax)
 			if res:
 				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name,"invoice_number",res.name)
 

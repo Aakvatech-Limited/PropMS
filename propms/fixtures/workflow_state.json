@@ -52,5 +52,14 @@
   "name": "Waiting for Approval",
   "style": "",
   "workflow_state_name": "Waiting for Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2019-02-12 13:48:56.133095",
+  "name": "Cancelled",
+  "style": "Danger",
+  "workflow_state_name": "Cancelled"
  }
 ]
