@@ -260,16 +260,18 @@ def makeDailyCheckListForTakeover(source_name, target_doc=None, ignore_permissio
 @frappe.whitelist()
 def makeJournalEntry(customer,date,amount):
 	try:
-		propm_setting=frappe.get_doc("PropMS Settings","Propms Setting")
+		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+		company=frappe.db.get_single_value('Global Defaults','default_company')
+		company_doc=frappe.get_doc("Company",company)
 		j_entry=[]
 		j_entry_debit={}
-		j_entry_debit["account"]='Debtors - PMC'
+		j_entry_debit["account"]=company_doc.default_receivable_account
 		j_entry_debit["party_type"]='Customer'
 		j_entry_debit["party"]=customer
 		j_entry_debit["debit_in_account_currency"]=amount
 		j_entry.append(j_entry_debit)
 		j_entry_credit={}
-		j_entry_credit["account"]='Cash - PMC'
+		j_entry_credit["account"]=company_doc.default_cash_account
 		j_entry_credit["credit_in_account_currency"]=amount
 		j_entry.append(j_entry_credit)
 		j_entry=frappe.get_doc(dict(

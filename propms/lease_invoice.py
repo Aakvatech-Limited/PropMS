@@ -87,7 +87,14 @@ def makeLeaseInvoice(self,method):
 def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax=None):
 	try:
 		rate=tax
-		tax='[{"charge_type": "On Net Total","account_head": "VAT - PMC","description": "custom","rate":'+str(rate)+'}]'
+		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+		tax=[]
+		tax_json={}
+		tax_json["charge_type"]="On Net Total"
+		tax_json["account_head"]=str(propm_setting.default_tax_account_head)
+		tax_json["description"]="custom"
+		tax_json["rate"]=str(rate)
+		tax.append(tax_json)
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
 					posting_date=date,
@@ -97,7 +104,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax
 					currency=currency,
 					lease=lease,
 					lease_item=lease_item,
-					taxes=json.loads(tax)
+					taxes=tax
 		)).insert()
 		return sales_invoice
 	except Exception as e:
