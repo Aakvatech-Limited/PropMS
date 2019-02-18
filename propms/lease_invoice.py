@@ -44,7 +44,7 @@ def app_error_log(title,error):
 @frappe.whitelist()
 def makeLeaseInvoice(self,method):
 	try:
-		frappe.msgprint("2")
+		#frappe.msgprint("2")
 		if len(self.lease_item)>=1:
 			item_arr=[]
 			for item in self.lease_item:
