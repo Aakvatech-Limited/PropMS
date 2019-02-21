@@ -47,37 +47,23 @@ def makeLeaseInvoice(self,method):
 		#frappe.msgprint("2")
 		if len(self.lease_item)>=1:
 			item_arr=[]
+			item_invoice_frequency = {
+					"Monthly": 1,
+					"Quarterly": 3,
+					"6 Months": 6,
+					"Annually": 12
+			}
 			for item in self.lease_item:
-				frappe.msgprint("1")
+				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
+				if frequency_factor == "Invalid frequency":
+					frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
 				item_json={}
-				if item.frequency=="Annually":
-					item_json["item_code"]=item.lease_item
-					item_json["qty"]=12
-					item_json["rate"]=item.amount
-					item_arr.append(item_json)
-					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-					del item_arr[:]
-				if item.frequency=="6 months":
-					item_json["item_code"]=item.lease_item
-					item_json["qty"]=6
-					item_json["rate"]=item.amount
-					item_arr.append(item_json)
-					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-					del item_arr[:]
-				if item.frequency=="Quarterly":
-					item_json["item_code"]=item.lease_item
-					item_json["qty"]=3
-					item_json["rate"]=item.amount
-					item_arr.append(item_json)
-					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-					del item_arr[:]
-				if item.frequency=="Monthly":
-					item_json["item_code"]=item.lease_item
-					item_json["qty"]=1
-					item_json["rate"]=item.amount
-					item_arr.append(item_json)
-					makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-					del item_arr[:]
+				item_json["item_code"]=item.lease_item
+				item_json["qty"]=frequency_factor
+				item_json["rate"]=item.amount
+				item_arr.append(item_json)
+				makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
+				del item_arr[:]
 					
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))

@@ -313,8 +313,8 @@ def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None,
 			parent=name,
 			parentfield="lease_invoice_schedule",
 			parenttype="lease",
-			lease_item=item,
 			date_to_invoice=date,
+			lease_item=item,
 			paid_by=paid_by,
 			lease_item_name=item_name,
 			qty=qty,
@@ -322,6 +322,7 @@ def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None,
 			currency=currency,
 			tax=tax
 		)).insert()
+		frappe.msgprint("Inside MakeInvoiceSchedule")
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
