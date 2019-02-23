@@ -75,9 +75,9 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Lease",
-  "modified": "2019-02-06 07:47:20.176975",
+  "modified": "2019-02-23 12:21:43.662554",
   "name": "Lease-Client",
-  "script": "cur_frm.add_fetch('property', 'unit_owner', 'property_owner');\nfrappe.ui.form.on('Task', {\n    after_save: function(frm) {\n        frappe.timeout(1);\n\tcur_frm.reload_doc();\n    } \n});",
+  "script": "cur_frm.add_fetch('property', 'unit_owner', 'property_owner');\n\nfrappe.ui.form.on('Lease', {\n\tvalidate: function (frm) {\n\t\tcur_frm.reload_doc();\n\t}\n});\n",
   "script_type": "Client"
  }
 ]
