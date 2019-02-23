@@ -40,44 +40,41 @@ class Lease(Document):
 			error_log=app_error_log(frappe.session.user,str(e))
 
 
-	def validate(self):
+	def on_update(self):
 	#def after_insert(self):
 		try:
 			if len(self.lease_item)>=1:
 				item_invoice_frequency = {
-					"Monthly": 1,
-					"Quarterly": 3,
-					"6 Months": 6,
-					"Annually": 12
+					"Monthly": 1.00, # .00 to make it float type
+					"Quarterly": 3.00,
+					"6 Months": 6.00,
+					"Annually": 12.00
 				}
 				for item in self.lease_item:
 					frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
 					if frequency_factor == "Invalid frequency":
 						frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
-					else:
-						frappe.msgprint("Frequency: " + item.frequency + " found. Factor selected: " + str(frequency_factor))
+						break
+					#else:
+						#frappe.msgprint("Frequency: " + item.frequency + " found. Factor selected: " + str(frequency_factor))
 					end_date = self.end_date
 					invoice_date = self.start_date
+					invoice_qty = float(frequency_factor)
 					#frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
 					while end_date >= invoice_date:
-						new_end_date = add_days(add_months(invoice_date,frequency_factor),-1)
-						frappe.msgprint("New End Date: " + str(new_end_date))
-						frappe.msgprint("End Date: " + str(end_date))
-						if new_end_date <= end_date and new_end_date >= "2019-01-01":
-							frappe.msgprint("Making Invoice Schedule for " + str(new_end_date))	
-							makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, self.name, frequency_factor, item.amount, item.currency_code, item.witholding_tax)
-							frappe.msgprint("Self Name: " + self.name)
-							invoice_date = add_months(new_end_date, frequency_factor)
-							if not invoice_date < end_date:
-								if not new_end_date == end_date:
-									makeInvoiceSchedule(add_days(new_end_date, 1), item.lease_item, item.paid_by, item.lease_item, self.name, getDateMonthDiff(new_end_date, end_date, frequency_factor), item.amount, item.currency_code, item.witholding_tax)
-									break
-								else:
-									break
-						invoice_date = add_days(new_end_date, 1)
-						frappe.msgprint("Start Date: " + str(invoice_date))
+						invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
+						#frappe.msgprint("New End Date: " + str(invoice_period_end + "--- Invoice Date: " + str(invoice_date))
+						#frappe.msgprint("End Date: " + str(end_date))
+						# set invoice_Qty as appropriate fraction of frequency_factor
+						if invoice_period_end > end_date:
+							invoice_qty = float(getDateMonthDiff(invoice_date, end_date, 1))
+						# frappe.msgprint("Making Invoice Schedule for " + str(invoice_period_end))
+						#frappe.msgprint("Quantity calculated: " + str(invoice_qty))
+						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, self.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
+						invoice_date = add_days(invoice_period_end, 1)
 
 				lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"parent":self.name, "invoice_number":None}, fields = ["name"])
+				#frappe.msgprint(lease_invoice)
 				for row in lease_invoice:
 					invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
 					item_dict = []
@@ -94,4 +91,3 @@ class Lease(Document):
 		except Exception as e:
 			frappe.msgprint("Exception error! Check app error log.")
 			error_log=app_error_log(frappe.session.user,str(e))
-

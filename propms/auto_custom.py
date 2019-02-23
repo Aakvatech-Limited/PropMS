@@ -322,7 +322,7 @@ def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None,
 			currency=currency,
 			tax=tax
 		)).insert()
-		frappe.msgprint("Inside MakeInvoiceSchedule")
+		#frappe.msgprint(str(doc.name))
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
@@ -340,13 +340,16 @@ def diff_month(d1, d2):
 @frappe.whitelist()
 def getDateMonthDiff(start_date,end_date,period):
 	month=0
+	#frappe.msgprint("start_date: " + str(start_date) + "  --- end_date: " + str(end_date))
 	while start_date<end_date:
 		new_start_date=add_days(add_months(start_date,int(period)),-1)
+		#frappe.msgprint("start_date: " + str(start_date) + "  --- new_start_date: " + str(new_start_date))
 		if new_start_date<=end_date:
 			month=month+int(period)
 			start_date=add_months(start_date,int(period))
 		else:
 			no_month=getMonthNo(end_date,start_date)
+			#frappe.msgprint("date1: " + str(end_date) + "  --- date2: " + str(start_date) + " --- no_month: " + str(no_month))
 			if not no_month==0:
 				if add_months(start_date,no_month)<end_date:
 					days=date_diff(getdate(end_date),getdate(add_months(start_date,no_month)))
