@@ -40,8 +40,8 @@ class Lease(Document):
 			error_log=app_error_log(frappe.session.user,str(e))
 
 
-	def on_update(self):
-	#def after_insert(self):
+	#def on_update(self):
+	def after_insert(self):
 		try:
 			if len(self.lease_item)>=1:
 				item_invoice_frequency = {
