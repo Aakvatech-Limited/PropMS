@@ -73,20 +73,20 @@ class Lease(Document):
 						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, self.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
 						invoice_date = add_days(invoice_period_end, 1)
 
-				lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"parent":self.name, "invoice_number":None}, fields = ["name"])
-				#frappe.msgprint(lease_invoice)
-				for row in lease_invoice:
-					invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
-					item_dict = []
-					if invoice_item.date_to_invoice <= getdate(today()) and invoice_item.date_to_invoice >= getdate("2019-01-01"):
-						item_json = {}
-						item_json["item_code"] = invoice_item.lease_item
-						item_json["qty"] = invoice_item.qty
-						item_json["rate"] = invoice_item.rate
-						item_dict.append(item_json)
-						res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, self.name, row.name, invoice_item.tax)
-						if res:
-							frappe.db.set_value("Lease Invoice Schedule", invoice_item.name,"invoice_number", res.name)
+				# lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"parent":self.name, "invoice_number":None}, fields = ["name"])
+				# #frappe.msgprint(lease_invoice)
+				# for row in lease_invoice:
+					# invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
+					# item_dict = []
+					# if invoice_item.date_to_invoice <= getdate(today()) and invoice_item.date_to_invoice >= getdate("2019-01-01"):
+						# item_json = {}
+						# item_json["item_code"] = invoice_item.lease_item
+						# item_json["qty"] = invoice_item.qty
+						# item_json["rate"] = invoice_item.rate
+						# item_dict.append(item_json)
+						# res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, self.name, row.name, invoice_item.tax)
+						# if res:
+							# frappe.db.set_value("Lease Invoice Schedule", invoice_item.name,"invoice_number", res.name)
 					
 		except Exception as e:
 			frappe.msgprint("Exception error! Check app error log.")
