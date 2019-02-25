@@ -41,7 +41,7 @@ class Lease(Document):
 
 
 	#def on_update(self):
-	def after_insert(self):
+	def TestTest(self):
 		try:
 			if len(self.lease_item)>=1:
 				item_invoice_frequency = {
