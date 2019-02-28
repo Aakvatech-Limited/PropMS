@@ -847,7 +847,7 @@ class POSCart {
 				label: 'Cost Center',
 				fieldname: 'cost_center',
 				options: 'Cost Center',
-				reqd: 1,
+				reqd: 0,
 				get_query: function() {
 						return {
 							filters: {
