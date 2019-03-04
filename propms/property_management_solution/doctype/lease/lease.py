@@ -51,7 +51,7 @@ def make_lease_invoice_schedule(leasedoc):
 				"Monthly": 1.00, # .00 to make it float type
 				"Bi-Monthly": 2.00,
 				"Quarterly": 3.00,
-				"6 Months": 6.00,
+				"6 months": 6.00,
 				"Annually": 12.00
 			}
 			for item in lease.lease_item:
@@ -82,6 +82,7 @@ def make_lease_invoice_schedule(leasedoc):
 					#frappe.msgprint("Making Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
 					invoice_date = add_days(invoice_period_end, 1)
+		frappe.msgprint("Making invoice schedule complete. Please reload the document.")
 
 	except Exception as e:
 		frappe.msgprint("Exception error! Check app error log.")

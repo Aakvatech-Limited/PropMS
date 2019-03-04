@@ -16,7 +16,7 @@ var make_lease_invoice_schedule = function(frm){
 		method: 		"propms.property_management_solution.doctype.lease.lease.make_lease_invoice_schedule",
 		args: {leasedoc: doc.name},
 		callback: function(){
-			//cur_frm.reload_doc();
+			cur_frm.reload_doc();
 		}
 	});
 };

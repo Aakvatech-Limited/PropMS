@@ -100,7 +100,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	try:
-		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ("<=", today()) , "invoice_number": ("=", "")}, fields = ["name"])
+		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ("<=", today()), "date_to_invoice": (">=", "2019-01-01"), "invoice_number": ("=", "")}, fields = ["name"])
 		item_dict = []
 		for row in lease_invoice:
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
