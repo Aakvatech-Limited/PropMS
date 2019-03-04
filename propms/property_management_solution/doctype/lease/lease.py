@@ -65,7 +65,7 @@ def make_lease_invoice_schedule(leasedoc):
 						invoice_date = add_months(lease_invoice_schedule.date_to_invoice, lease_invoice_schedule.qty)
 						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name + " for invoice number: " + str(lease_invoice_schedule.invoice_number))
 				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
-				frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
+				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
 				if frequency_factor == "Invalid frequency":
 					frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
 					break
@@ -78,7 +78,7 @@ def make_lease_invoice_schedule(leasedoc):
 					# set invoice_Qty as appropriate fraction of frequency_factor
 					if invoice_period_end > end_date:
 						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
-						frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
+						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
 					#frappe.msgprint("Making Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
 					invoice_date = add_days(invoice_period_end, 1)
