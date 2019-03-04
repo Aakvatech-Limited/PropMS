@@ -333,29 +333,30 @@ def diff_month(d1, d2):
 		return (d1.year - d2.year) * 12 + d1.month - d2.month - 1
 
 @frappe.whitelist()
-def getDateMonthDiff(start_date, end_date, period):
+def getDateMonthDiff(start_date, end_date, month_factor):
 	month_count = 0
 	no_month = 0
 	month_float = 0
 	#frappe.msgprint("start_date: " + str(start_date) + "  --- end_date: " + str(end_date))
 	while start_date <= end_date:
-		period_end_date = add_days(add_months(start_date, period), -1)
+		period_end_date = add_days(add_months(start_date, month_factor), -1)
 		#frappe.msgprint("start_date: " + str(start_date) + "  --- period_end_date: " + str(period_end_date))
 		if period_end_date <= end_date:
 			# add month and set new start date to calculate next month_count
-			month_count = month_count + period
-			start_date = add_months(start_date, period)
+			month_count = month_count + month_factor
+			start_date = add_months(start_date, month_factor)
 		else:
 			# find last number of days 
 			days = float(date_diff(getdate(end_date), getdate(add_months(start_date, no_month))))
 			#msg = "no_month = 0 so Days calculated: " + str(days) + " between " + str(start_date) + " and " + str(end_date)
 			#frappe.msgprint(msg)
-			no_days_in_month = float(calendar.monthrange(getdate(end_date).year, getdate(end_date).month)[1])
+			# start_date to cater for correct number of days in month in case the start date is feb
+			no_days_in_month = float(calendar.monthrange(getdate(start_date).year, getdate(start_date).month)[1])
 			#msg = "no_month = 0 so No of Days calculated: " + str(no_days_in_month) + " between " + str(start_date) + " and " + str(end_date)
 			#frappe.msgprint(msg)
 			month_float = days / no_days_in_month
 			#frappe.msgprint("month_float = " + str(month_float) + " for days = " + str(days) + " and total number of days = " + str(no_days_in_month))
-			start_date = add_months(start_date, period)
+			start_date = add_months(start_date, month_factor)
 	month_count = month_count + no_month + month_float
 	return month_count
 
