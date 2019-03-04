@@ -326,47 +326,56 @@ def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None,
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
-
-
-
-
-
 def diff_month(d1, d2):
 	if d1.day>=d2.day-1:
 		return (d1.year - d2.year) * 12 + d1.month - d2.month
 	else:
-		return (d1.year - d2.year) * 12 + d1.month - d2.month-1
+		return (d1.year - d2.year) * 12 + d1.month - d2.month - 1
 
 @frappe.whitelist()
-def getDateMonthDiff(start_date,end_date,period):
-	month=0
+def getDateMonthDiff(start_date, end_date, period):
+	month = float(0)
 	#frappe.msgprint("start_date: " + str(start_date) + "  --- end_date: " + str(end_date))
-	while start_date<end_date:
-		new_start_date=add_days(add_months(start_date,int(period)),-1)
+	while start_date < end_date:
+		new_start_date = add_days(add_months(start_date, int(period)), -1)
 		#frappe.msgprint("start_date: " + str(start_date) + "  --- new_start_date: " + str(new_start_date))
-		if new_start_date<=end_date:
-			month=month+int(period)
-			start_date=add_months(start_date,int(period))
+		if new_start_date <= end_date:
+			month = month + int(period)
+			start_date = add_months(start_date, int(period))
 		else:
-			no_month=getMonthNo(end_date,start_date)
+			no_month = getMonthNo(end_date, start_date)
 			#frappe.msgprint("date1: " + str(end_date) + "  --- date2: " + str(start_date) + " --- no_month: " + str(no_month))
-			if not no_month==0:
-				if add_months(start_date,no_month)<end_date:
-					days=date_diff(getdate(end_date),getdate(add_months(start_date,no_month)))
-					no_days_in_month=calendar.monthrange(getdate(end_date).year,getdate(end_date).month)[1]
-					month_float=days/no_days_in_month
-					month=month+no_month+month_float
+			if not no_month == 0:
+				if add_months(start_date, no_month) < end_date:
+					days = float(date_diff(getdate(end_date), getdate(add_months(start_date, no_month))))
+					#msg = "Days calculated: " + str(days) + " between " + str(start_date) + " and " + str(end_date)
+					#frappe.msgprint(msg)
+					#error_log=app_error_log(frappe.session.user,str(msg))
+					# no_days_in_month should be based on start date to ensure that 4-feb to 1-mar is calculated correctly.
+					no_days_in_month = float(calendar.monthrange(getdate(start_date).year, getdate(start_date).month)[1])
+					#msg = "No of Days calculated: " + str(no_days_in_month) + " between " + str(start_date) + " and " + str(end_date)
+					#frappe.msgprint(msg)
+					#error_log=app_error_log(frappe.session.user,str(msg))
+					month_float = days / no_days_in_month
+					month = month + no_month + month_float
 					return month
 				else:
-					month=month+no_month
+					month = month + no_month
 					return month
 			else:
-				days=date_diff(getdate(end_date),getdate(add_months(start_date,no_month)))
-				no_days_in_month=calendar.monthrange(getdate(end_date).year,getdate(end_date).month)[1]
-				month_float=days/no_days_in_month
-				month=month+month_float
+				days = float(date_diff(getdate(end_date), getdate(add_months(start_date, no_month))))
+				#msg = "no_month = 0 so Days calculated: " + str(days) + " between " + str(start_date) + " and " + str(end_date)
+				#frappe.msgprint(msg)
+				#error_log=app_error_log(frappe.session.user,str(msg))
+				no_days_in_month = float(calendar.monthrange(getdate(end_date).year, getdate(end_date).month)[1])
+				#msg = "no_month = 0 so No of Days calculated: " + str(no_days_in_month) + " between " + str(start_date) + " and " + str(end_date)
+				#frappe.msgprint(msg)
+				#error_log=app_error_log(frappe.session.user,str(msg))
+				month_float = days / no_days_in_month
+				frappe.msgprint("no_months = and month_float = " + str(month_float) + " for days = " + str(days) + " and total number of days = " + str(no_days_in_month))
+				month = month + month_float
 				return month
-			start_date=add_months(start_date,int(period))
+			start_date = add_months(start_date, int(period))
 
 
 	return month

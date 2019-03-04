@@ -40,33 +40,33 @@ def app_error_log(title,error):
 	return d	
 
 
-
-@frappe.whitelist()
-def makeLeaseInvoice(self,method):
-	try:
-		#frappe.msgprint("2")
-		if len(self.lease_item)>=1:
-			item_arr=[]
-			item_invoice_frequency = {
-					"Monthly": 1,
-					"Quarterly": 3,
-					"6 Months": 6,
-					"Annually": 12
-			}
-			for item in self.lease_item:
-				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
-				if frequency_factor == "Invalid frequency":
-					frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
-				item_json={}
-				item_json["item_code"]=item.lease_item
-				item_json["qty"]=frequency_factor
-				item_json["rate"]=item.amount
-				item_arr.append(item_json)
-				makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-				del item_arr[:]
+# Remarked as this is no longer necessary
+# @frappe.whitelist()
+# def makeLeaseInvoice(self,method):
+	# try:
+		# #frappe.msgprint("2")
+		# if len(self.lease_item)>=1:
+			# item_arr=[]
+			# item_invoice_frequency = {
+					# "Monthly": 1,
+					# "Quarterly": 3,
+					# "6 Months": 6,
+					# "Annually": 12
+			# }
+			# for item in self.lease_item:
+				# frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
+				# if frequency_factor == "Invalid frequency":
+					# frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
+				# item_json={}
+				# item_json["item_code"]=item.lease_item
+				# item_json["qty"]=frequency_factor
+				# item_json["rate"]=item.amount
+				# item_arr.append(item_json)
+				# makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
+				# del item_arr[:]
 					
-	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+	# except Exception as e:
+		# error_log=app_error_log(frappe.session.user,str(e))
 
 
 @frappe.whitelist()
@@ -100,24 +100,21 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	try:
-		lease_invoice=frappe.get_all("Lease Invoice Schedule",filters={"date_to_invoice":today()},fields=["name"])
-		item_dict=[]
+		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ("<=", today()) , "invoice_number": ("=", "")}, fields = ["name"])
+		item_dict = []
 		for row in lease_invoice:
-			invoice_item=frappe.get_doc("Lease Invoice Schedule",row.name)
-			item_json={}
-			item_json["item_code"]=invoice_item.lease_item
-			item_json["qty"]=invoice_item.qty
-			item_json["rate"]=invoice_item.rate
+			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
+			item_json = {}
+			item_json["item_code"] = invoice_item.lease_item
+			item_json["qty"] = invoice_item.qty
+			item_json["rate"] = invoice_item.rate
 			item_dict.append(item_json)
-			res=makeInvoice(invoice_item.date_to_invoice,invoice_item.paid_by,json.dumps(item_dict),invoice_item.currency,lease_invoice.parent,lease_invoice.name,invoice_item.tax)
+			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict),invoice_item.currency, lease_invoice.parent, lease_invoice.name, invoice_item.tax)
 			if res:
-				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name,"invoice_number",res.name)
-
+				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
 
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
-
-
+		error_log = app_error_log(frappe.session.user, str(e))
 
 
 @frappe.whitelist()
