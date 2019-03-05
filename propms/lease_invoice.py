@@ -100,22 +100,24 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	try:
-		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ("<=", today()), "date_to_invoice": (">=", "2019-01-01"), "invoice_number": ("=", "")}, fields = ["name"])
+		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number"])
+		#frappe.msgprint("Lease being generated for " + str(lease_invoice))
 		item_dict = []
 		for row in lease_invoice:
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
+			#frappe.msgprint(row.name + " - " + str(invoice_item.date_to_invoice))
 			item_json = {}
 			item_json["item_code"] = invoice_item.lease_item
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
 			item_dict.append(item_json)
-			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict),invoice_item.currency, lease_invoice.parent, lease_invoice.name, invoice_item.tax)
+			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.tax)
+			#frappe.msgprint(str(res))
 			if res:
 				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
-
+				frappe.msgprint("Lease generated with number: " + str(res.name))
 	except Exception as e:
 		error_log = app_error_log(frappe.session.user, str(e))
-
 
 @frappe.whitelist()
 def test():
