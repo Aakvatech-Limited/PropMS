@@ -40,6 +40,13 @@ class Lease(Document):
 			error_log=app_error_log(frappe.session.user,str(e))
 
 
+@frappe.whitelist()
+def getAllLease():
+	lease_list = frappe.get_all("Lease",filters={"end_date": (">=", "2019-01-01")},fields=["name"])
+	frappe.msgprint("working on lease_list" + str(lease_list))
+	for lease in lease_list:
+		make_lease_invoice_schedule(lease.name)
+
 #def on_update(self):
 @frappe.whitelist()
 def make_lease_invoice_schedule(leasedoc):
@@ -67,7 +74,7 @@ def make_lease_invoice_schedule(leasedoc):
 				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
 				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
 				if frequency_factor == "Invalid frequency":
-					frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
+					frappe.msgprint("Invalid frequency: " + str(item.frequency) + " for " + str(leasedoc) + " not found. Contact the developers!")
 					break
 				invoice_qty = float(frequency_factor)
 				#frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
@@ -82,7 +89,7 @@ def make_lease_invoice_schedule(leasedoc):
 					#frappe.msgprint("Making Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
 					invoice_date = add_days(invoice_period_end, 1)
-		frappe.msgprint("Making invoice schedule complete. Please reload the document.")
+		frappe.msgprint("Completed making of invoice schedule.")
 
 	except Exception as e:
 		frappe.msgprint("Exception error! Check app error log.")
