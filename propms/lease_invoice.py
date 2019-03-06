@@ -102,11 +102,11 @@ def leaseInvoiceAutoCreate():
 	try:
 		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number"])
 		#frappe.msgprint("Lease being generated for " + str(lease_invoice))
-		item_dict = []
 		for row in lease_invoice:
+			item_dict = []
+			item_json = {}
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
 			#frappe.msgprint(row.name + " - " + str(invoice_item.date_to_invoice))
-			item_json = {}
 			item_json["item_code"] = invoice_item.lease_item
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
