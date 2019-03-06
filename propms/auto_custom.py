@@ -347,7 +347,7 @@ def getDateMonthDiff(start_date, end_date, month_factor):
 			start_date = add_months(start_date, month_factor)
 		else:
 			# find last number of days 
-			days = float(date_diff(getdate(end_date), getdate(add_months(start_date, no_month))))
+			days = float(date_diff(getdate(end_date), getdate(add_months(start_date, no_month))) + 1)
 			#msg = "no_month = 0 so Days calculated: " + str(days) + " between " + str(start_date) + " and " + str(end_date)
 			#frappe.msgprint(msg)
 			# start_date to cater for correct number of days in month in case the start date is feb
