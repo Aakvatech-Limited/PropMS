@@ -28,7 +28,7 @@ var make_lease_invoice_schedule = function(frm){
 
 var generate_pending_invoice = function(){
 	frappe.call({
-		method: 		"propms.lease_invoice.leaseInvoiceAutoCreate",
+		method: "propms.lease_invoice.leaseInvoiceAutoCreate",
 		args: {},
 		callback: function(){
 			cur_frm.reload_doc();
@@ -37,11 +37,20 @@ var generate_pending_invoice = function(){
 };
 
 var getAllLease = function(){
-	frappe.call({
-		method: 		"propms.property_management_solution.doctype.lease.lease.getAllLease",
-		args: {},
-		callback: function(){
-			cur_frm.reload_doc();
+	frappe.confirm(
+		'Are you sure to initiate this long process?',
+		function(){
+			frappe.call({
+				method: "propms.property_management_solution.doctype.lease.lease.getAllLease",
+				args: {},
+				callback: function(){
+					cur_frm.reload_doc();
+				}
+			});
+		},
+		function(){
+			frappe.msgprint(__("Closed before starting long process!"));
+			window.close();
 		}
-	});
+	)
 };

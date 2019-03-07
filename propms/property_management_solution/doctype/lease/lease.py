@@ -10,6 +10,7 @@ from frappe import throw, msgprint, _
 from datetime import datetime
 from datetime import date
 from datetime import timedelta
+from frappe.utils.background_jobs import enqueue
 
 import calendar
 import collections
@@ -42,18 +43,31 @@ class Lease(Document):
 
 @frappe.whitelist()
 def getAllLease():
+	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
+	enqueue("propms.property_management_solution.doctype.lease.lease.getAllLeaseJob")
+	frappe.msgprint("The background task of making lease invoice schedule for all users has been sent for background processing.")
+
+@frappe.whitelist()
+def getAllLeaseJob():
+	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
+	frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": "0", "reload": 1}, user=frappe.session.user)
 	lease_list = frappe.get_all("Lease",filters={"end_date": (">=", "2019-01-01")},fields=["name"])
 	frappe.msgprint("working on lease_list" + str(lease_list))
+	lease_list_len = len(lease_list)
+	processed_lease = 0
 	for lease in lease_list:
+		processed_lease = processed_lease + 1
+		frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": str(int(processed_lease * 100/lease_list_len))}, user=frappe.session.user)
 		make_lease_invoice_schedule(lease.name)
+	frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": "100", "reload": 1}, user=frappe.session.user)
 
 #def on_update(self):
 @frappe.whitelist()
 def make_lease_invoice_schedule(leasedoc):
 	#frappe.msgprint("This is the parameter passed: " + str(leasedoc))
-	lease = frappe.get_doc("Lease", str(leasedoc)) 
+	lease = frappe.get_doc("Lease", str(leasedoc))
 	try:
-		if len(lease.lease_item)>=1:
+		if len(lease.lease_item) >= 1:
 			item_invoice_frequency = {
 				"Monthly": 1.00, # .00 to make it float type
 				"Bi-Monthly": 2.00,
