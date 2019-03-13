@@ -6,6 +6,7 @@ from datetime import timedelta
 from erpnext.accounts.utils import get_fiscal_year
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import throw, msgprint, _
+from erpnext.accounts.party import get_due_date
 from frappe.client import delete
 from frappe.desk.notifications import clear_notifications
 from frappe.desk.reportview import get_match_cond, get_filters_cond
@@ -70,31 +71,62 @@ def app_error_log(title,error):
 
 
 @frappe.whitelist()
-def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None):
+def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty=None):
 	try:
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
-		tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
-		tax=[]
-		tax_json={}
-		tax_json["charge_type"]="On Net Total"
-		tax_json["account_head"]=tax_account.name
-		tax_json["description"]="VAT account"
-		tax_json["rate"]=tax_account.tax_rate
-		tax.append(tax_json)
+		if qty != int(qty):
+			#it means the last invoice for the lease that may have fraction of months
+			subs_end_date=frappe.get_value("Lease", lease, "end_date")
+		else:
+			#month qty is not fractional
+			subs_end_date = add_months(date,qty)
+		#tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
+		#tax=[]
+		#tax_json={}
+		#tax_json["charge_type"]="On Net Total"
+		#tax_json["account_head"]=tax_account.name
+		#tax_json["description"]="VAT account"
+		#tax_json["rate"]=tax_account.tax_rate
+		#tax.append(tax_json)
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
-					posting_date=date,
+					posting_date=today(),
 					items=json.loads(items),
 					customer=str(customer),
-					due_date=date,
+					due_date=getDueDate(today(),str(customer)),
 					currency=currency,
 					lease=lease,
 					lease_item=lease_item,
-					taxes=tax
+					taxes_and_charges=propm_setting.default_tax_template,
+					from_date=date,
+					to_date=subs_end_date,
+					cost_center=getCostCenter(lease)
 		)).insert()
+		if sales_invoice.taxes_and_charges:
+			getTax(sales_invoice)
+		sales_invoice.calculate_taxes_and_totals()
+		sales_invoice.save()
 		return sales_invoice
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
+
+@frappe.whitelist()
+def getTax(sales_invoice):
+	taxes = get_taxes_and_charges('Sales Taxes and Charges Template',sales_invoice.taxes_and_charges)
+	for tax in taxes:
+		sales_invoice.append('taxes', tax)
+
+@frappe.whitelist()
+def getDueDate(date,customer):
+	return get_due_date(date,'Customer',str(customer),frappe.db.get_single_value('Global Defaults', 'default_company'),date)
+
+@frappe.whitelist()
+def getCostCenter(name):
+	property_name = frappe.db.get_value("Lease",name,"property")
+	return frappe.db.get_value("Property",property_name,"cost_center")
+			
+	
+
 
 
 @frappe.whitelist()
@@ -111,7 +143,7 @@ def leaseInvoiceAutoCreate():
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
 			item_dict.append(item_json)
-			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item)
+			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty)
 			#frappe.msgprint(str(res))
 			if res:
 				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
