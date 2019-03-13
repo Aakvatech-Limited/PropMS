@@ -70,7 +70,7 @@ def app_error_log(title,error):
 
 
 @frappe.whitelist()
-def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax=None):
+def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None):
 	try:
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 		tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
@@ -111,7 +111,7 @@ def leaseInvoiceAutoCreate():
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
 			item_dict.append(item_json)
-			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.tax)
+			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item)
 			#frappe.msgprint(str(res))
 			if res:
 				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
