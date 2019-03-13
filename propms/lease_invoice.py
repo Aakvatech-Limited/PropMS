@@ -72,14 +72,14 @@ def app_error_log(title,error):
 @frappe.whitelist()
 def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,tax=None):
 	try:
-		rate=tax
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+		tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
 		tax=[]
 		tax_json={}
 		tax_json["charge_type"]="On Net Total"
-		tax_json["account_head"]=str(propm_setting.default_tax_account_head)
-		tax_json["description"]="custom"
-		tax_json["rate"]=str(rate)
+		tax_json["account_head"]=tax_account.name
+		tax_json["description"]="VAT account"
+		tax_json["rate"]=tax_account.tax_rate
 		tax.append(tax_json)
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
