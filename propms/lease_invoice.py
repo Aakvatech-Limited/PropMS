@@ -132,9 +132,10 @@ def getCostCenter(name):
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	try:
-		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number"])
+		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number", "parent"])
 		#frappe.msgprint("Lease being generated for " + str(lease_invoice))
 		for row in lease_invoice:
+			#frappe.msgprint("The parent of this row is: " + str(row.parent))
 			item_dict = []
 			item_json = {}
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
@@ -142,6 +143,7 @@ def leaseInvoiceAutoCreate():
 			item_json["item_code"] = invoice_item.lease_item
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
+			item_json["cost_center"] = getCostCenter(row.parent)
 			item_dict.append(item_json)
 			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty)
 			#frappe.msgprint(str(res))
