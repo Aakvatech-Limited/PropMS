@@ -77,11 +77,15 @@ def make_lease_invoice_schedule(leasedoc):
 				"Annually": 12.00
 			}
 			for item in lease.lease_item:
+				#frappe.msgprint("Lease item being processed: " + str(item.lease_item))
 				end_date = lease.end_date
 				invoice_date = lease.start_date
-				for lease_invoice_schedule in lease.lease_invoice_schedule:
+				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "lease_item": item.lease_item}, order_by="date_to_invoice")
+				#frappe.msgprint(str(lease_invoice_schedule_list))
+				for lease_invoice_schedule in lease_invoice_schedule_list:
+					#frappe.msgprint(str(lease_invoice_schedule))
 					if lease_invoice_schedule.invoice_number is None:
-						#frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice))
+						#frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 					else:
 						# Set months as a rounded up by 1 if the month is a fraction (last invoice for the lease already invoiced).
@@ -89,8 +93,9 @@ def make_lease_invoice_schedule(leasedoc):
 							add_months_value = round(lease_invoice_schedule.qty, 0) + 1
 						else:
 							add_months_value = lease_invoice_schedule.qty
+						#frappe.msgprint("Add Months Value" + str(add_months_value) + " due to qty = " + str(lease_invoice_schedule.qty))
 						invoice_date = add_months(lease_invoice_schedule.date_to_invoice, add_months_value)
-						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name + " for invoice number: " + str(lease_invoice_schedule.invoice_number))
+						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name + " for invoice number: " + str(lease_invoice_schedule.invoice_number) + " dated " + str(lease_invoice_schedule.date_to_invoice))
 				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
 				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
 				if frequency_factor == "Invalid frequency":
