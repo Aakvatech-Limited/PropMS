@@ -1,3 +1,4 @@
+/* Customized version 2019-04-01 */
 /* global Clusterize */
 frappe.provide('erpnext.pos');
 
@@ -346,6 +347,12 @@ erpnext.pos.PointOfSale = class PointOfSale {
 	}
 
 	submit_sales_invoice() {
+		for(var i = 0; i< this.frm.doc.items.length; i++ ){
+			console.log( document.querySelector('input[data-fieldname="cost_center"]').value)
+			this.frm.doc.items[i].cost_center = document.querySelector('input[data-fieldname="cost_center"]').value;
+						//this.frm.doc.items[i].cost_center =  this.cost_center_field.get_value()
+		}
+		this.frm.doc.cost_center = document.querySelector('input[data-fieldname="cost_center"]').value;
 		this.frm.savesubmit()
 			.then((r) => {
 				if (r && r.doc) {
@@ -878,9 +885,7 @@ class POSCart {
 			parent: this.wrapper.find('.customer-field'),
 			render_input: true
 		});
-		for(var i = 0; i< this.frm.doc.items.length; i++ ){
-			this.frm.doc.items[0].cost_center =  this.cost_center_field.get_value()
-		}
+		
 		
 	}
 

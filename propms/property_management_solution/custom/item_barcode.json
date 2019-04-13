@@ -1,0 +1,31 @@
+{
+ "custom_fields": [], 
+ "custom_perms": [], 
+ "doctype": "Item Barcode", 
+ "property_setters": [
+  {
+   "_assign": null, 
+   "_comments": null, 
+   "_liked_by": null, 
+   "_user_tags": null, 
+   "creation": "2019-04-01 09:45:22.930631", 
+   "default_value": null, 
+   "doc_type": "Item Barcode", 
+   "docstatus": 0, 
+   "doctype_or_field": "DocField", 
+   "field_name": "barcode", 
+   "idx": 0, 
+   "modified": "2019-02-25 10:23:10.747084", 
+   "modified_by": "Administrator", 
+   "name": "Item Barcode-barcode-hidden", 
+   "owner": "Administrator", 
+   "parent": null, 
+   "parentfield": null, 
+   "parenttype": null, 
+   "property": "hidden", 
+   "property_type": "Check", 
+   "value": "0"
+  }
+ ], 
+ "sync_on_migrate": 1
+}
