@@ -79,7 +79,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 			subs_end_date=frappe.get_value("Lease", lease, "end_date")
 		else:
 			#month qty is not fractional
-			subs_end_date = add_months(date,qty)
+			subs_end_date = add_days(add_months(date,qty), -1)
 		#tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
 		#tax=[]
 		#tax_json={}
