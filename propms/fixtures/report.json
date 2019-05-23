@@ -14,16 +14,26 @@
   "modified": "2019-02-07 10:42:43.433394", 
   "module": "Property Management Solution", 
   "name": "Outsourcing Attendance", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "prepared_report": 0, 
   "query": "SELECT  oa.owner as `Created by`,\n        oa.modified_by as `Approved by`,\n        upper(oa.shift_name) as `Shift`,\n        oa.shift_date as `Date:Date:`,\n        oad.person_name as `Person Name`,\n        oad.position as `Position`, \n        if(oad.status = 'Present', 1, 0) as `Present:Int:`,\n        if(oad.status = 'Absent ', 1, 0) as `Absent:Int:`,\n        if(oad.status = 'Day off', 1, 0) as `Day off:Int:`,\n        1 as `Total:Int:`,\n        oad.remarks as `Remarks`\nFROM    `tabOutsourcing Attendance` as  oa,\n        `tabOutsourcing Attendance Details` oad\nWHERE   oa.name = oad.parent    ", 
   "ref_doctype": "Outsourcing Attendance", 
+  "reference_report": null, 
   "report_name": "Outsourcing Attendance", 
   "report_type": "Query Report", 
   "roles": [
    {
+    "parent": "Outsourcing Attendance", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "System Manager"
    }, 
    {
+    "parent": "Outsourcing Attendance", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "Maintenance Job in-charge"
    }
   ]
@@ -43,16 +53,26 @@
   "modified": "2018-12-20 13:30:28.461805", 
   "module": "Property Management Solution", 
   "name": "Security Attendance Report", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "prepared_report": 0, 
   "query": "SELECT  sa.owner as `Created by`,\n        sa.modified_by as `Approved by`,\n        upper(sa.shift_name) as `Shift`,\n        sa.shift_date as `Date:Date:`,\n        sad.guard_name as `Guard Name`,\n        sad.position as `Position`, \n        if(sad.status = 'Present', 1, 0) as `Present:Int:`,\n        if(sad.status = 'Absent ', 1, 0) as `Absent:Int:`,\n        if(sad.status = 'Day off', 1, 0) as `Day off:Int:`,\n        1 as `Total:Int:`,\n        sad.remarks as `Remarks`\nFROM    `tabSecurity Attendance` as  sa,\n        `tabSecurity Attendance Details` sad\nWHERE   sa.name = sad.parent    ", 
   "ref_doctype": "Security Attendance", 
+  "reference_report": null, 
   "report_name": "Security Attendance Report", 
   "report_type": "Query Report", 
   "roles": [
    {
+    "parent": "Security Attendance Report", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "System Manager"
    }, 
    {
+    "parent": "Security Attendance Report", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "Maintenance Job in-charge"
    }
   ]
@@ -72,16 +92,26 @@
   "modified": "2019-04-30 15:52:51.819729", 
   "module": "Property Management Solution", 
   "name": "Pending Signed Agreement", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "prepared_report": 0, 
   "query": null, 
   "ref_doctype": "Lease", 
+  "reference_report": null, 
   "report_name": "Pending Signed Agreement", 
   "report_type": "Report Builder", 
   "roles": [
    {
+    "parent": "Pending Signed Agreement", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "System Manager"
    }, 
    {
+    "parent": "Pending Signed Agreement", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "Property Manager"
    }
   ]
@@ -101,16 +131,26 @@
   "modified": "2019-04-30 16:14:32.184542", 
   "module": "Property Management Solution", 
   "name": "Stamp Duty Paid by Tenant", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "prepared_report": 0, 
   "query": null, 
   "ref_doctype": "Lease", 
+  "reference_report": null, 
   "report_name": "Stamp Duty Paid by Tenant", 
   "report_type": "Report Builder", 
   "roles": [
    {
+    "parent": "Stamp Duty Paid by Tenant", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "System Manager"
    }, 
    {
+    "parent": "Stamp Duty Paid by Tenant", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
     "role": "Property Manager"
    }
   ]

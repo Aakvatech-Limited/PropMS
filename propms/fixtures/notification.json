@@ -16,6 +16,9 @@
   "modified": "2018-12-20 15:20:53.866648", 
   "module": null, 
   "name": "Daily Checkup Report", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "print_format": null, 
   "property_value": null, 
   "recipients": [
@@ -24,7 +27,10 @@
     "cc": "gm@vivatowers.com\nmd@vivatowers.com\npa@vivatowers.com\nvimalrathod@vvsdtz.com\noperations@vivatowers.com\npareshmanek@yahoo.com", 
     "condition": null, 
     "email_by_document_field": null, 
-    "email_by_role": "Analytics"
+    "email_by_role": "Analytics", 
+    "parent": "Daily Checkup Report", 
+    "parentfield": "recipients", 
+    "parenttype": "Notification"
    }
   ], 
   "sender": "Viva ERP Notification", 
@@ -51,6 +57,9 @@
   "modified": "2018-12-27 19:21:53.916574", 
   "module": null, 
   "name": "Security Attendance", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "print_format": null, 
   "property_value": null, 
   "recipients": [
@@ -59,7 +68,10 @@
     "cc": "gm@vivatowers.com\nmd@vivatowers.com\npa@vivatowers.com\nvimalrathod@vvsdtz.com\noperations@vivatowers.com\npareshmanek@yahoo.com", 
     "condition": null, 
     "email_by_document_field": null, 
-    "email_by_role": "Analytics"
+    "email_by_role": "Analytics", 
+    "parent": "Security Attendance", 
+    "parentfield": "recipients", 
+    "parenttype": "Notification"
    }
   ], 
   "sender": "Viva ERP Notification", 
@@ -86,6 +98,9 @@
   "modified": "2018-12-27 19:22:31.820085", 
   "module": null, 
   "name": "Outsourcing Attendance", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "print_format": null, 
   "property_value": null, 
   "recipients": [
@@ -94,7 +109,10 @@
     "cc": "gm@vivatowers.com\nmd@vivatowers.com\npa@vivatowers.com\nvimalrathod@vvsdtz.com\noperations@vivatowers.com\npareshmanek@yahoo.com", 
     "condition": null, 
     "email_by_document_field": null, 
-    "email_by_role": "Analytics"
+    "email_by_role": "Analytics", 
+    "parent": "Outsourcing Attendance", 
+    "parentfield": "recipients", 
+    "parenttype": "Notification"
    }
   ], 
   "sender": "Viva ERP Notification", 
