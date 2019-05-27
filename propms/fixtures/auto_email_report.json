@@ -17,6 +17,7 @@
   "parent": null, 
   "parentfield": null, 
   "parenttype": null, 
+  "reference_report": null, 
   "report": "All Maintenance Jobs", 
   "report_type": "Report Builder", 
   "send_if_data": 1, 
