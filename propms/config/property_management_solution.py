@@ -5,68 +5,62 @@ import frappe
 def get_data():
 	config = [
 		{
-			"label": _("Lease and Property"),
+			"label": _("Property Management Documents"),
 			"items": [
 				{
 					"type": "doctype",
 					"name": "Property",
-					"description": _("Property that needs to be managed.")
+					"description": _("Property that needs to be managed."),
 				},
 				{
 					"type": "doctype",
 					"name": "Lease",
-					"description": _("Lease pertaining to the properties.")
+					"description": _("Lease pertaining to the properties."),
 				},
 				{
 					"type": "doctype",
 					"name": "Key Set Detail",
-					"description": _("Key Set Detail")
+					"description": _("Key Set Detail"),
 				},
 				{
 					"type": "doctype",
 					"name": "Daily Checklist",
-					"description": _("Daily Checklist")
+					"description": _("Daily Checklist"),
 				},
 				{
 					"type": "doctype",
 					"name": "Exit",
-					"description": _("Exit")
+					"description": _("Exit"),
 				},
 				{
 					"type": "doctype",
 					"name": "Meter Reading",
-					"description": _("Meter Reading")
+					"description": _("Meter Reading"),
 				},
 				{
 					"type": "doctype",
 					"name": "Outsourcing Attendance",
-					"description": _("Outsourcing Attendance")
+					"description": _("Outsourcing Attendance"),
 				},
 				{
 					"type": "doctype",
 					"name": "Insurance",
-					"description": _("Insurance")
-				},
-				{
-					"type": "doctype",
-					"name": "Insurance",
-					"description": _("Insurance")
+					"description": _("Insurance"),
 				},
 				{
 					"type": "doctype",
 					"name": "Security Attendance",
-					"description": _("Security Attendance")
+					"description": _("Security Attendance"),
 				},
 				{
 					"type": "doctype",
 					"name": "Withholding Tax Summary",
-					"description": _("Withholding Tax Summary")
+					"description": _("Withholding Tax Summary"),
 				}
 			]
-
 		},
 		{
-			"label": _("Masters"),
+			"label": _("Property Management Masters"),
 			"icon": "fa fa-cog",
 			"items": [
 				{
@@ -76,14 +70,14 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Property",
-					"description": _("Property database.")
-				},
-				{
-					"type": "doctype",
 					"name": "Unit Type",
 					"label": _("Unit Type"),
 					"description": _("Unit Type definition."),
+				},
+				{
+					"type": "doctype",
+					"name": "Property",
+					"description": _("Property database.")
 				},
 				{
 					"type": "doctype",
@@ -143,30 +137,21 @@ def get_data():
 			]
 		},
 		{
-			"label": _("Analytics"),
+			"label": _("Property Management Analytics"),
 			"items": [
-				{
-					"type": "report",
-					"name": "Pending Signed Agreement",
-					"doctype": "Lease"
-				},
-				{
-					"type": "report",
-					"name": "Stamp Duty Paid by Tenant",
-					"doctype": "Lease"
-				},
 				{
 					"type": "report",
 					"name": "Outsourcing Attendance",
 					"is_query_report": True,
-					"doctype": "Outsourcing Attendance"
+					"doctype": "Outsourcing Attendance",
 				},
 				{
 					"type": "report",
 					"name": "Security Attendance Report",
 					"is_query_report": True,
-					"doctype": "Security Attendance"
+					"doctype": "Security Attendance",
 				}
 			]
 		}
 	]
+	return config
