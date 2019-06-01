@@ -1,5 +1,6 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
+cur_frm.add_fetch('property', 'unit_owner', 'property_owner');
 
 frappe.ui.form.on('Lease', {
 	refresh: function(frm) {

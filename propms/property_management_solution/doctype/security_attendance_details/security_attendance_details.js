@@ -1,8 +1,10 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('Security Attendance Details', {
-	refresh: function(frm) {
-
-	}
+cur_frm.set_query("guard_empid", function() {
+    return {
+        "filters": {
+            "department": ["like", "Security - "]
+        }
+    }
 });
