@@ -84,7 +84,7 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-fixtures = ["Custom Field", "Custom Script", "Property Setter", {"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, {"doctype":"Notification", "filters": [{"is_standard":0}]}, 'Auto Email Report', "Translation", {"doctype":"Print Format", "filters": [{"module":"Property Management Solution"}]}, {"doctype":"Report", "filters": [{"module":"Property Management Solution"}]} ]
+fixtures = [{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, {"doctype":"Notification", "filters": [{"is_standard":0}]}, 'Auto Email Report', "Translation", {"doctype":"Print Format", "filters": [{"module":"Property Management Solution"}]}, {"doctype":"Report", "filters": [{"module":"Property Management Solution"}]} ]
 #fixtures = ["Custom Field", "Custom Script", "Property Setter", {"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, 'Workflow', 'Workflow State', 'Workflow Action', {"doctype":"Notification", "filters": [{"is_standard":0}]}, 'Auto Email Report', "Translation", {"doctype":"Print Format", "filters": [{"module":"Property Management Solution"}]}, {"doctype":"Report", "filters": [{"module":"Property Management Solution"}]} ]
 
 
