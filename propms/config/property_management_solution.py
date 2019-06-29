@@ -123,6 +123,12 @@ def get_data():
 					"label": _("Security Deposit Details"),
 					"description": _("Security Deposit Details definition."),
 				},
+				{
+					"type": "doctype",
+					"name": "Meter",
+					"label": _("Meter database"),
+					"description": _("Register all meters here."),
+				},
 			]
 		},
 		{
