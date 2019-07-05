@@ -44,22 +44,13 @@ class Lease(Document):
 @frappe.whitelist()
 def getAllLease():
 	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
-	frappe.enqueue("getAllLeaseJob")
-	#frappe.msgprint("The background task of making lease invoice schedule for all users has been sent for background processing.")
-
-@frappe.whitelist()
-def getAllLeaseJob():
-	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
-	frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": "0", "reload": 1}, user=frappe.session.user)
+	frappe.msgprint("The task of making lease invoice schedule for all users has been sent for background processing.")
 	lease_list = frappe.get_all("Lease",filters={"end_date": (">=", "2019-01-01")},fields=["name"])
-	frappe.msgprint("working on lease_list" + str(lease_list))
+	frappe.msgprint("Working on lease_list" + str(lease_list))
 	lease_list_len = len(lease_list)
-	processed_lease = 0
+	frappe.msgprint("Total number of lease to be processed is " + str(lease_list_len))
 	for lease in lease_list:
-		processed_lease = processed_lease + 1
-		frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": str(int(processed_lease * 100/lease_list_len))}, user=frappe.session.user)
 		make_lease_invoice_schedule(lease.name)
-	frappe.publish_realtime('lease_invoice_schedule_progress', {"progress": "100", "reload": 1}, user=frappe.session.user)
 
 #def on_update(self):
 @frappe.whitelist()
@@ -67,8 +58,25 @@ def make_lease_invoice_schedule(leasedoc):
 	#frappe.msgprint("This is the parameter passed: " + str(leasedoc))
 	lease = frappe.get_doc("Lease", str(leasedoc))
 	try:
+		# Records after lease end date
+		lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": (">", lease.end_date)})
+		for lease_invoice_schedule in lease_invoice_schedule_list:
+			frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 		# Only process lease that is current
 		if len(lease.lease_item) >= 1 and lease.end_date >= getdate(today()):
+			# Clean up records that are no longer required, i.e. of unnecessary lease items and unnecessary dates
+			# Records before 1st Jan 2019
+			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": ("<", "2019-01-01"), "invoice_number": ("!=", "")})
+			for lease_invoice_schedule in lease_invoice_schedule_list:
+				frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
+			# Records of lease_items that no longer existing in lease.lease_item
+			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name})
+			lease_item_list = frappe.get_list("Lease Item", fields=["name", "parent", "lease_item"], filters={"parent": lease.name})
+			frappe.msgprint(str(lease_item_list))
+			for lease_invoice_schedule in lease_invoice_schedule_list:
+				if lease_invoice_schedule.lease_item not in lease_item_list:
+					frappe.msgprint("This lease item will be removed from invoice schedule " + str(lease_invoice_schedule.lease_item))
+				# frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			item_invoice_frequency = {
 				"Monthly": 1.00, # .00 to make it float type
 				"Bi-Monthly": 2.00,
@@ -82,7 +90,6 @@ def make_lease_invoice_schedule(leasedoc):
 				end_date = lease.end_date
 				invoice_date = lease.start_date
 				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "lease_item": item.lease_item}, order_by="date_to_invoice")
-				lease_invoice_schedule_list = sorted(lease_invoice_schedule_list, key=lambda k: k['date_to_invoice'])
 				#frappe.msgprint(str(lease_invoice_schedule_list))
 				for lease_invoice_schedule in lease_invoice_schedule_list:
 					#frappe.msgprint(str(lease_invoice_schedule))
