@@ -306,9 +306,10 @@ def getMonthNo(date1,date2):
 	return diff_month(datetime(d1.year,d1.month,d1.day), datetime(d2.year,d2.month,d2.day))
 
 @frappe.whitelist()
-def makeInvoiceSchedule(date,item,paid_by,item_name,name,qty,rate,currency=None,tax=None):
+def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, currency=None, tax=None):
 	try:
 		doc=frappe.get_doc(dict(
+			idx=idx,
 			doctype="Lease Invoice Schedule",
 			parent=name,
 			parentfield="lease_invoice_schedule",

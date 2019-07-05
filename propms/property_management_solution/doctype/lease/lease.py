@@ -44,7 +44,7 @@ class Lease(Document):
 @frappe.whitelist()
 def getAllLease():
 	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
-	enqueue("propms.property_management_solution.doctype.lease.lease.getAllLeaseJob")
+	frappe.enqueue("getAllLeaseJob")
 	#frappe.msgprint("The background task of making lease invoice schedule for all users has been sent for background processing.")
 
 @frappe.whitelist()
@@ -76,11 +76,13 @@ def make_lease_invoice_schedule(leasedoc):
 				"6 months": 6.00,
 				"Annually": 12.00
 			}
+			idx = 1
 			for item in lease.lease_item:
 				#frappe.msgprint("Lease item being processed: " + str(item.lease_item))
 				end_date = lease.end_date
 				invoice_date = lease.start_date
 				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "lease_item": item.lease_item}, order_by="date_to_invoice")
+				lease_invoice_schedule_list = sorted(lease_invoice_schedule_list, key=lambda k: k['date_to_invoice'])
 				#frappe.msgprint(str(lease_invoice_schedule_list))
 				for lease_invoice_schedule in lease_invoice_schedule_list:
 					#frappe.msgprint(str(lease_invoice_schedule))
@@ -95,7 +97,11 @@ def make_lease_invoice_schedule(leasedoc):
 							add_months_value = lease_invoice_schedule.qty
 						#frappe.msgprint("Add Months Value" + str(add_months_value) + " due to qty = " + str(lease_invoice_schedule.qty))
 						invoice_date = add_months(lease_invoice_schedule.date_to_invoice, add_months_value)
+						# Set sequence to show it on the top
+						frappe.set_value("Lease Invoice Schedule", lease_invoice_schedule.name, "idx", idx)
+						idx += 1
 						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name + " for invoice number: " + str(lease_invoice_schedule.invoice_number) + " dated " + str(lease_invoice_schedule.date_to_invoice))
+				
 				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
 				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
 				if frequency_factor == "Invalid frequency":
@@ -112,7 +118,8 @@ def make_lease_invoice_schedule(leasedoc):
 						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
 						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
 					#frappe.msgprint("Making Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
-					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, item.currency_code, item.witholding_tax)
+					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax)
+					idx += 1
 					invoice_date = add_days(invoice_period_end, 1)
 		frappe.msgprint("Completed making of invoice schedule.")
 
