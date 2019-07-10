@@ -66,8 +66,10 @@ def make_lease_invoice_schedule(leasedoc):
 		if len(lease.lease_item) >= 1 and lease.end_date >= getdate(today()):
 			# Clean up records that are no longer required, i.e. of unnecessary lease items and unnecessary dates
 			# Records before 1st Jan 2019
-			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": ("<", "2019-01-01"), "invoice_number": ("!=", "")})
+			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": ("<", getdate("2019-01-01"))})
+			# frappe.msgprint("Records before 1st Jan 2019 " + str(lease_invoice_schedule_list))
 			for lease_invoice_schedule in lease_invoice_schedule_list:
+				# frappe.msgprint("Deleting Record before 1st Jan 2019 " + str(lease_invoice_schedule.name))
 				frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			# Records of lease_items that no longer existing in lease.lease_item
 			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name})
@@ -87,10 +89,7 @@ def make_lease_invoice_schedule(leasedoc):
 			}
 			idx = 1
 			for item in lease.lease_item:
-				frappe.msgprint("Lease item being processed: " + str(item.lease_item))
-				end_date = lease.end_date
-				prev_invoice_date = lease.start_date
-				invoice_date = lease.start_date
+				# frappe.msgprint("Lease item being processed: " + str(item.lease_item))
 				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule",
 					fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"],
 					filters={"parent": lease.name, "lease_item": item.lease_item},
@@ -103,6 +102,16 @@ def make_lease_invoice_schedule(leasedoc):
 					frappe.msgprint("Invalid frequency: " + str(item.frequency) + " for " + str(leasedoc) + " not found. Contact the developers!")
 					break
 				invoice_qty = float(frequency_factor)
+				end_date = lease.end_date
+				invoice_date = lease.start_date
+				# Find out the first invoice date after 2019-01-01 to process.
+				while end_date >= invoice_date and invoice_date <= getdate('2019-01-01'):
+					invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
+					# Set invoice_Qty as appropriate fraction of frequency_factor
+					if invoice_period_end > end_date:
+						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
+						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
+					invoice_date = add_days(invoice_period_end, 1)
 				# If there is no lease_invoice_schedule_list found, i.e. it is fresh new list to be created
 				if not lease_invoice_schedule_list:
 					while end_date >= invoice_date:
@@ -113,25 +122,25 @@ def make_lease_invoice_schedule(leasedoc):
 						if invoice_period_end > end_date:
 							invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
 							#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
-						frappe.msgprint("Making Fresh Invoice Schedule for " + str(invoice_date)
-							+ ", Quantity calculated: " + str(invoice_qty))
+						# frappe.msgprint("Making Fresh Invoice Schedule for " + str(invoice_date)
+						# 	+ ", Quantity calculated: " + str(invoice_qty))
 						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
 							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
 						)
 						idx += 1
 						invoice_date = add_days(invoice_period_end, 1)
 				for lease_invoice_schedule in lease_invoice_schedule_list:
-					frappe.msgprint("Upon entering lease_invoice_schedule_list - Date to invoice: " + str(lease_invoice_schedule.date_to_invoice)
-						+ " and invoice date to process is " + str(invoice_date))
+					# frappe.msgprint("Upon entering lease_invoice_schedule_list - Date to invoice: " + str(lease_invoice_schedule.date_to_invoice)
+					# 	+ " and invoice date to process is " + str(invoice_date))
 					while end_date >= invoice_date and lease_invoice_schedule.date_to_invoice > invoice_date:
 						invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
-						# frappe.msgprint("Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
+						# frappe.msgprint("Upon entering Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
 						#frappe.msgprint("End Date: " + str(end_date))
 						# set invoice_Qty as appropriate fraction of frequency_factor
 						if invoice_period_end > end_date:
 							invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
 							#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
-						frappe.msgprint("Making Pre Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
+						# frappe.msgprint("Making Pre Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
 							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
 						)
@@ -140,10 +149,10 @@ def make_lease_invoice_schedule(leasedoc):
 					#frappe.msgprint(str(lease_invoice_schedule))
 					# If the record already exists and invoice is generated
 					if (lease_invoice_schedule.invoice_number is not None and lease_invoice_schedule.invoice_number != ""):
-						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name
-							+ " for invoice number: " + str(lease_invoice_schedule.invoice_number)
-							+ " dated " + str(lease_invoice_schedule.date_to_invoice)
-						)
+						# frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name
+						# 	+ " for invoice number: " + str(lease_invoice_schedule.invoice_number)
+						# 	+ " dated " + str(lease_invoice_schedule.date_to_invoice)
+						# )
 						# Set months as rounded up by 1 if the month is a fraction (last invoice for the lease item already created).
 						# Above needed to escape from infinite loop of rounded down date and therefore never reaching end of the lease.
 						if lease_invoice_schedule.qty != round(lease_invoice_schedule.qty, 0):
@@ -157,11 +166,8 @@ def make_lease_invoice_schedule(leasedoc):
 						idx += 1
 					# If the invoice is not created
 					else:
-						frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
+						# frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
-						# Reset previous invoice date so that next run will create the deleted record afresh.
-						# This is because the record id deleted and is necessary to be recreated
-						# invoice_date = prev_invoice_date
 				# frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
 				while end_date >= invoice_date:
 					invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
@@ -171,7 +177,7 @@ def make_lease_invoice_schedule(leasedoc):
 					if invoice_period_end > end_date:
 						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
 						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
-					frappe.msgprint("Making Post Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
+					# frappe.msgprint("Making Post Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
 						invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
 					)
