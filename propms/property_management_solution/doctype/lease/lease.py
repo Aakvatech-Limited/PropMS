@@ -46,7 +46,7 @@ def getAllLease():
 	# Below is temporarily created to manually run through all lease and refresh lease invoice schedule. Hardcoded to start from 1st Jan 2019.
 	frappe.msgprint("The task of making lease invoice schedule for all users has been sent for background processing.")
 	lease_list = frappe.get_all("Lease",filters={"end_date": (">=", "2019-01-01")},fields=["name"])
-	frappe.msgprint("Working on lease_list" + str(lease_list))
+	# frappe.msgprint("Working on lease_list" + str(lease_list))
 	lease_list_len = len(lease_list)
 	frappe.msgprint("Total number of lease to be processed is " + str(lease_list_len))
 	for lease in lease_list:
@@ -58,25 +58,26 @@ def make_lease_invoice_schedule(leasedoc):
 	#frappe.msgprint("This is the parameter passed: " + str(leasedoc))
 	lease = frappe.get_doc("Lease", str(leasedoc))
 	try:
-		# Records after lease end date
+		# Delete unnecessary records after lease end date
 		lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": (">", lease.end_date)})
 		for lease_invoice_schedule in lease_invoice_schedule_list:
 			frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
-		# Only process lease that is current
+		# Only process lease that items and is current
 		if len(lease.lease_item) >= 1 and lease.end_date >= getdate(today()):
 			# Clean up records that are no longer required, i.e. of unnecessary lease items and unnecessary dates
 			# Records before 1st Jan 2019
-			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": ("<", "2019-01-01"), "invoice_number": ("!=", "")})
+			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "date_to_invoice": ("<", "2019-01-01"), "invoice_number": ("!=", "")})
 			for lease_invoice_schedule in lease_invoice_schedule_list:
 				frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			# Records of lease_items that no longer existing in lease.lease_item
 			lease_invoice_schedule_list = frappe.get_list("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "invoice_number", "date_to_invoice"], filters={"parent": lease.name})
-			lease_item_list = frappe.get_list("Lease Item", fields=["name", "parent", "lease_item"], filters={"parent": lease.name})
-			frappe.msgprint(str(lease_item_list))
+			lease_items_list = frappe.get_list("Lease Item", fields=["name", "parent", "lease_item"], filters={"parent": lease.name})
+			lease_item_name_list = [lease_item['lease_item'] for lease_item in lease_items_list]
+			#frappe.msgprint(str(lease_item_list))
 			for lease_invoice_schedule in lease_invoice_schedule_list:
-				if lease_invoice_schedule.lease_item not in lease_item_list:
-					frappe.msgprint("This lease item will be removed from invoice schedule " + str(lease_invoice_schedule.lease_item))
-				# frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
+				if lease_invoice_schedule.lease_item not in lease_item_name_list:
+					# frappe.msgprint("This lease item will be removed from invoice schedule " + str(lease_invoice_schedule.lease_item))
+					frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			item_invoice_frequency = {
 				"Monthly": 1.00, # .00 to make it float type
 				"Bi-Monthly": 2.00,
@@ -86,18 +87,65 @@ def make_lease_invoice_schedule(leasedoc):
 			}
 			idx = 1
 			for item in lease.lease_item:
-				#frappe.msgprint("Lease item being processed: " + str(item.lease_item))
+				frappe.msgprint("Lease item being processed: " + str(item.lease_item))
 				end_date = lease.end_date
+				prev_invoice_date = lease.start_date
 				invoice_date = lease.start_date
-				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule", fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"], filters={"parent": lease.name, "lease_item": item.lease_item}, order_by="date_to_invoice")
-				#frappe.msgprint(str(lease_invoice_schedule_list))
+				lease_invoice_schedule_list = frappe.get_all("Lease Invoice Schedule",
+					fields=["name", "parent", "lease_item", "qty", "invoice_number", "date_to_invoice"],
+					filters={"parent": lease.name, "lease_item": item.lease_item},
+					order_by="date_to_invoice")
+				# frappe.msgprint(str(lease_invoice_schedule_list))
+				# Get the latest item frequency incase lease was changed.
+				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
+				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
+				if frequency_factor == "Invalid frequency":
+					frappe.msgprint("Invalid frequency: " + str(item.frequency) + " for " + str(leasedoc) + " not found. Contact the developers!")
+					break
+				invoice_qty = float(frequency_factor)
+				# If there is no lease_invoice_schedule_list found, i.e. it is fresh new list to be created
+				if not lease_invoice_schedule_list:
+					while end_date >= invoice_date:
+						invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
+						# frappe.msgprint("Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
+						#frappe.msgprint("End Date: " + str(end_date))
+						# set invoice_Qty as appropriate fraction of frequency_factor
+						if invoice_period_end > end_date:
+							invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
+							#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
+						frappe.msgprint("Making Fresh Invoice Schedule for " + str(invoice_date)
+							+ ", Quantity calculated: " + str(invoice_qty))
+						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
+							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
+						)
+						idx += 1
+						invoice_date = add_days(invoice_period_end, 1)
 				for lease_invoice_schedule in lease_invoice_schedule_list:
+					frappe.msgprint("Upon entering lease_invoice_schedule_list - Date to invoice: " + str(lease_invoice_schedule.date_to_invoice)
+						+ " and invoice date to process is " + str(invoice_date))
+					while end_date >= invoice_date and lease_invoice_schedule.date_to_invoice > invoice_date:
+						invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
+						# frappe.msgprint("Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
+						#frappe.msgprint("End Date: " + str(end_date))
+						# set invoice_Qty as appropriate fraction of frequency_factor
+						if invoice_period_end > end_date:
+							invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
+							#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
+						frappe.msgprint("Making Pre Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
+						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
+							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
+						)
+						idx += 1
+						invoice_date = add_days(invoice_period_end, 1)
 					#frappe.msgprint(str(lease_invoice_schedule))
-					if lease_invoice_schedule.invoice_number is None:
-						#frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
-						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
-					else:
-						# Set months as a rounded up by 1 if the month is a fraction (last invoice for the lease already invoiced).
+					# If the record already exists and invoice is generated
+					if (lease_invoice_schedule.invoice_number is not None and lease_invoice_schedule.invoice_number != ""):
+						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name
+							+ " for invoice number: " + str(lease_invoice_schedule.invoice_number)
+							+ " dated " + str(lease_invoice_schedule.date_to_invoice)
+						)
+						# Set months as rounded up by 1 if the month is a fraction (last invoice for the lease item already created).
+						# Above needed to escape from infinite loop of rounded down date and therefore never reaching end of the lease.
 						if lease_invoice_schedule.qty != round(lease_invoice_schedule.qty, 0):
 							add_months_value = round(lease_invoice_schedule.qty, 0) + 1
 						else:
@@ -107,29 +155,32 @@ def make_lease_invoice_schedule(leasedoc):
 						# Set sequence to show it on the top
 						frappe.set_value("Lease Invoice Schedule", lease_invoice_schedule.name, "idx", idx)
 						idx += 1
-						frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name + " for invoice number: " + str(lease_invoice_schedule.invoice_number) + " dated " + str(lease_invoice_schedule.date_to_invoice))
-				
-				frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
-				#frappe.msgprint("Next Invoice date calculated: " + str(invoice_date))
-				if frequency_factor == "Invalid frequency":
-					frappe.msgprint("Invalid frequency: " + str(item.frequency) + " for " + str(leasedoc) + " not found. Contact the developers!")
-					break
-				invoice_qty = float(frequency_factor)
-				#frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
+					# If the invoice is not created
+					else:
+						frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
+						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
+						# Reset previous invoice date so that next run will create the deleted record afresh.
+						# This is because the record id deleted and is necessary to be recreated
+						# invoice_date = prev_invoice_date
+				# frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
 				while end_date >= invoice_date:
 					invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
-					#frappe.msgprint("Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
+					# frappe.msgprint("Invoice period end: " + str(invoice_period_end) + "--- Invoice Date: " + str(invoice_date))
 					#frappe.msgprint("End Date: " + str(end_date))
 					# set invoice_Qty as appropriate fraction of frequency_factor
 					if invoice_period_end > end_date:
 						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
 						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
-					#frappe.msgprint("Making Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
-					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name, invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax)
+					frappe.msgprint("Making Post Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
+					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
+						invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax
+					)
 					idx += 1
 					invoice_date = add_days(invoice_period_end, 1)
+
 		frappe.msgprint("Completed making of invoice schedule.")
 
 	except Exception as e:
 		frappe.msgprint("Exception error! Check app error log.")
 		error_log=app_error_log(frappe.session.user,str(e))
+
