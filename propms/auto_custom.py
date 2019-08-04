@@ -15,6 +15,7 @@ from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
 from dateutil import relativedelta
 from calendar import monthrange
+from propms.lease_invoice import getDueDate
 import collections
 import calendar
 import frappe
@@ -420,4 +421,120 @@ def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=No
 	except:
 		frappe.msgprint(_("Unable to find exchange rate for {0} to {1} for key date {2}. Please create a Currency Exchange record manually").format(from_currency, to_currency, transaction_date))
 		return 0.0
+
+
+@frappe.whitelist()
+def get_active_meter_from_property(property_id,meter_type):
+	"""Get Active Meter Number"""
+	meter_data = frappe.db.sql("""SELECT meter_number
+		FROM `tabProperty Meter Reading`
+		WHERE parent=%s
+		AND meter_type=%s
+  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+	if meter_data:
+		return meter_data[0].meter_number
+	else:
+		return ''
+
+@frappe.whitelist()
+def get_active_meter_customer_from_property(property_id,meter_type):
+	"""Get Active Meter Customer Name"""
+	meter_data = frappe.db.sql("""SELECT invoice_customer
+		FROM `tabProperty Meter Reading`
+		WHERE parent=%s
+		AND meter_type=%s
+  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+	if meter_data:
+		return meter_data[0].invoice_customer
+	else:
+		return ''
+
+@frappe.whitelist()
+def get_previous_meter_reading(meter_number,property_id,meter_type):
+	"""Get Previous Meter Reading"""
+	previous_reading_details = frappe.db.sql("""SELECT md.current_meter_reading as 'previous_reading',
+		m.reading_date as 'reading_date'
+		FROM `tabMeter Reading Detail` AS md
+		INNER JOIN `tabMeter Reading` AS m ON md.parent=m.name
+		WHERE md.meter_number=%s
+		AND m.docstatus=1
+		ORDER BY m.reading_date DESC limit 1""",meter_number,as_dict=True)
+	if len(previous_reading_details) >= 1:
+		print previous_reading_details[0].previous_reading
+		return previous_reading_details[0]
+	else:
+		initial_reading_details = frappe.db.sql("""SELECT initial_meter_reading as 'previous_reading',
+			installation_date as 'reading_date'
+			FROM `tabProperty Meter Reading`
+			WHERE parent=%s
+			AND meter_type=%s
+			AND meter_number=%s
+  			AND status='Active'""",(property_id,meter_type,meter_number),as_dict=True)
+		if len(initial_reading_details) >= 1:
+			return initial_reading_details[0]
+		else:
+			return 0
+
+@frappe.whitelist()
+def make_invoice_meter_reading(self,method):
+	for meter_row in self.meter_reading_detail:
+		if not int(meter_row.do_not_create_invoice) == 1:
+			item_detail = get_item_details(self.meter_type,meter_row.reading_difference)
+			customer = get_active_meter_customer_from_property(meter_row.property,self.meter_type)
+			if customer:
+				si_no = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
+				frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
+
+@frappe.whitelist()
+def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None,to_date=None):
+	try:
+		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+		sales_invoice=frappe.get_doc(dict(
+					doctype='Sales Invoice',
+					posting_date=meter_date,
+					items=items,
+					lease=get_latest_active_lease(property_id),
+					lease_item=lease_item,
+					customer=str(customer),
+					due_date=getDueDate(meter_date,str(customer)),
+					taxes_and_charges=propm_setting.default_tax_template,
+					cost_center=get_cost_center(property_id),
+					from_date=from_date,
+					to_date=to_date
+		)).insert()
+		if sales_invoice.taxes_and_charges:
+			get_tax(sales_invoice)
+		sales_invoice.calculate_taxes_and_totals()
+		sales_invoice.save()
+		return sales_invoice.name
+	except Exception as e:
+		error_log=app_error_log(frappe.session.user,str(e))
+
+@frappe.whitelist()
+def get_tax(sales_invoice):
+	taxes = get_taxes_and_charges('Sales Taxes and Charges Template',sales_invoice.taxes_and_charges)
+	for tax in taxes:
+		sales_invoice.append('taxes', tax)
+
+@frappe.whitelist()
+def get_cost_center(property_id):
+	return frappe.db.get_value("Property",property_id,"cost_center")
+
+@frappe.whitelist()
+def get_item_details(item,qty):
+	item_dict = []
+	item_json = {}
+	item_json["item_code"] = item
+	item_json["qty"] = qty
+	item_dict.append(item_json)
+	return item_dict
+		
+@frappe.whitelist()
+def get_latest_active_lease(property_id):
+	lease_details = frappe.get_all("Lease",filters={"property":property_id},fields=["name"],order_by="lease_date desc",limit=1)
+	if len(lease_details)>=1:
+		return lease_details[0].name
+	else:
+		return ''
+		
 

@@ -103,6 +103,9 @@ doc_events = {
 	},
 	"Key Set Detail": {
 		"on_change": "propms.auto_custom.changeStatusKeyset"
+	},
+	"Meter Reading": {
+		"before_submit": "propms.auto_custom.make_invoice_meter_reading"
 	}
 
 
