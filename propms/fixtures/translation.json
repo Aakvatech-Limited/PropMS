@@ -46,41 +46,5 @@
   "parenttype": null, 
   "source_name": "Issue", 
   "target_name": "Maintenance Job Card"
- }, 
- {
-  "docstatus": 0, 
-  "doctype": "Translation", 
-  "language": "en", 
-  "modified": "2019-07-10 16:27:54.575386", 
-  "name": "0ef8997081", 
-  "parent": null, 
-  "parentfield": null, 
-  "parenttype": null, 
-  "source_name": "Issue", 
-  "target_name": "Maintenance Job Card"
- }, 
- {
-  "docstatus": 0, 
-  "doctype": "Translation", 
-  "language": "en", 
-  "modified": "2019-07-10 16:59:46.269111", 
-  "name": "92bd19d802", 
-  "parent": null, 
-  "parentfield": null, 
-  "parenttype": null, 
-  "source_name": "Issue", 
-  "target_name": "Maintenance Job Card"
- }, 
- {
-  "docstatus": 0, 
-  "doctype": "Translation", 
-  "language": "en", 
-  "modified": "2019-07-10 17:06:31.935794", 
-  "name": "8080f314df", 
-  "parent": null, 
-  "parentfield": null, 
-  "parenttype": null, 
-  "source_name": "Issue", 
-  "target_name": "Maintenance Job Card"
  }
 ]

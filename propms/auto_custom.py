@@ -460,7 +460,7 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 		AND m.docstatus=1
 		ORDER BY m.reading_date DESC limit 1""",meter_number,as_dict=True)
 	if len(previous_reading_details) >= 1:
-		print previous_reading_details[0].previous_reading
+		# print previous_reading_details[0].previous_reading
 		return previous_reading_details[0]
 	else:
 		initial_reading_details = frappe.db.sql("""SELECT initial_meter_reading as 'previous_reading',
