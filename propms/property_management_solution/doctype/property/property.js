@@ -14,7 +14,7 @@ frappe.ui.form.on('Property Meter Reading', {
 		if (meter_doc.meter_number != "") {
 			$.each(property_doc.property_meter_reading, function(i, d) {
 				if(d.name!=meter_doc.name && meter_doc.meter_type==d.meter_type && d.status=="Active")	{
-					var msg=_("Another Active Meter of type ")+meter_doc.meter_type+_(" Is Already allocated. Please de-activate it before adding a new meter of same type.")
+					var msg="Another Active Meter of type "+meter_doc.meter_type+" Is Already allocated. Please de-activate it before adding a new meter of same type."
 					frappe.model.set_value(cdt,cdn,"meter_number",'')
 					frappe.throw(msg)
 				}
@@ -27,8 +27,8 @@ frappe.ui.form.on('Property Meter Reading', {
 		if (meter_doc.meter_number != "") {
 			$.each(property_doc.property_meter_reading, function(i, d) {
 				if(d.name!=meter_doc.name && meter_doc.meter_type==d.meter_type && d.status=="Active")	{
-					var msg=_("Another Active Meter of type ")+meter_doc.meter_type+_(" Is Already allocated. Please de-activate it before adding a new meter of same type.")
-					frappe.model.set_value(cdt,cdn,"meter_number",'')
+					var msg="Another Active Meter of type "+meter_doc.meter_type+" Is Already allocated. Please de-activate it before adding a new meter of same type."
+					frappe.model.set_value(cdt,cdn,"status",'')
 					frappe.throw(msg)
 				}
 			})

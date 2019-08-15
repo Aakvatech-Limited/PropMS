@@ -27,7 +27,7 @@ frappe.ui.form.on('Meter Reading Detail', {
 					} else {
 						frappe.model.set_value(cdt, cdn, "property", "")
 						frappe.model.set_value(cdt, cdn, "meter_number", "")
-						frappe.model.set_value(cdt, cdn, "previous_meter_reading", "")
+						frappe.model.set_value(cdt, cdn, "previous_meter_reading", 0)
 						frappe.throw(_("Meter Does Not Exist For This Type"))
 					}
 				}
@@ -64,7 +64,8 @@ frappe.ui.form.on('Meter Reading Detail', {
 			frappe.model.set_value(cdt, cdn, "current_meter_reading", '')
 			frappe.throw("Current Meter Reading Must Be Greater Than Previous Reading")
 		}
-		if (doc.previous_meter_reading && doc.current_meter_reading) {
+		// frappe.msgprint("Current meter reading value is: " + String(doc.current_meter_reading))
+		if (doc.current_meter_reading) {
 			console.log(parseFloat(doc.current_meter_reading) - parseFloat(doc.previous_meter_reading))
 			frappe.model.set_value(cdt, cdn, "reading_difference", parseFloat(doc.current_meter_reading) - parseFloat(doc.previous_meter_reading))
 		}
