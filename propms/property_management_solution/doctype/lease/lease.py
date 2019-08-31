@@ -162,7 +162,7 @@ def make_lease_invoice_schedule(leasedoc):
 						#frappe.msgprint("Add Months Value" + str(add_months_value) + " due to qty = " + str(lease_invoice_schedule.qty))
 						invoice_date = add_months(lease_invoice_schedule.date_to_invoice, add_months_value)
 						# Set sequence to show it on the top
-						frappe.set_value("Lease Invoice Schedule", lease_invoice_schedule.name, "idx", idx)
+						frappe.db.set_value("Lease Invoice Schedule", lease_invoice_schedule.name, "idx", idx)
 						idx += 1
 					# If the invoice is not created
 					else:
