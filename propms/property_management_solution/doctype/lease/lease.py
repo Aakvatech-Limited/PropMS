@@ -104,8 +104,8 @@ def make_lease_invoice_schedule(leasedoc):
 				invoice_qty = float(frequency_factor)
 				end_date = lease.end_date
 				invoice_date = lease.start_date
-				# Find out the first invoice date after 2019-01-01 to process.
-				while end_date >= invoice_date and invoice_date <= getdate('2019-01-01'):
+				# Find out the first invoice date on or after 2019-01-01 to process.
+				while end_date >= invoice_date and invoice_date < getdate('2019-01-01'):
 					invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
 					# Set invoice_Qty as appropriate fraction of frequency_factor
 					if invoice_period_end > end_date:
