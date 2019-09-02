@@ -156,7 +156,13 @@ def get_data():
 					"name": "Security Attendance Report",
 					"is_query_report": True,
 					"doctype": "Security Attendance",
-				}
+				},
+				{
+					"type": "report",
+					"name": "Debtors Report",
+					"is_query_report": True,
+					"doctype": "Sales Invoice",
+				},
 			]
 		}
 	]
