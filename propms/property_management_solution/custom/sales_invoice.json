@@ -1,5 +1,6 @@
 {
  "custom_fields": [
+<<<<<<< HEAD
     {
         "_assign": null, 
         "_comments": null, 
@@ -255,6 +256,8 @@
         "unique": 0, 
         "width": null
        },
+=======
+>>>>>>> fb84cdb2cc6d73ab8fc706f8c23586c7b2668bff
   {
    "_assign": null, 
    "_comments": null, 
