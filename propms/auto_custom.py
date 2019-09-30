@@ -205,9 +205,6 @@ def statusChangeBeforeLeaseExpire():
 				property_doc=frappe.get_doc("Property",lease.property)
 				if not property_doc.status=="Off lease in 3 months":
 					frappe.db.set_value("Property",lease.property,"status","Off lease in 3 months")
-					
-
-
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
@@ -220,8 +217,6 @@ def statusChangeAfterLeaseExpire():
 				property_doc=frappe.get_doc("Property",lease.property)
 				if not property_doc.status=="Available":
 					frappe.db.set_value("Property",lease.property,"status","Available")
-
-
 	except Exception as e:
 		error_log=app_error_log(frappe.session.user,str(e))
 
