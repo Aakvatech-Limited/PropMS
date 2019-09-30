@@ -4,12 +4,22 @@
 
 frappe.query_reports["Security Deposit"] = {
         "filters": [
+
 			{
 				"fieldname":"account",
 				"label": __("Account"),
-				"fieldtype": "Select",
-				"width": "120",
-				"options": "options": ["21401 - Security Deposit Commercial - VPL","21402 - Security Deposit Residential - VPL"]
+				"fieldtype": "Link",
+				"options": "Account",
+				"default": "21401 - Security Deposit Commercial - VPL",
+				"get_query": function() {
+					return {
+						"query": "erpnext.controllers.queries.get_account_list",
+						"filters": [
+							['Account', 'account_type', 'in', 'Receivable'],
+							['Account', 'is_group', '=', 0],
+						]
+					}
+				}
 			},
         ]
 }
