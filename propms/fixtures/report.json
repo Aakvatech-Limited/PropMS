@@ -193,7 +193,6 @@
     "role": "Accounts User"
    }
   ]
-<<<<<<< HEAD
  },
  {
   "add_total_row": 1,
@@ -220,7 +219,5 @@
   "report_name": "Security Deposit",
   "report_type": "Query Report",
   "roles": []
-=======
->>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
  }
 ]
