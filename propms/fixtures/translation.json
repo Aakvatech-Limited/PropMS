@@ -1,5 +1,6 @@
 [
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -9,9 +10,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 17:52:26.011018", 
+  "name": "957122e06b", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -21,9 +34,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 17:52:26.019063", 
+  "name": "1e6ebb17a6", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -33,9 +58,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 17:52:26.025642", 
+  "name": "70d4aca307", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -45,9 +82,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 17:52:26.032141", 
+  "name": "b4db502359", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -57,9 +106,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 18:19:12.061299", 
+  "name": "2216f42f89", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -69,9 +130,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 18:19:12.065196", 
+  "name": "a788db0639", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -81,9 +154,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 18:19:12.068229", 
+  "name": "408930b2c2", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -93,9 +178,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 18:19:12.071327", 
+  "name": "5f8df21599", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -105,9 +202,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 19:46:14.354214", 
+  "name": "75b622482e", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -117,9 +226,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 19:46:14.358184", 
+  "name": "f1f6873f81", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -129,9 +250,21 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 19:46:14.361241", 
+  "name": "d10d1db82b", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  },
  {
+<<<<<<< HEAD
   "docstatus": 0,
   "doctype": "Translation",
   "language": "en",
@@ -141,6 +274,17 @@
   "parentfield": null,
   "parenttype": null,
   "source_name": "Issue",
+=======
+  "docstatus": 0, 
+  "doctype": "Translation", 
+  "language": "en", 
+  "modified": "2019-09-19 19:46:14.364373", 
+  "name": "650d3e05fb", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "source_name": "Issue", 
+>>>>>>> f7f8c7626c31a2bc274164287a9c90c248f99d78
   "target_name": "Maintenance Job Card"
  }
 ]
