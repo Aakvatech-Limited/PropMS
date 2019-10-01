@@ -163,6 +163,12 @@ def get_data():
 					"is_query_report": True,
 					"doctype": "Sales Invoice",
 				},
+				{
+					"type": "report",
+					"name": "Security Deposit",
+					"is_query_report": True,
+					"doctype": "Journal Entry Account",
+				},
 			]
 		}
 	]
