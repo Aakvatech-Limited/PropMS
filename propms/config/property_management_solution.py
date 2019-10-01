@@ -167,7 +167,7 @@ def get_data():
 					"type": "report",
 					"name": "Security Deposit",
 					"is_query_report": True,
-					"doctype": "Journal Entry Account",
+					"doctype": "Journal Entry",
 				},
 			]
 		}
