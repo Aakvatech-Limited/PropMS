@@ -199,7 +199,7 @@ def validateSalesInvoiceItemDuplication(self,method):
 @frappe.whitelist()
 def statusChangeBeforeLeaseExpire():
 	try:
-		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","<=",add_months(today(),3)]],fields=["name","property"])
+		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","<=",add_months(today(),3)]],fields=["name","property","end_date"])
 		if lease_doclist:
 			for lease in lease_doclist:
 				property_doc=frappe.get_doc("Property",lease.property)
@@ -211,7 +211,7 @@ def statusChangeBeforeLeaseExpire():
 @frappe.whitelist()
 def statusChangeAfterLeaseExpire():
 	try:
-		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","<=",add_days(today(),-1)]],fields=["name","property"])
+		lease_doclist=frappe.get_all("Lease",filters=[["Lease","end_date","<",today()]],fields=["name","property","end_date"])
 		if lease_doclist:
 			for lease in lease_doclist:
 				property_doc=frappe.get_doc("Property",lease.property)
