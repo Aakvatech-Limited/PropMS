@@ -199,6 +199,10 @@ def validateSalesInvoiceItemDuplication(self,method):
 @frappe.whitelist()
 def statusChangeBeforeLeaseExpire():
 	try:
+		lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property  ORDER BY ml.end_date DESC LIMIT  1) AND p.status != 'On Lease' and Now() BETWEEN l.start_date and l.end_date", as_dict=1)
+		if lease_doclist:
+			for lease in lease_doclist:
+				frappe.db.set_value("Property",lease.property,"status","On lease")
 		lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property ORDER BY ml.end_date DESC LIMIT  1) AND l.end_date BETWEEN Now() AND Date_add(Now(), INTERVAL 3 month) AND p.status = 'On Lease'", as_dict=1)
 		if lease_doclist:
 			for lease in lease_doclist:
