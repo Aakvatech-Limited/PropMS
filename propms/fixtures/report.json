@@ -11,7 +11,7 @@
   "javascript": null, 
   "json": null, 
   "letter_head": null, 
-  "modified": "2019-10-01 12:46:56.998078", 
+  "modified": "2019-10-02 12:39:40.006182", 
   "module": "Property Management Solution", 
   "name": "Security Deposit", 
   "parent": null, 
@@ -23,7 +23,20 @@
   "reference_report": null, 
   "report_name": "Security Deposit", 
   "report_type": "Query Report", 
-  "roles": []
+  "roles": [
+   {
+    "parent": "Security Deposit", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
+    "role": "Accounts Manager"
+   }, 
+   {
+    "parent": "Security Deposit", 
+    "parentfield": "roles", 
+    "parenttype": "Report", 
+    "role": "Accounts User"
+   }
+  ]
  }, 
  {
   "add_total_row": 0, 

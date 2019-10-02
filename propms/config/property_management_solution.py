@@ -159,16 +159,17 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "Debtors Report",
-					"is_query_report": True,
-					"doctype": "Sales Invoice",
-				},
-				{
-					"type": "report",
 					"name": "Security Deposit",
 					"is_query_report": True,
 					"doctype": "Journal Entry",
 				},
+				{
+					"type": "report",
+					"name": "Debtors Report",
+					"is_query_report": True,
+					"doctype": "Sales Invoice",
+				},
+
 			]
 		}
 	]
