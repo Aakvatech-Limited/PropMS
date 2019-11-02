@@ -4,4 +4,4 @@ Property Management Solution
 
 #### License
 
-MIT
+GPL
