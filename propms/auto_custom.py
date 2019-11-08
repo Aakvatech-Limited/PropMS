@@ -433,6 +433,7 @@ def get_active_meter_from_property(property_id,meter_type):
 
 @frappe.whitelist()
 def get_active_meter_customer_from_property(property_id,meter_type):
+	# Unused as per conversation with Vimal on 2019-08-11
 	"""Get Active Meter Customer Name"""
 	meter_data = frappe.db.sql("""SELECT invoice_customer
 		FROM `tabProperty Meter Reading`
@@ -475,7 +476,11 @@ def make_invoice_meter_reading(self,method):
 	for meter_row in self.meter_reading_detail:
 		if not int(meter_row.do_not_create_invoice) == 1:
 			item_detail = get_item_details(self.meter_type,meter_row.reading_difference)
-			customer = get_active_meter_customer_from_property(meter_row.property,self.meter_type)
+			# Changed from propert/meter customer lookup to pos cusotmer lookup as per conversation with Vimal on 2019-11-08
+			leasename=get_latest_active_lease(meter_row.property)
+			lease = frappe.get_doc("Lease",leasename)
+			#customer = get_active_meter_customer_from_property(meter_row.property,self.meter_type)
+			customer = lease.customer
 			if customer:
 				si_no = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
 				frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
