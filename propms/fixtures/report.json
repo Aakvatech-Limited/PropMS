@@ -1,12 +1,10 @@
 [
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -22,6 +20,7 @@
   "ref_doctype": "Journal Entry",
   "reference_report": null,
   "report_name": "Security Deposit",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -40,12 +39,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -61,6 +58,7 @@
   "ref_doctype": "Outsourcing Attendance",
   "reference_report": null,
   "report_name": "Outsourcing Attendance",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -79,12 +77,10 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -100,6 +96,7 @@
   "ref_doctype": "Security Attendance",
   "reference_report": null,
   "report_name": "Security Attendance Report",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -118,12 +115,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "No",
   "javascript": null,
   "json": "{\"order_by\": \"`tabLease`.`modified` desc\", \"filters\": [[\"Lease\", \"signed_agreement_received\", \"=\", 0, false]], \"fields\": [[\"name\", \"Lease\"], [\"docstatus\", \"Lease\"], [\"property_owner\", \"Lease\"], [\"customer\", \"Lease\"], [\"start_date\", \"Lease\"], [\"end_date\", \"Lease\"]], \"add_totals_row\": 0, \"add_total_row\": 0, \"page_length\": 20}",
@@ -139,6 +134,7 @@
   "ref_doctype": "Lease",
   "reference_report": null,
   "report_name": "Pending Signed Agreement",
+  "report_script": null,
   "report_type": "Report Builder",
   "roles": [
    {
@@ -157,12 +153,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "No",
   "javascript": null,
   "json": "{\"order_by\": \"`tabLease`.`modified` desc\", \"filters\": [[\"Lease\", \"stamp_duty_paid_by_tenant\", \"=\", 0, false]], \"fields\": [[\"name\", \"Lease\"], [\"docstatus\", \"Lease\"], [\"property_owner\", \"Lease\"], [\"customer\", \"Lease\"], [\"start_date\", \"Lease\"], [\"end_date\", \"Lease\"]], \"add_totals_row\": 0, \"add_total_row\": 0, \"page_length\": 20}",
@@ -178,6 +172,7 @@
   "ref_doctype": "Lease",
   "reference_report": null,
   "report_name": "Stamp Duty Paid by Tenant",
+  "report_script": null,
   "report_type": "Report Builder",
   "roles": [
    {
@@ -196,27 +191,26 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
   "letter_head": null,
-  "modified": "2019-11-06 18:24:45.579818",
+  "modified": "2019-11-11 15:27:03.006792",
   "module": "Property Management Solution",
   "name": "Debtors Report",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
   "prepared_report": 0,
-  "query": "SELECT \tsi.name AS \"Invoice No:Link/Sales Invoice:150\", \r\n\t\tsi.cost_center AS \"Cost Center:Link/Cost Center:180\", \r\n\t\tsi.customer AS \"Customer:Link/Customer:150\", \r\n\t\tGROUP_CONCAT(sid.item_name) AS \"Items:Data:200\",\r\n\t\tsi.from_date AS \"From Date:Date:100\", \r\n\t\tsi.to_date AS \"To Date:Date:100\", \r\n\t\tsi.due_date AS \"Due Date:Date:100\", \r\n\t\tIF(si.currency != \"TZS\", si.outstanding_amount/si.conversion_rate, 0) AS \"USD:Float/2:100\",\r\n\t\tIF(si.currency = \"TZS\", si.outstanding_amount, 0) AS \"TZS:Float:100\",\r\n\t\tsi._user_tags as \"Remarks:Data:200\"\r\nFROM `tabSales Invoice` si LEFT JOIN `tabSales Invoice Item` as sid ON si.name = sid.parent\r\nWHERE si.status IN (\"Sumitted\", \"Unpaid\", \"Overdue\")\r\nGROUP BY si.name",
+  "query": "SELECT \tsi.name AS \"Invoice No:Link/Sales Invoice:150\", \r\n\t\tsi.cost_center AS \"Cost Center:Link/Cost Center:180\", \r\n\t\tsi.customer AS \"Customer:Link/Customer:150\", \r\n\t\tGROUP_CONCAT(sid.item_name) AS \"Items:Data:200\",\r\n\t\tsi.from_date AS \"From Date:Date:100\", \r\n\t\tsi.to_date AS \"To Date:Date:100\", \r\n\t\tsi.due_date AS \"Due Date:Date:100\", \r\n\t\tIF(si.currency != \"TZS\", si.outstanding_amount/si.conversion_rate, 0) AS \"USD:Float:100\",\r\n\t\tIF(si.currency = \"TZS\", si.outstanding_amount, 0) AS \"TZS:Float:100\",\r\n\t\tsi._user_tags as \"Remarks:Data:200\"\r\nFROM `tabSales Invoice` si LEFT JOIN `tabSales Invoice Item` as sid ON si.name = sid.parent\r\nWHERE si.status IN (\"Sumitted\", \"Unpaid\", \"Overdue\")\r\nGROUP BY si.name",
   "ref_doctype": "Sales Invoice",
   "reference_report": null,
   "report_name": "Debtors Report",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
