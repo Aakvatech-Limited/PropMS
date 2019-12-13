@@ -40,38 +40,8 @@ def app_error_log(title,error):
 	d = d.insert(ignore_permissions=True)
 	return d	
 
-
-# Remarked as this is no longer necessary
-# @frappe.whitelist()
-# def makeLeaseInvoice(self,method):
-	# try:
-		# #frappe.msgprint("2")
-		# if len(self.lease_item)>=1:
-			# item_arr=[]
-			# item_invoice_frequency = {
-					# "Monthly": 1,
-					# "Quarterly": 3,
-					# "6 Months": 6,
-					# "Annually": 12
-			# }
-			# for item in self.lease_item:
-				# frequency_factor = item_invoice_frequency.get(item.frequency, "Invalid frequency")
-				# if frequency_factor == "Invalid frequency":
-					# frappe.msgprint("Invalid frequency: " + item.frequency + " not found. Contact the developers!")
-				# item_json={}
-				# item_json["item_code"]=item.lease_item
-				# item_json["qty"]=frequency_factor
-				# item_json["rate"]=item.amount
-				# item_arr.append(item_json)
-				# makeInvoice(self.start_date,item.paid_by,item_arr,item.currency_code)
-				# del item_arr[:]
-					
-	# except Exception as e:
-		# error_log=app_error_log(frappe.session.user,str(e))
-
-
 @frappe.whitelist()
-def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty=None):
+def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty=None,schedule_start_date=None):
 	try:
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 		if qty != int(qty):
@@ -79,15 +49,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 			subs_end_date=frappe.get_value("Lease", lease, "end_date")
 		else:
 			#month qty is not fractional
-			subs_end_date = add_days(add_months(date,qty), -1)
-		#tax_account = frappe.get_doc("Account", str(propm_setting.default_tax_account_head))
-		#tax=[]
-		#tax_json={}
-		#tax_json["charge_type"]="On Net Total"
-		#tax_json["account_head"]=tax_account.name
-		#tax_json["description"]="VAT account"
-		#tax_json["rate"]=tax_account.tax_rate
-		#tax.append(tax_json)
+			subs_end_date = add_days(add_months(schedule_start_date,qty), -1)
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
 					posting_date=today(),
@@ -98,7 +60,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 					lease=lease,
 					lease_item=lease_item,
 					taxes_and_charges=propm_setting.default_tax_template,
-					from_date=date,
+					from_date=schedule_start_date,
 					to_date=subs_end_date,
 					cost_center=getCostCenter(lease)
 		)).insert()
@@ -108,7 +70,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 		sales_invoice.save()
 		return sales_invoice
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
 @frappe.whitelist()
 def getTax(sales_invoice):
@@ -139,19 +101,21 @@ def leaseInvoiceAutoCreate():
 			item_dict = []
 			item_json = {}
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
+			if not (invoice_item.schedule_start_date):
+				invoice_item.schedule_start_date = invoice_item.date_to_invoice
 			#frappe.msgprint(row.name + " - " + str(invoice_item.date_to_invoice))
 			item_json["item_code"] = invoice_item.lease_item
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
 			item_json["cost_center"] = getCostCenter(row.parent)
 			item_dict.append(item_json)
-			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty)
+			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty, invoice_item.schedule_start_date)
 			#frappe.msgprint(str(res))
 			if res:
 				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
 				frappe.msgprint("Lease generated with number: " + str(res.name))
 	except Exception as e:
-		error_log = app_error_log(frappe.session.user, str(e))
+		app_error_log(frappe.session.user, str(e))
 
 @frappe.whitelist()
 def test():

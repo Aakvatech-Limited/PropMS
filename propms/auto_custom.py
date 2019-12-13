@@ -63,7 +63,6 @@ def makeSalesInvoice(self,method):
 									item_json["item_code"]=item.item_code
 									item_json["qty"]=item.qty
 									items.append(item_json)
-			
 								sales_invoice = frappe.get_doc(dict(
 										doctype='Sales Invoice',
 										company=frappe.db.get_single_value('Global Defaults', 'default_company'),
@@ -76,7 +75,6 @@ def makeSalesInvoice(self,method):
 								)).insert()
 								if sales_invoice.name:
 									assignInvoiceNameInMR(sales_invoice.name,material_request_details.name)
-			
 			changeStatusIssue(self.name,self.status)
 		else:
 			if self.customer:
@@ -92,10 +90,6 @@ def makeSalesInvoice(self,method):
 									item_json["item_code"]=item.item_code
 									item_json["qty"]=item.qty
 									items.append(item_json)
-			
-					
-					
-
 								sales_invoice = frappe.get_doc(dict(
 										doctype='Sales Invoice',
 										company=frappe.db.get_single_value('Global Defaults', 'default_company'),
@@ -108,13 +102,8 @@ def makeSalesInvoice(self,method):
 								)).insert()
 								if sales_invoice.name:
 									assignInvoiceNameInMR(sales_invoice.name,material_request_details.name)
-									
-			
-
-
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
-
+		app_error_log(frappe.session.user,str(e))
 
 
 def checkIssue(name):
@@ -147,7 +136,7 @@ def changeStatusKeyset(self,method):
 			frappe.throw("Key set not found - {0}.".format(self.key_set))
 
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
 
 def getKeysetName(name):
@@ -170,11 +159,8 @@ def changeStatusIssue(name,status):
 			doc.save()
 
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
-	
-
-	
 
 def getIssueName(name):
 	data=frappe.db.sql("""select name from `tabIssue Materials Detail` where material_request=%s""",name)
@@ -209,7 +195,8 @@ def statusChangeBeforeLeaseExpire():
 			for lease in lease_doclist:
 				frappe.db.set_value("Property",lease.property,"status","Off Lease in 3 Months")
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
+
 
 @frappe.whitelist()
 def statusChangeAfterLeaseExpire():
@@ -219,7 +206,7 @@ def statusChangeAfterLeaseExpire():
 			for lease in lease_doclist:
 				frappe.db.set_value("Property",lease.property,"status","Available")
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
 
 @frappe.whitelist()
@@ -251,7 +238,7 @@ def makeDailyCheckListForTakeover(source_name, target_doc=None, ignore_permissio
 		return doclist
 
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
 
 @frappe.whitelist()
@@ -281,20 +268,23 @@ def makeJournalEntry(customer,date,amount):
 		return j_entry.name
 
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
 
 
 @frappe.whitelist()
 def getMonthADD(date,month):
 	return add_months(getdate(date),int(month))
 
+
 @frappe.whitelist()
 def getDateDiff(date1,date2):
 	return date_diff(getdate(date1),getdate(date2))
 
+
 @frappe.whitelist()
 def getNumberOfDays(date):
 	return calendar.monthrange(getdate(date).year,getdate(date).month)[1]
+
 
 @frappe.whitelist()
 def getMonthNo(date1,date2):
@@ -302,16 +292,19 @@ def getMonthNo(date1,date2):
 	d2=getdate(date2)
 	return diff_month(datetime(d1.year,d1.month,d1.day), datetime(d2.year,d2.month,d2.day))
 
+
 @frappe.whitelist()
-def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, currency=None, tax=None):
+def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, currency=None, tax=None, days_to_invoice_in_advance=None):
 	try:
-		doc=frappe.get_doc(dict(
+		date_to_invoice = add_days(date, -1 * (days_to_invoice_in_advance or 0))
+		frappe.get_doc(dict(
 			idx=idx,
 			doctype="Lease Invoice Schedule",
 			parent=name,
 			parentfield="lease_invoice_schedule",
 			parenttype="lease",
-			date_to_invoice=date,
+			date_to_invoice=date_to_invoice,
+			schedule_start_date=date,
 			lease_item=item,
 			paid_by=paid_by,
 			lease_item_name=item_name,
@@ -322,13 +315,15 @@ def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, cu
 		)).insert()
 		#frappe.msgprint(str(doc.name))
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
+
 
 def diff_month(d1, d2):
 	if d1.day>=d2.day-1:
 		return (d1.year - d2.year) * 12 + d1.month - d2.month
 	else:
 		return (d1.year - d2.year) * 12 + d1.month - d2.month - 1
+
 
 @frappe.whitelist()
 def getDateMonthDiff(start_date, end_date, month_factor):
@@ -358,6 +353,7 @@ def getDateMonthDiff(start_date, end_date, month_factor):
 	month_count = month_count + no_month + month_float
 	return month_count
 
+
 def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=None):
 	if not (from_currency and to_currency):
 		# manqala 19/09/2016: Should this be an empty return or should it throw and exception?
@@ -365,24 +361,20 @@ def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=No
 		return
 	if from_currency == to_currency:
 		return 1
-
 	if not transaction_date:
-		transaction_date = nowdate()
+		transaction_date = today()
 	currency_settings = frappe.get_doc("Accounts Settings").as_dict()
 	print(transaction_date)
 	allow_stale_rates = currency_settings.get("allow_stale")
-
 	filters = [
 		["date", "<=", get_datetime_str(transaction_date)],
 		["from_currency", "=", from_currency],
 		["to_currency", "=", to_currency]
 	]
-
 	if args == "for_buying":
 		filters.append(["for_buying", "=", "1"])
 	elif args == "for_selling":
 		filters.append(["for_selling", "=", "1"])
-
 	if not allow_stale_rates:
 		stale_days = currency_settings.get("stale_days")
 		checkpoint_date = add_days(transaction_date, -stale_days)
@@ -432,6 +424,7 @@ def get_active_meter_from_property(property_id,meter_type):
 	else:
 		return ''
 
+
 @frappe.whitelist()
 def get_active_meter_customer_from_property(property_id,meter_type):
 	# Unused as per conversation with Vimal on 2019-08-11
@@ -445,6 +438,7 @@ def get_active_meter_customer_from_property(property_id,meter_type):
 		return meter_data[0].invoice_customer
 	else:
 		return ''
+
 
 @frappe.whitelist()
 def get_previous_meter_reading(meter_number,property_id,meter_type):
@@ -472,6 +466,7 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 		else:
 			return 0
 
+
 @frappe.whitelist()
 def make_invoice_meter_reading(self,method):
 	for meter_row in self.meter_reading_detail:
@@ -485,6 +480,7 @@ def make_invoice_meter_reading(self,method):
 			if customer:
 				si_no = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
 				frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
+
 
 @frappe.whitelist()
 def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None,to_date=None):
@@ -509,7 +505,8 @@ def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None
 		sales_invoice.save()
 		return sales_invoice.name
 	except Exception as e:
-		error_log=app_error_log(frappe.session.user,str(e))
+		app_error_log(frappe.session.user,str(e))
+
 
 @frappe.whitelist()
 def get_tax(sales_invoice):
@@ -517,9 +514,11 @@ def get_tax(sales_invoice):
 	for tax in taxes:
 		sales_invoice.append('taxes', tax)
 
+
 @frappe.whitelist()
 def get_cost_center(property_id):
 	return frappe.db.get_value("Property",property_id,"cost_center")
+
 
 @frappe.whitelist()
 def get_item_details(item,qty):
@@ -529,7 +528,8 @@ def get_item_details(item,qty):
 	item_json["qty"] = qty
 	item_dict.append(item_json)
 	return item_dict
-		
+
+
 @frappe.whitelist()
 def get_latest_active_lease(property_id):
 	lease_details = frappe.get_all("Lease",filters={"property":property_id},fields=["name"],order_by="lease_date desc",limit=1)
@@ -537,5 +537,3 @@ def get_latest_active_lease(property_id):
 		return lease_details[0].name
 	else:
 		return ''
-		
-

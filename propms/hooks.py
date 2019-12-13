@@ -88,9 +88,9 @@ fixtures = [
 	{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, 
 	{"doctype":"Custom Field", "filters": [["_user_tags", "like", ("%PropMS%")]]},
 	{"doctype":"Property Setter", "filters": [["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Notification", "filters": [{"is_standard":0}]},
-	'Auto Email Report',
-	"Translation",
+	{"doctype":"Notification", "filters": [{"is_standard":0}, ["_user_tags", "like", ("%PropMS%")]]},
+	{"doctype":"Auto Email Report", "filters": [["_user_tags", "like", ("%PropMS%")]]},
+	{"doctype":"Translation", "filters": [["_user_tags", "like", ("%PropMS%")]]},
 	{"doctype":"Print Format", "filters": [{"module":"Property Management Solution"}]}, 
 	{"doctype":"Report", "filters": [{"module":"Property Management Solution"}]} 
 ]

@@ -32,6 +32,7 @@
   "section_break_11",
   "lease_invoice_schedule",
   "section_break_13",
+  "days_to_invoice_in_advance",
   "notice_period",
   "column_break_23",
   "fit_out_period",
@@ -76,6 +77,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "Today",
    "fieldname": "lease_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -303,9 +305,14 @@
    "options": "Lease",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "days_to_invoice_in_advance",
+   "fieldtype": "Int",
+   "label": "Days to invoice in advance"
   }
  ],
- "modified": "2019-12-05 17:10:27.153531",
+ "modified": "2019-12-13 20:02:20.267756",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease",
