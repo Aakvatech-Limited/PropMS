@@ -21,7 +21,7 @@ def get_residential_columns(year):
 def get_sales_invoice(filters,data):
     lease_item = "and lease_item= '" + filters.get("rental") + "' "
     if filters.get("maintenance"):
-        lease_item = "and lease_item = 'Service Charge' "
+        lease_item = "and lease_item = 'Utility Charges' "
     query = """ SELECT * FROM `tabSales Invoice` 
                 WHERE docstatus=%s {0} 
                 ORDER by customer,from_date ASC""".format(lease_item) % (1)
@@ -90,7 +90,7 @@ def get_rate(invoice_name,filters):
     print(invoice_name)
     filters_value = " and item_code= '" + filters.get("rental") + "' "
     if filters.get("maintenance"):
-        filters_value = "and item_code = 'Service Charge'"
+        filters_value = "and item_code = 'Utility Charges'"
     query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {0} {1}""".format( "parent = '" + invoice_name + "' ", filters_value)
     print(query)
 
