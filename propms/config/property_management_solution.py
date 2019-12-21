@@ -65,11 +65,6 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Apartment Status",
-					"description": _("Applicable Apartment Statuses.")
-				},
-				{
-					"type": "doctype",
 					"name": "Unit Type",
 					"label": _("Unit Type"),
 					"description": _("Unit Type definition."),
@@ -78,12 +73,6 @@ def get_data():
 					"type": "doctype",
 					"name": "Property",
 					"description": _("Property database.")
-				},
-				{
-					"type": "doctype",
-					"name": "Lease Item",
-					"label": _("Lease Item"),
-					"description": _("Lease Item definition."),
 				},
 				{
 					"type": "doctype",

@@ -14,7 +14,8 @@
   "qty",
   "rate",
   "currency",
-  "tax"
+  "tax",
+  "invoice_item_group"
  ],
  "fields": [
   {
@@ -92,10 +93,16 @@
    "fieldtype": "Date",
    "label": "Schedule Start Date",
    "read_only": 1
+  },
+  {
+   "fieldname": "invoice_item_group",
+   "fieldtype": "Select",
+   "label": "Invoice Item Group",
+   "options": "1\n2\n3"
   }
  ],
  "istable": 1,
- "modified": "2019-12-13 19:53:26.229736",
+ "modified": "2019-12-19 23:49:40.832915",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease Invoice Schedule",

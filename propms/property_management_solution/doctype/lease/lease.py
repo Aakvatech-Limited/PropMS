@@ -138,7 +138,7 @@ def make_lease_invoice_schedule(leasedoc):
 						# frappe.msgprint("Making Fresh Invoice Schedule for " + str(invoice_date)
 						# 	+ ", Quantity calculated: " + str(invoice_qty))
 						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
-							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance
+							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance, item.invoice_item_group
 						)
 						idx += 1
 						invoice_date = add_days(invoice_period_end, 1)
@@ -157,7 +157,7 @@ def make_lease_invoice_schedule(leasedoc):
 							#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
 						# frappe.msgprint("Making Pre Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 						makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
-							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance
+							invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance, item.invoice_item_group
 						)
 						idx += 1
 						invoice_date = add_days(invoice_period_end, 1)
@@ -194,7 +194,7 @@ def make_lease_invoice_schedule(leasedoc):
 						#frappe.msgprint("Invoice quantity corrected as " + str(invoice_qty))
 					# frappe.msgprint("Making Post Invoice Schedule for " + str(invoice_date) + ", Quantity calculated: " + str(invoice_qty))
 					makeInvoiceSchedule(invoice_date, item.lease_item, item.paid_by, item.lease_item, lease.name,
-						invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance
+						invoice_qty, item.amount, idx, item.currency_code, item.witholding_tax, lease.days_to_invoice_in_advance, item.invoice_item_group
 					)
 					idx += 1
 					invoice_date = add_days(invoice_period_end, 1)

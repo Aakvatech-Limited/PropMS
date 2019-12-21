@@ -294,7 +294,7 @@ def getMonthNo(date1,date2):
 
 
 @frappe.whitelist()
-def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, currency=None, tax=None, days_to_invoice_in_advance=None):
+def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, currency=None, tax=None, days_to_invoice_in_advance=None, invoice_item_group=None):
 	try:
 		date_to_invoice = add_days(date, -1 * (days_to_invoice_in_advance or 0))
 		frappe.get_doc(dict(
@@ -311,7 +311,8 @@ def makeInvoiceSchedule(date, item, paid_by, item_name, name, qty, rate, idx, cu
 			qty=qty,
 			rate=rate,
 			currency=currency,
-			tax=tax
+			tax=tax,
+			invoice_item_group=invoice_item_group
 		)).insert()
 		#frappe.msgprint(str(doc.name))
 	except Exception as e:

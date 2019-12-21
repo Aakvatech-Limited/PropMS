@@ -86,34 +86,82 @@ def getDueDate(date,customer):
 def getCostCenter(name):
 	property_name = frappe.db.get_value("Lease",name,"property")
 	return frappe.db.get_value("Property",property_name,"cost_center")
-			
-	
-
 
 
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	try:
-		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number", "parent"])
+		# frappe.msgprint("Started")
+		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2019-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number", "parent", "parent", "invoice_item_group", "lease_item", "paid_by", "currency"], order_by = "parent, paid_by, invoice_item_group, date_to_invoice, currency, lease_item")
 		#frappe.msgprint("Lease being generated for " + str(lease_invoice))
+		row_num = 1 # to identify the 1st line of the list
+		prev_parent = ""
+		prev_customer = ""
+		prev_invoice_item_group = ""
+		prev_date_to_invoice = ""
+		lease_invoice_schedule_name = ""
+		prev_currency = ""
+		lease_invoice_schedule_list = []
+		item_dict = []
+		item_json = {}
+		# frappe.msgprint(str(lease_invoice))
 		for row in lease_invoice:
-			#frappe.msgprint("The parent of this row is: " + str(row.parent))
-			item_dict = []
-			item_json = {}
+			# frappe.msgprint(str(invoice_item.name) + " " + str(invoice_item.lease_item))
+			# Check if same lease, customer, invoice_item_group and date_to_invoice.
+			# Also should not be 1st row of the list
+			# frappe.msgprint(row.parent + " -- " + prev_parent + " -- " + row.paid_by + " -- " + prev_customer + " -- " + row.invoice_item_group + " -- " + prev_invoice_item_group + " -- " + str(row.date_to_invoice) + " -- " + str(prev_date_to_invoice) + " -- " + row.currency + " -- " + prev_currency)
+			if (not (row.parent == prev_parent and row.paid_by == prev_customer and row.invoice_item_group == prev_invoice_item_group and row.date_to_invoice == prev_date_to_invoice and row.currency == prev_currency) and row_num != 1):
+				# frappe.msgprint("Creating invoice for: " + str(item_dict))
+				res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty, invoice_item.schedule_start_date)
+				if res:
+					# Loop through all list invoice names that were created and update them with same invoice number
+					for lease_invoice_schedule_name in lease_invoice_schedule_list:
+						frappe.msgprint("---")
+						# frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name))
+						# frappe.db.set_value("Lease Invoice Schedule",lease_invoice_schedule_name, "invoice_number", res.name)
+					# frappe.msgprint("Lease Invoice generated with number: " + str(res.name))
+				item_dict = []
+				lease_invoice_schedule_list = [] # reset the list of names of lease_invoice_schedule
+				item_json = {}
+			# Now that the invoice would be created if required, load the record for preparing item_dict
 			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
 			if not (invoice_item.schedule_start_date):
 				invoice_item.schedule_start_date = invoice_item.date_to_invoice
-			#frappe.msgprint(row.name + " - " + str(invoice_item.date_to_invoice))
+			lease_end_date = frappe.get_value("Lease", invoice_item.parent, "end_date")
 			item_json["item_code"] = invoice_item.lease_item
 			item_json["qty"] = invoice_item.qty
 			item_json["rate"] = invoice_item.rate
-			item_json["cost_center"] = getCostCenter(row.parent)
-			item_dict.append(item_json)
-			res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty, invoice_item.schedule_start_date)
-			#frappe.msgprint(str(res))
-			if res:
-				frappe.db.set_value("Lease Invoice Schedule",invoice_item.name, "invoice_number", res.name)
-				frappe.msgprint("Lease generated with number: " + str(res.name))
+			item_json["cost_center"] = getCostCenter(invoice_item.parent)
+			item_json["withholding_tax_rate"] = invoice_item.tax
+			# item_json["enable_deferred_revenue"] = 1 # Set it to true
+			item_json["service_start_date"] = str(invoice_item.schedule_start_date)
+			if invoice_item.qty != int(invoice_item.qty):
+				#it means the last invoice for the lease that may have fraction of months
+				subs_end_date=lease_end_date
+			else:
+				#month qty is not fractional
+				subs_end_date = add_days(add_months(invoice_item.schedule_start_date,invoice_item.qty), -1)
+			item_json["service_end_date"] = str(subs_end_date)
+			# Append to the dictionary as a dict() so that the values for the new row can be set
+			item_dict.append(dict(item_json))
+			lease_invoice_schedule_list.append(invoice_item.name)
+
+			# Remember the values for the next round 
+			prev_parent = invoice_item.parent
+			prev_customer = invoice_item.paid_by
+			prev_invoice_item_group = invoice_item.invoice_item_group
+			prev_date_to_invoice = invoice_item.date_to_invoice
+			prev_currency = invoice_item.currency
+			row_num += 1 # increment by 1
+		# Create the last invoice
+		res = makeInvoice(invoice_item.date_to_invoice, invoice_item.paid_by, json.dumps(item_dict), invoice_item.currency, invoice_item.parent, invoice_item.lease_item, invoice_item.qty, invoice_item.schedule_start_date)
+		if res:
+			# Loop through all list invoice names that were created and update them with same invoice number
+			for lease_invoice_schedule_name in lease_invoice_schedule_list:
+				frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name))
+				# frappe.db.set_value("Lease Invoice Schedule",lease_invoice_schedule_name, "invoice_number", res.name)
+			frappe.msgprint("Lease Invoice generated with number: " + str(res.name))
+
 	except Exception as e:
 		app_error_log(frappe.session.user, str(e))
 
