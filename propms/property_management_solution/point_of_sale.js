@@ -1,17 +1,14 @@
 /* Customized version 2019-12-30 */
 /* Added cost_center field */
 // POS page js.
-
 try {
 	erpnext.pos.PointOfSale = erpnext.pos.PointOfSale.extend({
 	});
-
 } catch (e) { //online POS
 	class NewPOSCart extends POSCart{
 		constructor(wrapper){
 			super(wrapper);
 		}
-	
 		make() {
 			this.make_dom();
 			console.log("AakvaERP POS making cost center field")
@@ -20,7 +17,6 @@ try {
 			this.make_loyalty_points();
 			this.make_numpad();
 		}
-
 		make_cost_center_field() {
 			console.log("AakvaERP POS making cost center field")
 			this.cost_center_field = frappe.ui.form.make_control({
