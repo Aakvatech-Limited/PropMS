@@ -42,6 +42,7 @@ def app_error_log(title,error):
 
 @frappe.whitelist()
 def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty=None,schedule_start_date=None):
+	"""Create sales invoice from lease invoice schedule."""
 	try:
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 		if qty != int(qty):
@@ -90,6 +91,7 @@ def getCostCenter(name):
 
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
+	"""Prepare data to create sales invoice from lease invoice schedule. This is called from form button as well as daily schedule"""
 	try:
 		# frappe.msgprint("Started")
 		lease_invoice = frappe.get_all("Lease Invoice Schedule", filters = {"date_to_invoice": ['between', ("2020-01-01", today())], "invoice_number": ""}, fields = ["name", "date_to_invoice", "invoice_number", "parent", "parent", "invoice_item_group", "lease_item", "paid_by", "currency"], order_by = "parent, paid_by, invoice_item_group, date_to_invoice, currency, lease_item")
@@ -158,8 +160,8 @@ def leaseInvoiceAutoCreate():
 		if res:
 			# Loop through all list invoice names that were created and update them with same invoice number
 			for lease_invoice_schedule_name in lease_invoice_schedule_list:
-				frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name))
-				# frappe.db.set_value("Lease Invoice Schedule",lease_invoice_schedule_name, "invoice_number", res.name)
+				# frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name))
+				frappe.db.set_value("Lease Invoice Schedule",lease_invoice_schedule_name, "invoice_number", res.name)
 			frappe.msgprint("Lease Invoice generated with number: " + str(res.name))
 
 	except Exception as e:
