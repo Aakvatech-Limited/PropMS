@@ -18,7 +18,7 @@ try {
 			this.make_numpad();
 		}
 		make_cost_center_field() {
-			console.log("AakvaERP POS making cost center field")
+			// console.log("AakvaERP POS making cost center field")
 			this.cost_center_field = frappe.ui.form.make_control({
 				df: {
 					fieldtype: 'Link',
@@ -41,11 +41,15 @@ try {
 								'cost_center':this.cost_center_field.get_value()
 							}
 						}).then(r => {
-							if (r.message.hasOwnProperty('customer')){
-							this.customer_field.set_value(r.message.customer);
-							this.frm.set_value('customer', r.message.customer);
+							var pos_customer = "Cash Customer"
+							if (r.message){
+								if (r.message.hasOwnProperty('customer')){
+									pos_customer = r.message.customer
+								}
 							}
-							//for(var i = 0; i< r.message.lease_item.length; i++ ){
+							this.customer_field.set_value(pos_customer);
+							this.frm.set_value('customer', pos_customer);
+						//for(var i = 0; i< r.message.lease_item.length; i++ ){
 							//	this.events.on_field_change(r.message.lease_item[i].lease_item);
 							//}
 						});

@@ -9,7 +9,7 @@ def get_pos_data(cost_center):
 	lease = None
 	one_lease = None
 	if property:
-		lease = frappe.get_list("Lease",filters={'property': property[0].name},fields=['*'],order_by="end_date desc")
+		lease = frappe.get_all("Lease",filters={'property': property[0].name},fields=['*'],order_by="end_date desc")
 	if lease and len(lease):
 		one_lease = frappe.get_doc("Lease",lease[0].name)
 	return one_lease
