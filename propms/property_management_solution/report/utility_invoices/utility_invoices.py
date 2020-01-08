@@ -4,11 +4,11 @@
 from __future__ import unicode_literals
 import frappe
 from .other_methods import get_residential_columns
-from .other_methods import get_sales_invoice
+from .other_methods import get_utility_sales_invoice
 def execute(filters=None):
 	columns, data = [], []
-	if filters.get("rental") and filters.get("year"):
+	if filters.get("year"):
 		columns = get_residential_columns(filters.get("year"))
-		get_sales_invoice(filters,data)
+		get_utility_sales_invoice(data)
 
 	return columns, data
