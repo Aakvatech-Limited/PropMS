@@ -5,18 +5,6 @@
 frappe.query_reports["Utility Invoices"] = {
 	"filters": [
 		{
-			"fieldname":"rental",
-			"label": __("Rental"),
-			"fieldtype": "Select",
-			"options": "Commercial Rent\nResidential Rent",
-			"default": "Commercial Rent"
-		},
-		{
-			"fieldname":"maintenance",
-			"label": __("Maintenance"),
-			"fieldtype": "Check"
-		},
-		{
 			"fieldname":"year",
 			"label": __("Year"),
 			"fieldtype": "Link",
