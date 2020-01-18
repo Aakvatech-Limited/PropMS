@@ -158,7 +158,12 @@ def get_data():
 					"is_query_report": True,
 					"doctype": "Sales Invoice",
 				},
-
+				{
+					"type": "report",
+					"name": "Creditors Report",
+					"is_query_report": True,
+					"doctype": "Purchase Invoice",
+				},
 			]
 		}
 	]
