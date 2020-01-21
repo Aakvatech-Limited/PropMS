@@ -38,31 +38,6 @@
   ]
  },
  {
-  "add_total_row": 1,
-  "disable_prepared_report": 0,
-  "disabled": 0,
-  "docstatus": 0,
-  "doctype": "Report",
-  "is_standard": "Yes",
-  "javascript": null,
-  "json": null,
-  "letter_head": null,
-  "modified": "2020-01-18 10:31:08.424511",
-  "module": "Property Management Solution",
-  "name": "Creditor Report",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "prepared_report": 0,
-  "query": "SELECT \tpi.name AS \"Invoice No:Link/Sales Invoice:150\", \r\n\t\tpi.supplier AS \"Customer:Link/Supplier:150\", \r\n\t\tGROUP_CONCAT(pid.item_name) AS \"Items:Data:200\",\r\n\t\tpi.due_date AS \"Due Date:Date:100\", \r\n\t\tROUND(IF(pi.currency = \"USD\", IF( pi.currency = pi.party_account_currency, pi.outstanding_amount, pi.outstanding_amount/pi.conversion_rate), 0),2) AS \"USD:Float:100\",\r\n\t\tROUND(IF(pi.currency = \"TZS\", IF( pi.currency = pi.party_account_currency, pi.outstanding_amount, pi.outstanding_amount*pi.conversion_rate), 0),2) AS \"TZS:Float:100\",\r\n\t\tpi._user_tags as \"Remarks:Data:200\"\r\nFROM `tabPurchase Invoice` pi LEFT JOIN `tabPurchase Invoice Item` as pid ON pi.name = pid.parent\r\nWHERE pi.status IN (\"Sumitted\", \"Unpaid\", \"Overdue\")\r\nGROUP BY pi.name",
-  "ref_doctype": "Purchase Invoice Item",
-  "reference_report": null,
-  "report_name": "Creditor Report",
-  "report_script": null,
-  "report_type": "Query Report",
-  "roles": []
- },
- {
   "add_total_row": 0,
   "disable_prepared_report": 0,
   "disabled": 0,
@@ -375,6 +350,56 @@
     "parentfield": "roles",
     "parenttype": "Report",
     "role": "Accounts User"
+   }
+  ]
+ },
+ {
+  "add_total_row": 1,
+  "disable_prepared_report": 0,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2020-01-21 12:11:55.937288",
+  "module": "Property Management Solution",
+  "name": "Creditors Report",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "prepared_report": 0,
+  "query": "SELECT \tpi.name AS \"Invoice No:Link/Sales Invoice:150\", \r\n\t\tpi.supplier AS \"Customer:Link/Supplier:150\", \r\n\t\tGROUP_CONCAT(pid.item_name) AS \"Items:Data:200\",\r\n\t\tpi.due_date AS \"Due Date:Date:100\", \r\n\t\tROUND(IF(pi.currency = \"USD\", IF( pi.currency = pi.party_account_currency, pi.outstanding_amount, pi.outstanding_amount/pi.conversion_rate), 0),2) AS \"USD:Float:100\",\r\n\t\tROUND(IF(pi.currency = \"TZS\", IF( pi.currency = pi.party_account_currency, pi.outstanding_amount, pi.outstanding_amount*pi.conversion_rate), 0),2) AS \"TZS:Float:100\",\r\n\t\tpi._user_tags as \"Remarks:Data:200\"\r\nFROM `tabPurchase Invoice` pi LEFT JOIN `tabPurchase Invoice Item` as pid ON pi.name = pid.parent\r\nWHERE pi.status IN (\"Sumitted\", \"Unpaid\", \"Overdue\")\r\nGROUP BY pi.name",
+  "ref_doctype": "Purchase Invoice",
+  "reference_report": null,
+  "report_name": "Creditors Report",
+  "report_script": null,
+  "report_type": "Query Report",
+  "roles": [
+   {
+    "parent": "Creditors Report",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "Creditors Report",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Purchase User"
+   },
+   {
+    "parent": "Creditors Report",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts Manager"
+   },
+   {
+    "parent": "Creditors Report",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Auditor"
    }
   ]
  }
