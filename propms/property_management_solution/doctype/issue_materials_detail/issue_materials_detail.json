@@ -4,28 +4,71 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "material_request",
-  "material_status"
+  "item",
+  "quantity",
+  "uom",
+  "rate",
+  "amount",
+  "material_status",
+  "sales_invoice"
  ],
  "fields": [
   {
-   "fieldname": "material_request",
+   "fieldname": "material_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Requested\nReceived and WIP\nWork Done\nFulfilled\nInvoiced"
+  },
+  {
+   "columns": 2,
+   "fieldname": "item",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Material Request",
-   "options": "Material Request"
+   "label": "Item",
+   "options": "Item"
   },
   {
-   "fieldname": "material_status",
-   "fieldtype": "Read Only",
+   "columns": 1,
+   "fieldname": "quantity",
+   "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Status",
-   "options": "material_request.status"
+   "label": "Quantity"
+  },
+  {
+   "columns": 1,
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate"
+  },
+  {
+   "columns": 2,
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2019-12-05 16:21:45.600780",
+ "modified": "2020-03-04 16:38:57.012793",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Issue Materials Detail",
