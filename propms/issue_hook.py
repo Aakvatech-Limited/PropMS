@@ -4,7 +4,7 @@ from frappe import _
 from frappe.utils import today
 
 def make_sales_invoice(doc, method):
-    is_grouped = frappe.db.get_value("DSR Settings", None, "group_maintenance_job_items")
+    is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
     if not is_grouped:
         is_grouped =0
     is_grouped =int(is_grouped)
