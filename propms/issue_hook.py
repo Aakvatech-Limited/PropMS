@@ -11,7 +11,7 @@ def make_sales_invoice(doc, method):
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
     
     def _make_sales_invoice(items_list = None): 
-        if not len(items) > 0 or not doc.customer:
+        if not len(items_list) > 0 or not doc.customer:
             return      
         invoice_doc = frappe.get_doc(dict(
             doctype = "Sales Invoice",
