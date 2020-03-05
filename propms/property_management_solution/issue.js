@@ -1,4 +1,8 @@
 frappe.ui.form.on('Issue', {
+    refresh: (frm)=>{
+        // frm.trigger("get_maintenance_item_group");
+       
+    },
 	setup: function(frm) {
         frm.set_query('person_in_charge', function() {
             return {
@@ -14,14 +18,30 @@ frappe.ui.form.on('Issue', {
                 }
             }
         });
-        frm.fields_dict['materials_required'].grid.get_field('material_request').get_query = function(doc, cdt, cdn) {
-            return {
-                filters: [
-                    ['Material Request', 'docstatus', '=', '0'],
-                    ['Material Request', 'docstatus', '=', '1']
-                ]
+        frappe.call({
+            'method': 'frappe.client.get_value',
+            'args': {
+                doctype: 'Property Management Settings',
+                filters: {
+                    'name': 'Property Management Settings'
+                },
+                fieldname: 'maintenance_item_group'
+            },
+            async: false,
+            callback: function(r) {
+                if (r.message.maintenance_item_group){
+                    let maintenance_item_group = r.message.maintenance_item_group;
+                    frm.fields_dict['materials_required'].grid.get_field('item').get_query = function(doc, cdt, cdn) {
+                        return {
+                            filters: [
+                                ['Item', 'item_group', '=', maintenance_item_group],
+                                
+                            ]
+                        }
+                    }
+                }
             }
-        }
+        });
     },
     property_name: function(frm, cdt, cdn) {
         // frappe.msgprint(__("Testing"))
@@ -61,26 +81,18 @@ frappe.ui.form.on('Issue', {
                 }
             });
         }
-    }
+    }, 
 });
-frappe.ui.form.on('Issue Materials Detail', {
-    material_request: function(frm, cdt, cdn) {
-        var material = locals[cdt][cdn];
-        if (material.material_request) {
-            frappe.call({
-                'method': 'frappe.client.get_value',
-                'args': {
-                    doctype: 'Material Request',
-                    filters: {
-                        'name': material.material_request
-                    },
-                    fieldname: 'status'
-                },
-                async: false,
-                callback: function(r) {
-                    frappe.model.set_value(cdt, cdn, 'material_status', r.message.status);
-                }
-            });
-        }
-    }
+
+frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+        item_row.amount = item_row.rate * item_row.quantity;
+        refresh_field("materials_required")
+});
+
+
+frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+        item_row.amount = item_row.rate * item_row.quantity;
+        refresh_field("materials_required")
 });
