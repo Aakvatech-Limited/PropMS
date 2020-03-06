@@ -9,6 +9,10 @@ def make_sales_invoice(doc, method):
     if not is_grouped:
         is_grouped =0
     is_grouped =int(is_grouped)
+    company = frappe.db.get_value("Property Management Settings", None, "company")
+    if not company:
+        company = frappe.db.get_single_value('Global Defaults', 'default_company')
+    cost_center = frappe.db.get_value("Property Management Settings", None, "cost_center")
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
     
     def _make_sales_invoice(items_list = None): 
@@ -17,13 +21,14 @@ def make_sales_invoice(doc, method):
         invoice_doc = frappe.get_doc(dict(
             doctype = "Sales Invoice",
             customer = doc.customer,
-            company = frappe.db.get_single_value('Global Defaults', 'default_company'),
+            company = company,
             posting_date = today(),
             due_date = today(),
             ignore_pricing_rule = 1,
             items = items_list,
             update_stock = 1,
             remarks = user_remarks,
+            cost_center = cost_center,
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
@@ -42,6 +47,7 @@ def make_sales_invoice(doc, method):
                     item_code = item_row.item,
                     qty = item_row.quantity,
                     rate = item_row.rate,
+                    cost_center = cost_center,
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1

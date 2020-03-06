@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
+  "cost_center",
   "section_break_2",
   "security_deposit_item",
   "security_account_code",
@@ -99,10 +100,16 @@
    "fieldtype": "Table MultiSelect",
    "label": "Maintenance Item Group",
    "options": "MultiSelect Item Group"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Default Cost Center",
+   "options": "Cost Center"
   }
  ],
  "issingle": 1,
- "modified": "2020-03-06 22:09:41.942106",
+ "modified": "2020-03-06 23:08:04.758668",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",

@@ -1,12 +1,19 @@
 frappe.ui.form.on('Issue', {
     onload: (frm)=>{
-        // make row read only after invoiced
-        let child = frm.doc.materials_required;
-            child.forEach(function(e){
-                if (e.invoiced ==1){
-                    $("[data-idx='"+e.idx+"']").css('pointer-events','none');
-                }
-            })
+        frm.trigger("make_row_readonly");
+    },
+    refresh: (frm)=>{
+        frm.trigger("make_row_readonly");
+    },
+    make_row_readonly:(frm)=>{
+         // make row read only after invoiced
+         let child = frm.doc.materials_required;
+         child.forEach(function(e){
+             if (e.invoiced ==1){
+                 $("[data-idx='"+e.idx+"']").css('pointer-events','none');
+                 refresh_field("materials_required")
+             }
+         })
     },
 	setup: function(frm) {
         frm.set_query('person_in_charge', function() {
