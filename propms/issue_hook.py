@@ -12,7 +12,7 @@ def make_sales_invoice(doc, method):
     company = frappe.db.get_value("Property Management Settings", None, "company")
     if not company:
         company = frappe.db.get_single_value('Global Defaults', 'default_company')
-    cost_center = frappe.db.get_value("Property Management Settings", None, "cost_center")
+    cost_center = frappe.db.get_value("Property", doc.property_name, "cost_center")
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
     
     def _make_sales_invoice(items_list = None): 
