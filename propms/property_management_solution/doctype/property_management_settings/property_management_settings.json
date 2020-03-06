@@ -96,13 +96,13 @@
   },
   {
    "fieldname": "maintenance_item_group",
-   "fieldtype": "Link",
+   "fieldtype": "Table MultiSelect",
    "label": "Maintenance Item Group",
-   "options": "Item Group"
+   "options": "MultiSelect Item Group"
   }
  ],
  "issingle": 1,
- "modified": "2020-03-04 16:42:06.411087",
+ "modified": "2020-03-06 22:09:41.942106",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",

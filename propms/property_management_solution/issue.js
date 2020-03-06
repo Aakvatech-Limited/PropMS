@@ -1,5 +1,6 @@
 frappe.ui.form.on('Issue', {
-    onload: (frm,cdt, cdn)=>{
+    onload: (frm)=>{
+        // make row read only after invoiced
         let child = frm.doc.materials_required;
             child.forEach(function(e){
                 if (e.invoiced ==1){
@@ -23,22 +24,15 @@ frappe.ui.form.on('Issue', {
             }
         });
         frappe.call({
-            'method': 'frappe.client.get_value',
-            'args': {
-                doctype: 'Property Management Settings',
-                filters: {
-                    'name': 'Property Management Settings'
-                },
-                fieldname: 'maintenance_item_group'
-            },
+            'method': 'propms.issue_hook.get_items_group',
             async: false,
             callback: function(r) {
-                if (r.message.maintenance_item_group){
-                    let maintenance_item_group = r.message.maintenance_item_group;
+                if (r.message){
+                    let maintenance_item_group = r.message;
                     frm.fields_dict['materials_required'].grid.get_field('item').get_query = function(doc, cdt, cdn) {
                         return {
                             filters: [
-                                ['Item', 'item_group', '=', maintenance_item_group],
+                                ['Item', 'item_group', 'in', maintenance_item_group],
                                 
                             ]
                         }
@@ -103,6 +97,7 @@ frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
 
 frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
+    if (!item_row.item){return}
         frappe.call({
             method: 'propms.issue_hook.get_item_rate',
             args: {
@@ -122,12 +117,3 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     
 });
 
-// frappe.ui.form.on("Issue Materials Detail",{
-//     refresh: function(frm, cdt, cdn) {
-//         // var item_row = locals[cdt][cdn];
-        
-//         console.log("Onload Issue Materials Detai");
-
-
-//     }
-// });

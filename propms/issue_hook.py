@@ -69,3 +69,12 @@ def get_item_rate(item,customer):
     rate = get_price(item,price_list,customer_group,company)
     if rate:
         return rate["price_list_rate"]
+
+
+@frappe.whitelist()
+def get_items_group():
+    property_doc = frappe.get_doc("Property Management Settings")
+    items_group_list = []
+    for items_group in property_doc.maintenance_item_group:
+        items_group_list.append(items_group.item_group)
+    return items_group_list
