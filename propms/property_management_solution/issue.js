@@ -96,3 +96,24 @@ frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
         item_row.amount = item_row.rate * item_row.quantity;
         refresh_field("materials_required")
 });
+
+frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+        frappe.call({
+            method: 'propms.issue_hook.get_item_rate',
+            args: {
+                item: item_row.item,
+                customer: frm.doc.customer,
+            },
+            async: false,
+            callback: function(r) {
+                if (r.message) {
+                    item_row.rate = r.message;
+                    item_row.amount = item_row.rate * item_row.quantity;
+                    refresh_field("materials_required");
+                }
+            }
+        });
+
+    
+});

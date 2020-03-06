@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.utils import today
+from erpnext.utilities.product import get_price
 
 def make_sales_invoice(doc, method):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
@@ -59,3 +60,12 @@ def make_sales_invoice(doc, method):
                 item_row.material_status = "Invoiced"
                 _make_sales_invoice(items)   
 
+
+@frappe.whitelist()
+def get_item_rate(item,customer):
+    price_list = frappe.db.get_value("Customer", customer, "default_price_list")
+    customer_group = frappe.db.get_value("Customer", customer, "customer_group")
+    company = frappe.db.get_single_value('Global Defaults', 'default_company')
+    rate = get_price(item,price_list,customer_group,company)
+    if rate:
+        return rate["price_list_rate"]

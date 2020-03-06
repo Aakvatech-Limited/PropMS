@@ -10,6 +10,7 @@
   "rate",
   "amount",
   "material_status",
+  "invoiced",
   "sales_invoice"
  ],
  "fields": [
@@ -31,6 +32,7 @@
   },
   {
    "columns": 1,
+   "default": "1",
    "fieldname": "quantity",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -66,10 +68,19 @@
    "label": "Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "invoiced",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Invoiced",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2020-03-05 20:31:58.176776",
+ "modified": "2020-03-06 16:10:46.442676",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Issue Materials Detail",
