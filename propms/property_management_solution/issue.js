@@ -1,7 +1,11 @@
 frappe.ui.form.on('Issue', {
-    refresh: (frm)=>{
-        // frm.trigger("get_maintenance_item_group");
-       
+    onload: (frm,cdt, cdn)=>{
+        let child = frm.doc.materials_required;
+            child.forEach(function(e){
+                if (e.invoiced ==1){
+                    $("[data-idx='"+e.idx+"']").css('pointer-events','none');
+                }
+            })
     },
 	setup: function(frm) {
         frm.set_query('person_in_charge', function() {
@@ -81,7 +85,7 @@ frappe.ui.form.on('Issue', {
                 }
             });
         }
-    }, 
+    },
 });
 
 frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) {
@@ -117,3 +121,13 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
 
     
 });
+
+// frappe.ui.form.on("Issue Materials Detail",{
+//     refresh: function(frm, cdt, cdn) {
+//         // var item_row = locals[cdt][cdn];
+        
+//         console.log("Onload Issue Materials Detai");
+
+
+//     }
+// });
