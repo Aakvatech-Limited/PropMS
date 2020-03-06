@@ -30,9 +30,9 @@ def make_sales_invoice(doc, method):
             invoice_doc.submit()
             frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
             for item_row in doc.materials_required:
-                if item_row.item and item_row.quantity and item_row.material_status =="Invoiced"and not item_row.sales_invoice:
+                if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
-                    item_row.material_status = "Invoiced"
+                    
 
     if is_grouped == 1:
         items = []
@@ -44,7 +44,7 @@ def make_sales_invoice(doc, method):
                     rate = item_row.rate,
                 )
                 items.append(item_dict)
-                item_row.material_status = "Invoiced"
+                item_row.invoiced = 1
         _make_sales_invoice(items)
 
     else :
@@ -57,7 +57,7 @@ def make_sales_invoice(doc, method):
                     rate = item_row.rate,
                 )
                 items.append(item_dict)
-                item_row.material_status = "Invoiced"
+                item_row.invoiced = 1
                 _make_sales_invoice(items)   
 
 
