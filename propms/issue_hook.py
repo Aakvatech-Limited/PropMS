@@ -20,7 +20,7 @@ def make_sales_invoice(doc, method):
     submit_maintenance_invoice =int(submit_maintenance_invoice)
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
 
-    def _make_sales_invoice(items_list = None): 
+    def _make_sales_invoice(items_list= None, pos= None): 
         if not len(items_list) > 0 or not doc.customer:
             return      
         invoice_doc = frappe.get_doc(dict(
@@ -37,9 +37,9 @@ def make_sales_invoice(doc, method):
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
-            if submit_maintenance_invoice == 1 and not check_is_pos():
+            if submit_maintenance_invoice == 1 and not pos:
                 invoice_doc.submit()
-            if check_is_pos():
+            if pos:
                 make_sales_pos_payment(invoice_doc)
             frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
             for item_row in doc.materials_required:
@@ -103,7 +103,11 @@ def make_sales_invoice(doc, method):
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
-                _make_sales_invoice(items)   
+                if item_row.is_pos:
+                    pos =True
+                else:
+                    pos = False
+                _make_sales_invoice(items,pos)   
 
 
 @frappe.whitelist()
