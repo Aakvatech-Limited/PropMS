@@ -1,19 +1,19 @@
 frappe.ui.form.on('Issue', {
-    onload: (frm)=>{
+    onload: (frm)=> {
         frm.trigger("make_row_readonly");
     },
-    refresh: (frm)=>{
+    refresh: (frm)=> {
         frm.trigger("make_row_readonly");
     },
-    make_row_readonly:(frm)=>{
+    make_row_readonly:(frm)=> {
          // make row read only after invoiced
          let child = frm.doc.materials_required;
          child.forEach(function(e){
              if (e.invoiced ==1){
-                 $("[data-idx='"+e.idx+"']").css('pointer-events','none');
+                 $("[data-idx='"+e.idx+"']").css("pointer-events","none");
                  refresh_field("materials_required")
              }
-         })
+         });
     },
 	setup: function(frm) {
         frm.set_query('person_in_charge', function() {
@@ -31,15 +31,15 @@ frappe.ui.form.on('Issue', {
             }
         });
         frappe.call({
-            'method': 'propms.issue_hook.get_items_group',
+            method: 'propms.issue_hook.get_items_group',
             async: false,
             callback: function(r) {
                 if (r.message){
                     let maintenance_item_group = r.message;
-                    frm.fields_dict['materials_required'].grid.get_field('item').get_query = function(doc, cdt, cdn) {
+                    frm.fields_dict["materials_required"].grid.get_field("item").get_query = function(doc, cdt, cdn) {
                         return {
                             filters: [
-                                ['Item', 'item_group', 'in', maintenance_item_group],
+                                ["Item", "item_group", "in", maintenance_item_group],
                                 
                             ]
                         }
@@ -99,14 +99,16 @@ frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) 
 frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
         item_row.amount = item_row.rate * item_row.quantity;
-        refresh_field("materials_required")
+        refresh_field("materials_required");
 });
 
 frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
-    if (!item_row.item){return}
+    if (!item_row.item){
+        return
+    }
         frappe.call({
-            method: 'propms.issue_hook.get_item_rate',
+            method: "propms.issue_hook.get_item_rate",
             args: {
                 item: item_row.item,
                 customer: frm.doc.customer,

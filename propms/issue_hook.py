@@ -22,9 +22,9 @@ def make_sales_invoice(doc, method):
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
     leas = get_latest_active_lease(doc.property_name)
     
-    def _make_sales_invoice(items_list= None, pos= None): 
+    def _make_sales_invoice(items_list=None, pos=None): 
         if not len(items_list) > 0 or not doc.customer:
-            return      
+            return
         invoice_doc = frappe.get_doc(dict(
             doctype = "Sales Invoice",
             customer = doc.customer,
@@ -60,7 +60,6 @@ def make_sales_invoice(doc, method):
             frappe.throw(_("Default Account Not Defined In Mode of Payment"))
     
 
-
     def make_sales_pos_payment(invoice_doc):
         user_pos_profile = get_pos_profile(company)
         invoice_doc.is_pos = 1
@@ -77,7 +76,7 @@ def make_sales_invoice(doc, method):
 
     def check_is_pos():
         for item_row in doc.materials_required:
-            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled"and not item_row.sales_invoice and item_row.is_pos: 
+            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled" and not item_row.sales_invoice and item_row.is_pos: 
                 return True
         return False
 
@@ -110,7 +109,7 @@ def make_sales_invoice(doc, method):
                     pos =True
                 else:
                     pos = False
-                _make_sales_invoice(items,pos)   
+                _make_sales_invoice(items,pos)
 
 
 @frappe.whitelist()
