@@ -13,8 +13,12 @@ def make_sales_invoice(doc, method):
     if not company:
         company = frappe.db.get_single_value('Global Defaults', 'default_company')
     cost_center = frappe.db.get_value("Property", doc.property_name, "cost_center")
+    submit_maintenance_invoice = frappe.db.get_value("Property Management Settings", None, "submit_maintenance_invoice")
+    if not submit_maintenance_invoice:
+        submit_maintenance_invoice =0
+    submit_maintenance_invoice =int(submit_maintenance_invoice)
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
-    
+
     def _make_sales_invoice(items_list = None): 
         if not len(items_list) > 0 or not doc.customer:
             return      
@@ -32,7 +36,8 @@ def make_sales_invoice(doc, method):
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
-            invoice_doc.submit()
+            if submit_maintenance_invoice == 1:
+                invoice_doc.submit()
             frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
             for item_row in doc.materials_required:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:

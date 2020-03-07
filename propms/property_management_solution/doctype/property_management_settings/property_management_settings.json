@@ -6,7 +6,6 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
-  "cost_center",
   "section_break_2",
   "security_deposit_item",
   "security_account_code",
@@ -19,6 +18,7 @@
   "default_tax_template",
   "section_break_12",
   "group_maintenance_job_items",
+  "submit_maintenance_invoice",
   "column_break_14",
   "maintenance_item_group"
  ],
@@ -102,14 +102,14 @@
    "options": "MultiSelect Item Group"
   },
   {
-   "fieldname": "cost_center",
-   "fieldtype": "Link",
-   "label": "Default Cost Center",
-   "options": "Cost Center"
+   "default": "0",
+   "fieldname": "submit_maintenance_invoice",
+   "fieldtype": "Check",
+   "label": "Submit Maintenance Invoice"
   }
  ],
  "issingle": 1,
- "modified": "2020-03-06 23:08:04.758668",
+ "modified": "2020-03-07 14:11:49.631857",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",
