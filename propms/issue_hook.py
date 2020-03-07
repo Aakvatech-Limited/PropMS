@@ -3,6 +3,7 @@ import frappe
 from frappe import _
 from frappe.utils import today
 from erpnext.utilities.product import get_price
+from erpnext.stock.get_item_details import get_pos_profile
 
 def make_sales_invoice(doc, method):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
@@ -36,15 +37,48 @@ def make_sales_invoice(doc, method):
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
-            if submit_maintenance_invoice == 1:
+            if submit_maintenance_invoice == 1 and not check_is_pos():
                 invoice_doc.submit()
+            if check_is_pos():
+                make_sales_pos_payment(invoice_doc)
             frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
             for item_row in doc.materials_required:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
-                    
+    
 
-    if is_grouped == 1:
+    def get_account_pyment_mode(mode_of_payment,company):
+        mode_of_payment_doc = frappe.get_doc("Mode of Payment",mode_of_payment)
+        if mode_of_payment_doc:
+            for account_row in mode_of_payment_doc.accounts:
+                if account_row.company == company:
+                    return account_row.default_account
+        else:
+            frappe.throw(_("Default Account Not Defined In Mode of Payment"))
+    
+
+
+    def make_sales_pos_payment(invoice_doc):
+        user_pos_profile = get_pos_profile(company)
+        invoice_doc.is_pos = 1
+        invoice_doc.pos_profile = user_pos_profile.name
+        payment_row = invoice_doc.append("payments",{})
+        payment_row.mode_of_payment = "Cash"
+        payment_row.amount = invoice_doc.grand_total
+        payment_row.base_amount = invoice_doc.grand_total
+        payment_row.account = get_account_pyment_mode("Cash",invoice_doc.company)
+        if submit_maintenance_invoice == 1:
+            invoice_doc.submit()
+        else :
+            invoice_doc.save()
+
+    def check_is_pos():
+        for item_row in doc.materials_required:
+            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled"and not item_row.sales_invoice and item_row.is_pos: 
+                return True
+        return False
+
+    if is_grouped == 1 and not check_is_pos():
         items = []
         for item_row in doc.materials_required:
             if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled"and not item_row.sales_invoice:
