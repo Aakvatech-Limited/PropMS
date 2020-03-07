@@ -4,6 +4,7 @@ from frappe import _
 from frappe.utils import today
 from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
+from propms.auto_custom import get_latest_active_lease
 
 def make_sales_invoice(doc, method):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
@@ -19,7 +20,8 @@ def make_sales_invoice(doc, method):
         submit_maintenance_invoice =0
     submit_maintenance_invoice =int(submit_maintenance_invoice)
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
-
+    leas = get_latest_active_lease(doc.property_name)
+    
     def _make_sales_invoice(items_list= None, pos= None): 
         if not len(items_list) > 0 or not doc.customer:
             return      
@@ -34,6 +36,7 @@ def make_sales_invoice(doc, method):
             update_stock = 1,
             remarks = user_remarks,
             cost_center = cost_center,
+            lease = leas
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
