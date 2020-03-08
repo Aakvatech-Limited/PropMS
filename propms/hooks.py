@@ -102,7 +102,10 @@ fixtures = [
 
 doc_events = {
 	"Issue": {
-		"validate": "propms.auto_custom.makeSalesInvoice"
+		"validate": [
+			# "propms.auto_custom.makeSalesInvoice",
+			"propms.issue_hook.make_sales_invoice"
+			]
 	},
 	"Material Request": {
 		"validate": "propms.auto_custom.makeSalesInvoice",

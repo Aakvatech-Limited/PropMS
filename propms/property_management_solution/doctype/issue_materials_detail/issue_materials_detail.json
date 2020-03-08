@@ -9,16 +9,19 @@
   "uom",
   "rate",
   "amount",
+  "is_pos",
   "material_status",
+  "invoiced",
   "sales_invoice"
  ],
  "fields": [
   {
+   "columns": 1,
    "fieldname": "material_status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Requested\nReceived and WIP\nWork Done\nFulfilled\nInvoiced"
+   "options": "Requested\nReceived and WIP\nWork Done\nFulfilled"
   },
   {
    "columns": 2,
@@ -31,6 +34,7 @@
   },
   {
    "columns": 1,
+   "default": "1",
    "fieldname": "quantity",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -53,6 +57,7 @@
   },
   {
    "columns": 1,
+   "fetch_from": "item.stock_uom",
    "fieldname": "uom",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -65,10 +70,27 @@
    "label": "Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "invoiced",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Invoiced",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "is_pos",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is POS"
   }
  ],
  "istable": 1,
- "modified": "2020-03-04 16:38:57.012793",
+ "modified": "2020-03-07 14:08:56.172817",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Issue Materials Detail",
