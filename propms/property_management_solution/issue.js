@@ -9,13 +9,13 @@ frappe.ui.form.on('Issue', {
          // make row read only after invoiced
          let child = frm.doc.materials_required;
          child.forEach(function(e){
-             if (e.invoiced ==1){
+             if (e.invoiced === 1){
                  $("[data-idx='"+e.idx+"']").css("pointer-events","none");
                  refresh_field("materials_required")
              }
          });
     },
-	setup: function(frm) {
+    setup: function(frm) {
         frm.set_query('person_in_charge', function() {
             return {
                 filters: {
@@ -31,7 +31,7 @@ frappe.ui.form.on('Issue', {
             }
         });
         frappe.call({
-            method: 'propms.issue_hook.get_items_group',
+            method: "propms.issue_hook.get_items_group",
             async: false,
             callback: function(r) {
                 if (r.message){
@@ -92,7 +92,7 @@ frappe.ui.form.on('Issue', {
 frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
         item_row.amount = item_row.rate * item_row.quantity;
-        refresh_field("materials_required")
+        refresh_field("materials_required");
 });
 
 
@@ -105,7 +105,7 @@ frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
 frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
     if (!item_row.item){
-        return
+        return;
     }
         frappe.call({
             method: "propms.issue_hook.get_item_rate",
