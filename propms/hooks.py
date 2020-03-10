@@ -89,7 +89,7 @@ doctype_js = {
 # Hook on document methods and events
 
 fixtures = [
-	{"doctype":"Custom Field", "filters": [["name", "om", (
+	{"doctype":"Custom Field", "filters": [["name", "in", (
 		"Item-reading_required",
 		"Sales Invoice-lease_item",
 		"Sales Invoice-lease_information",
