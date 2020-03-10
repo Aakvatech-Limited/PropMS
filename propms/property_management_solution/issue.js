@@ -1,5 +1,21 @@
 frappe.ui.form.on('Issue', {
-	setup: function(frm) {
+    onload: (frm)=> {
+        frm.trigger("make_row_readonly");
+    },
+    refresh: (frm)=> {
+        frm.trigger("make_row_readonly");
+    },
+    make_row_readonly:(frm)=> {
+         // make row read only after invoiced
+         let child = frm.doc.materials_required;
+         child.forEach(function(e){
+             if (e.invoiced === 1){
+                 $("[data-idx='"+e.idx+"']").css("pointer-events","none");
+                 refresh_field("materials_required")
+             }
+         });
+    },
+    setup: function(frm) {
         frm.set_query('person_in_charge', function() {
             return {
                 filters: {
@@ -14,14 +30,23 @@ frappe.ui.form.on('Issue', {
                 }
             }
         });
-        frm.fields_dict['materials_required'].grid.get_field('material_request').get_query = function(doc, cdt, cdn) {
-            return {
-                filters: [
-                    ['Material Request', 'docstatus', '=', '0'],
-                    ['Material Request', 'docstatus', '=', '1']
-                ]
+        frappe.call({
+            method: "propms.issue_hook.get_items_group",
+            async: false,
+            callback: function(r) {
+                if (r.message){
+                    let maintenance_item_group = r.message;
+                    frm.fields_dict["materials_required"].grid.get_field("item").get_query = function(doc, cdt, cdn) {
+                        return {
+                            filters: [
+                                ["Item", "item_group", "in", maintenance_item_group],
+                                
+                            ]
+                        }
+                    }
+                }
             }
-        }
+        });
     },
     property_name: function(frm, cdt, cdn) {
         // frappe.msgprint(__("Testing"))
@@ -61,26 +86,43 @@ frappe.ui.form.on('Issue', {
                 }
             });
         }
-    }
+    },
 });
-frappe.ui.form.on('Issue Materials Detail', {
-    material_request: function(frm, cdt, cdn) {
-        var material = locals[cdt][cdn];
-        if (material.material_request) {
-            frappe.call({
-                'method': 'frappe.client.get_value',
-                'args': {
-                    doctype: 'Material Request',
-                    filters: {
-                        'name': material.material_request
-                    },
-                    fieldname: 'status'
-                },
-                async: false,
-                callback: function(r) {
-                    frappe.model.set_value(cdt, cdn, 'material_status', r.message.status);
+
+frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+        item_row.amount = item_row.rate * item_row.quantity;
+        refresh_field("materials_required");
+});
+
+
+frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+        item_row.amount = item_row.rate * item_row.quantity;
+        refresh_field("materials_required");
+});
+
+frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+    if (!item_row.item){
+        return;
+    }
+        frappe.call({
+            method: "propms.issue_hook.get_item_rate",
+            args: {
+                item: item_row.item,
+                customer: frm.doc.customer,
+            },
+            async: false,
+            callback: function(r) {
+                if (r.message) {
+                    item_row.rate = r.message;
+                    item_row.amount = item_row.rate * item_row.quantity;
+                    refresh_field("materials_required");
                 }
-            });
-        }
-    }
+            }
+        });
+
+    
 });
+
