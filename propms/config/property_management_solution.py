@@ -5,7 +5,7 @@ import frappe
 def get_data():
 	config = [
 		{
-			"label": _("Property Management Documents"),
+			"label": _("Property Documents"),
 			"items": [
 				{
 					"type": "doctype",
@@ -60,7 +60,7 @@ def get_data():
 			]
 		},
 		{
-			"label": _("Property Management Masters"),
+			"label": _("Property Masters"),
 			"icon": "fa fa-cog",
 			"items": [
 				{
@@ -121,7 +121,7 @@ def get_data():
 			]
 		},
 		{
-			"label": _("Property Management Settings"),
+			"label": _("Property Settings"),
 			"items": [
 				{
 					"type": "doctype",
@@ -132,7 +132,7 @@ def get_data():
 			]
 		},
 		{
-			"label": _("Property Management Analytics"),
+			"label": _("Property Analytics"),
 			"items": [
 				{
 					"type": "report",
