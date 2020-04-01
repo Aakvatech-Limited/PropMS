@@ -77,11 +77,11 @@ doctype_js = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+#	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # Document Events
@@ -186,15 +186,15 @@ doc_events = {
 
 
 scheduler_events = {
- 	"daily": [
- 		"propms.auto_custom.statusChangeBeforeLeaseExpire",
+	"daily": [
+		"propms.auto_custom.statusChangeBeforeLeaseExpire",
 		"propms.auto_custom.statusChangeAfterLeaseExpire"
- 	],
-    	"cron": {
+	],
+	"cron": {
 		"00 12 * * *": [
 			"propms.lease_invoice.leaseInvoiceAutoCreate"
 			]
-    		}
+		}
 }
 
 
@@ -202,10 +202,10 @@ scheduler_events = {
 
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
+#	"*": {
+#		"on_update": "method",
+#		"on_cancel": "method",
+#		"on_trash": "method"
 #	}
 # }
 
@@ -213,21 +213,21 @@ scheduler_events = {
 # ---------------
 
 # scheduler_events = {
-# 	"all": [
-# 		"propms.tasks.all"
-# 	],
-# 	"daily": [
-# 		"propms.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"propms.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"propms.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"propms.tasks.monthly"
-# 	]
+#	"all": [
+#		"propms.tasks.all"
+#	],
+#	"daily": [
+#		"propms.tasks.daily"
+#	],
+#	"hourly": [
+#		"propms.tasks.hourly"
+#	],
+#	"weekly": [
+#		"propms.tasks.weekly"
+#	]
+#	"monthly": [
+#		"propms.tasks.monthly"
+#	]
 # }
 
 # Testing
@@ -239,6 +239,6 @@ scheduler_events = {
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
+#	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
 # }
 
