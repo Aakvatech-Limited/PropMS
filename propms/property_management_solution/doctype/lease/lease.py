@@ -5,18 +5,8 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint, format_datetime, now_datetime,add_days,today,formatdate,date_diff,getdate,get_last_day,add_months
-from frappe import throw, msgprint, _
-from datetime import datetime
-from datetime import date
-from datetime import timedelta
-from frappe.utils.background_jobs import enqueue
-
-import calendar
-import collections
-import json
-from propms.auto_custom import app_error_log,makeInvoiceSchedule,getMonthNo,getDateMonthDiff
-from propms.lease_invoice import makeInvoice
+from frappe.utils import add_days, today, getdate, add_months
+from propms.auto_custom import app_error_log, makeInvoiceSchedule, getDateMonthDiff
 
 
 class Lease(Document):

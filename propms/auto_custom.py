@@ -1,35 +1,15 @@
 from __future__ import unicode_literals
-from collections import defaultdict
-from datetime import date
 from datetime import datetime
-from datetime import timedelta
-from erpnext.accounts.utils import get_fiscal_year
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
-from frappe import throw, msgprint, _
-from frappe.client import delete
-from frappe.desk.notifications import clear_notifications
-from frappe.desk.reportview import get_match_cond, get_filters_cond
+from frappe import _
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import cint, format_datetime,get_datetime_str,now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
-from frappe.utils.password import update_password as _update_password
-from frappe.utils.user import get_system_managers
-from dateutil import relativedelta
-from calendar import monthrange
+from frappe.utils import get_datetime_str, add_days, today, date_diff, getdate, add_months
 from propms.lease_invoice import getDueDate
-import collections
 import calendar
 import frappe
 import frappe.permissions
 import frappe.share
-import json
-import logging
-import math
-import random
-import re
-import string
-import time
 import traceback
-import urllib
 
 
 @frappe.whitelist()
