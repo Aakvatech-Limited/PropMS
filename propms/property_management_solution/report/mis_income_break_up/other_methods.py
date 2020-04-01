@@ -1,4 +1,3 @@
-import frappe
 from time import strptime
 import calendar
 from collections import Counter
