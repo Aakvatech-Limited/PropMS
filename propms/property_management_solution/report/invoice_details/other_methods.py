@@ -53,10 +53,10 @@ def get_sales_invoice(filters,data,from_other=None, months=None):
 def set_monthly_amount(start_date, end_date, obj,filters,total,months):
     rate = get_rate(obj['invoice_no'],filters)
     if end_date and rate:
-        check_dates(start_date,end_date,rate,obj,total,filters,months)
+        check_dates(start_date,end_date,rate,obj,total,months)
 
 
-def check_dates(start_date,end_date,rate,obj,total,filters,months):
+def check_dates(start_date,end_date,rate,obj,total,months):
     start = start_date
     no_minus = 0
 
