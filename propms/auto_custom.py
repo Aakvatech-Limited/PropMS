@@ -31,7 +31,7 @@ def makeSalesInvoice(self,method):
 
 			if self.status=="Issued":
 				result=checkIssue(self.name)
-				if not result==False:
+				if result:
 					items=[]
 					issue_details=frappe.get_doc("Issue",result)
 					if issue_details.customer:
