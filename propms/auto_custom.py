@@ -89,7 +89,7 @@ def makeSalesInvoice(self,method):
 def checkIssue(name):
 	data=frappe.db.sql("""select parent from `tabIssue Materials Detail` where material_request=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
@@ -122,7 +122,7 @@ def changeStatusKeyset(self,method):
 def getKeysetName(name):
 	data=frappe.db.sql("""select name from `tabKey Set` where name=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
@@ -145,7 +145,7 @@ def changeStatusIssue(name,status):
 def getIssueName(name):
 	data=frappe.db.sql("""select name from `tabIssue Materials Detail` where material_request=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
