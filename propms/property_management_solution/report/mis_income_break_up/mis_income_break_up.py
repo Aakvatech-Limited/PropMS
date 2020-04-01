@@ -2,7 +2,6 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
-import frappe
 from .other_methods import get_columns
 from .other_methods import get_rentals
 from .other_methods import get_rental_maintenance
