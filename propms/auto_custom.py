@@ -168,8 +168,8 @@ def statusChangeBeforeLeaseExpire():
 		# Remarked as the users will set the property status manually
 		# lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property  ORDER BY ml.end_date DESC LIMIT  1) AND p.status != 'On Lease' and Now() BETWEEN l.start_date and l.end_date", as_dict=1)
 		# if lease_doclist:
-		# 	for lease in lease_doclist:
-		# 		frappe.db.set_value("Property",lease.property,"status","On lease")
+		#	for lease in lease_doclist:
+		#		frappe.db.set_value("Property",lease.property,"status","On lease")
 		lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property ORDER BY ml.end_date DESC LIMIT  1) AND l.end_date BETWEEN Now() AND Date_add(Now(), INTERVAL 3 month) AND p.status = 'On Lease'", as_dict=1)
 		if lease_doclist:
 			for lease in lease_doclist:
@@ -399,7 +399,7 @@ def get_active_meter_from_property(property_id,meter_type):
 		FROM `tabProperty Meter Reading`
 		WHERE parent=%s
 		AND meter_type=%s
-  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+		AND status='Active'""",(property_id,meter_type),as_dict=True)
 	if meter_data:
 		return meter_data[0].meter_number
 	else:
@@ -414,7 +414,7 @@ def get_active_meter_customer_from_property(property_id,meter_type):
 		FROM `tabProperty Meter Reading`
 		WHERE parent=%s
 		AND meter_type=%s
-  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+		AND status='Active'""",(property_id,meter_type),as_dict=True)
 	if meter_data:
 		return meter_data[0].invoice_customer
 	else:
@@ -441,7 +441,7 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 			WHERE parent=%s
 			AND meter_type=%s
 			AND meter_number=%s
-  			AND status='Active'""",(property_id,meter_type,meter_number),as_dict=True)
+			AND status='Active'""",(property_id,meter_type,meter_number),as_dict=True)
 		if len(initial_reading_details) >= 1:
 			return initial_reading_details[0]
 		else:
