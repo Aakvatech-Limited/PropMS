@@ -32,10 +32,8 @@ def get_rentals(filters):
         return_data.append(tax)
         return_data.append(net_rent)
         for i in sum_monthly:
-            try:
-                tax[i] = float(sum_monthly[i]) * float(0.10)
-                net_rent[i] = sum_monthly[i] - tax[i]
-            except: None
+            tax[i] = float(sum_monthly[i]) * float(0.10)
+            net_rent[i] = sum_monthly[i] - tax[i]
     return return_data
 
 def get_rental_maintenance(filters,return_data):
