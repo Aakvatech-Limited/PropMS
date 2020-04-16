@@ -1,105 +1,105 @@
 {
- "creation": "2018-11-22 07:16:14.803984",
- "doctype": "DocType",
- "editable_grid": 1,
- "engine": "InnoDB",
- "field_order": [
-  "item",
-  "quantity",
-  "uom",
-  "rate",
-  "amount",
-  "is_pos",
-  "material_status",
-  "invoiced",
-  "sales_invoice"
- ],
- "fields": [
-  {
-   "columns": 1,
-   "fieldname": "material_status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Requested\nReceived and WIP\nWork Done\nBill\nSelf Consumption"
-  },
-  {
-   "columns": 2,
-   "fieldname": "item",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Item",
-   "options": "Item"
-  },
-  {
-   "columns": 1,
-   "default": "1",
-   "fieldname": "quantity",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Quantity"
-  },
-  {
-   "columns": 1,
-   "fetch_from": "item.standard_rate",
-   "fetch_if_empty": 1,
-   "fieldname": "rate",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Rate"
-  },
-  {
-   "columns": 2,
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
-   "read_only": 1
-  },
-  {
-   "columns": 1,
-   "fetch_from": "item.stock_uom",
-   "fieldname": "uom",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "UOM",
-   "options": "UOM"
-  },
-  {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Link",
-   "label": "Sales Invoice",
-   "options": "Sales Invoice",
-   "read_only": 1
-  },
-  {
-   "columns": 1,
-   "default": "0",
-   "fieldname": "invoiced",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Invoiced",
-   "read_only": 1
-  },
-  {
-   "columns": 1,
-   "default": "0",
-   "fieldname": "is_pos",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is POS"
-  }
- ],
- "istable": 1,
- "modified": "2020-04-16 17:17:01.825395",
- "modified_by": "Administrator",
- "module": "Property Management Solution",
- "name": "Issue Materials Detail",
- "owner": "Administrator",
- "permissions": [],
- "quick_entry": 1,
- "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1
-}
+    "creation": "2018-11-22 07:16:14.803984",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+     "item",
+     "quantity",
+     "uom",
+     "rate",
+     "amount",
+     "is_pos",
+     "material_status",
+     "invoiced",
+     "sales_invoice"
+    ],
+    "fields": [
+     {
+      "columns": 1,
+      "fieldname": "material_status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Requested\nReceived and WIP\nWork Done\nSelf Consumption"
+     },
+     {
+      "columns": 2,
+      "fieldname": "item",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Item",
+      "options": "Item"
+     },
+     {
+      "columns": 1,
+      "default": "1",
+      "fieldname": "quantity",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity"
+     },
+     {
+      "columns": 1,
+      "fetch_from": "item.standard_rate",
+      "fetch_if_empty": 1,
+      "fieldname": "rate",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Rate"
+     },
+     {
+      "columns": 2,
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Amount",
+      "read_only": 1
+     },
+     {
+      "columns": 1,
+      "fetch_from": "item.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "UOM",
+      "options": "UOM"
+     },
+     {
+      "fieldname": "sales_invoice",
+      "fieldtype": "Link",
+      "label": "Sales Invoice",
+      "options": "Sales Invoice",
+      "read_only": 1
+     },
+     {
+      "columns": 1,
+      "default": "0",
+      "fieldname": "invoiced",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "label": "Invoiced",
+      "read_only": 1
+     },
+     {
+      "columns": 1,
+      "default": "0",
+      "fieldname": "is_pos",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "label": "Is POS"
+     }
+    ],
+    "istable": 1,
+    "modified": "2020-04-17 02:00:44.280989",
+    "modified_by": "Administrator",
+    "module": "Property Management Solution",
+    "name": "Issue Materials Detail",
+    "owner": "Administrator",
+    "permissions": [],
+    "quick_entry": 1,
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+   }

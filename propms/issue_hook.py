@@ -132,6 +132,11 @@ def get_items_group():
     return items_group_list
 
 
+def validate_materials_required(doc):
+    if len(doc.materials_required) > 0 and doc.status == "Closed":
+        frappe.throw(_("The Materials Required Table Have items"))
+
+
 @frappe.whitelist()
 def validate (doc, method):
-    print_out(doc.materials_required.name)
+    validate_materials_required(doc)
