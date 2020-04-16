@@ -104,7 +104,8 @@ doc_events = {
 	"Issue": {
 		"validate": [
 			# "propms.auto_custom.makeSalesInvoice",
-			"propms.issue_hook.make_sales_invoice"
+			"propms.issue_hook.make_sales_invoice",
+			"propms.issue_hook.validate",
 			]
 	},
 	"Material Request": {

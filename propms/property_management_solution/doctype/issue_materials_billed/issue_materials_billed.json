@@ -1,5 +1,5 @@
 {
- "creation": "2018-11-22 07:16:14.803984",
+ "creation": "2020-04-16 17:07:23.961402",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -16,14 +16,6 @@
  ],
  "fields": [
   {
-   "columns": 1,
-   "fieldname": "material_status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Requested\nReceived and WIP\nWork Done\nBill\nSelf Consumption"
-  },
-  {
    "columns": 2,
    "fieldname": "item",
    "fieldtype": "Link",
@@ -39,6 +31,15 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Quantity"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "item.stock_uom",
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "UOM"
   },
   {
    "columns": 1,
@@ -59,19 +60,19 @@
   },
   {
    "columns": 1,
-   "fetch_from": "item.stock_uom",
-   "fieldname": "uom",
-   "fieldtype": "Link",
+   "default": "0",
+   "fieldname": "is_pos",
+   "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "UOM",
-   "options": "UOM"
+   "label": "Is POS"
   },
   {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Link",
-   "label": "Sales Invoice",
-   "options": "Sales Invoice",
-   "read_only": 1
+   "columns": 1,
+   "fieldname": "material_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Requested\nReceived and WIP\nWork Done\nBill\nSelf Consumption"
   },
   {
    "columns": 1,
@@ -83,19 +84,18 @@
    "read_only": 1
   },
   {
-   "columns": 1,
-   "default": "0",
-   "fieldname": "is_pos",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is POS"
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2020-04-16 17:17:01.825395",
+ "modified": "2020-04-16 17:16:43.980651",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
- "name": "Issue Materials Detail",
+ "name": "Issue Materials Billed",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,

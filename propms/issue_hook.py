@@ -5,6 +5,7 @@ from frappe.utils import today
 from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
 from propms.auto_custom import get_latest_active_lease
+from csf_tz.custom_api import print_out
 
 def make_sales_invoice(doc, method):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
@@ -129,3 +130,8 @@ def get_items_group():
     for items_group in property_doc.maintenance_item_group:
         items_group_list.append(items_group.item_group)
     return items_group_list
+
+
+@frappe.whitelist()
+def validate (doc, method):
+    print_out(doc.materials_required.name)

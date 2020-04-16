@@ -1,9 +1,9 @@
 frappe.ui.form.on('Issue', {
     onload: (frm)=> {
-        frm.trigger("make_row_readonly");
+        // frm.trigger("make_row_readonly");
     },
     refresh: (frm)=> {
-        frm.trigger("make_row_readonly");
+        // frm.trigger("make_row_readonly");
     },
     make_row_readonly:(frm)=> {
          // make row read only after invoiced
