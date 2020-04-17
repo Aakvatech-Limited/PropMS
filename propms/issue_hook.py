@@ -46,7 +46,8 @@ def make_sales_invoice(doc, method):
                 invoice_doc.submit()
             if pos:
                 make_sales_pos_payment(invoice_doc)
-            frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
+            invoice_url = frappe.utils.get_url_to_form(invoice_doc.doctype, invoice_doc.name)
+            frappe.msgprint(_("Sales invoice Created <a href='{0}'>{1}</a>".format(invoice_url,invoice_doc.name)))
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
