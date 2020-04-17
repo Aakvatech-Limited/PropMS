@@ -137,6 +137,22 @@ def validate_materials_required(doc):
         frappe.throw(_("The Materials Required Table Have items"))
 
 
+def move_complete_items(doc):
+    for item in doc.materials_required:
+        if item.material_status == "Work Done":
+            doc.materials_required.remove(item)
+            doc.append("materials_billed",{
+                "item" : item.item,
+                "quantity" : item.quantity,
+                "uom" : item.uom,
+                "rate" : item.rate,
+                "amount" : item.amount,
+                "is_pos" : item.is_pos,
+                "material_status" : item.material_status
+            })
+        
+
 @frappe.whitelist()
 def validate (doc, method):
+    move_complete_items(doc)
     validate_materials_required(doc)
