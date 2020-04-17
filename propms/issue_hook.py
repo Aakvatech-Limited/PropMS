@@ -158,10 +158,10 @@ def move_complete_items(doc):
 def validate (doc, method):
     move_complete_items(doc)
     validate_materials_required(doc)
-    make_sales_invoice(doc)
 
 
 def on_submit(doc, method):
     validate (doc, method)
     if not doc.status == "Closed":
         frappe.throw(_("Should close the document before submit it"))
+    make_sales_invoice(doc)
