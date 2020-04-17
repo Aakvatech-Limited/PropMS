@@ -49,6 +49,7 @@ def make_sales_invoice(doc, method):
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
+                    item_row.material_status = "Bill"
     
 
     def get_account_pyment_mode(mode_of_payment,company):
