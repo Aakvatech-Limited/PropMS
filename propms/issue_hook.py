@@ -37,7 +37,8 @@ def make_sales_invoice(doc, method):
             update_stock = 1,
             remarks = user_remarks,
             cost_center = cost_center,
-            lease = leas
+            lease = leas,
+            job_card = doc.name
             )).insert(ignore_permissions=True)
         if invoice_doc:
             frappe.flags.ignore_account_permission = True
