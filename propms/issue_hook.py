@@ -7,7 +7,7 @@ from erpnext.stock.get_item_details import get_pos_profile
 from propms.auto_custom import get_latest_active_lease
 from csf_tz.custom_api import print_out
 
-def make_sales_invoice(doc, method):
+def make_sales_invoice(doc):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
     if not is_grouped:
         is_grouped =0
@@ -80,14 +80,14 @@ def make_sales_invoice(doc, method):
 
     def check_is_pos():
         for item_row in doc.materials_billed:
-            if item_row.item and item_row.quantity and item_row.material_status =="Work Done" and not item_row.sales_invoice and item_row.is_pos:
+            if item_row.item and item_row.quantity and item_row.material_status =="Bill" and not item_row.sales_invoice and item_row.is_pos:
                 return True
         return False
 
     if is_grouped == 1 and not check_is_pos():
         items = []
         for item_row in doc.materials_billed:
-            if item_row.item and item_row.quantity and item_row.material_status =="Work Done"and not item_row.sales_invoice:
+            if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice:
                 item_dict = dict(
                     item_code = item_row.item,
                     qty = item_row.quantity,
@@ -100,7 +100,7 @@ def make_sales_invoice(doc, method):
 
     else :
         for item_row in doc.materials_billed:
-            if item_row.item and item_row.quantity and item_row.material_status =="Work Done"and not item_row.sales_invoice:
+            if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice:
                 items = []
                 item_dict = dict(
                     item_code = item_row.item,
@@ -142,7 +142,7 @@ def validate_materials_required(doc):
 
 def move_complete_items(doc):
     for item in doc.materials_required:
-        if item.material_status == "Work Done":
+        if item.material_status == "Bill":
             doc.materials_required.remove(item)
             doc.append("materials_billed",{
                 "item" : item.item,
@@ -155,7 +155,13 @@ def move_complete_items(doc):
             })
         
 
-@frappe.whitelist()
 def validate (doc, method):
     move_complete_items(doc)
     validate_materials_required(doc)
+    make_sales_invoice(doc)
+
+
+def on_submit(doc, method):
+    validate (doc, method)
+    if not doc.status == "Closed":
+        frappe.throw(_("Should close the document before submit it"))
