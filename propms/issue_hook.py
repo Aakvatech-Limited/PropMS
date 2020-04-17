@@ -46,7 +46,7 @@ def make_sales_invoice(doc, method):
             if pos:
                 make_sales_pos_payment(invoice_doc)
             frappe.msgprint(str("Sales invoice Created {0}".format(invoice_doc.name)))
-            for item_row in doc.materials_required:
+            for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
     
@@ -76,15 +76,15 @@ def make_sales_invoice(doc, method):
             invoice_doc.save()
 
     def check_is_pos():
-        for item_row in doc.materials_required:
-            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled" and not item_row.sales_invoice and item_row.is_pos:
+        for item_row in doc.materials_billed:
+            if item_row.item and item_row.quantity and item_row.material_status =="Work Done" and not item_row.sales_invoice and item_row.is_pos:
                 return True
         return False
 
     if is_grouped == 1 and not check_is_pos():
         items = []
-        for item_row in doc.materials_required:
-            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled"and not item_row.sales_invoice:
+        for item_row in doc.materials_billed:
+            if item_row.item and item_row.quantity and item_row.material_status =="Work Done"and not item_row.sales_invoice:
                 item_dict = dict(
                     item_code = item_row.item,
                     qty = item_row.quantity,
@@ -96,8 +96,8 @@ def make_sales_invoice(doc, method):
         _make_sales_invoice(items)
 
     else :
-        for item_row in doc.materials_required:
-            if item_row.item and item_row.quantity and item_row.material_status =="Fulfilled"and not item_row.sales_invoice:
+        for item_row in doc.materials_billed:
+            if item_row.item and item_row.quantity and item_row.material_status =="Work Done"and not item_row.sales_invoice:
                 items = []
                 item_dict = dict(
                     item_code = item_row.item,
