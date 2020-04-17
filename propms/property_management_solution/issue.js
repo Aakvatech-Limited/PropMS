@@ -1,6 +1,20 @@
 frappe.ui.form.on('Issue', {
-    onload: (frm)=> {
+    validate: (frm)=> {
         // frm.trigger("make_row_readonly");
+        frm.doc.materials_required.forEach((item,idx)=> {
+            if (item.material_status === "Bill") {
+                console.log(item);
+                let child = frm.add_child("materials_billed");
+                child.item = item.item;
+                child.quantity = item.quantity;
+                child.uom = item.uom;
+                child.amount = item.amount;
+                child.material_status = item.material_status;
+                cur_frm.get_field("materials_required").grid.grid_rows[idx].remove();
+            }
+        refresh_field("materials_required");
+        refresh_field("materials_billed");
+        });
     },
     refresh: (frm)=> {
         // frm.trigger("make_row_readonly");

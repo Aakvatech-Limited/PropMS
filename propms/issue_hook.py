@@ -21,7 +21,7 @@ def make_sales_invoice(doc):
         submit_maintenance_invoice =0
     submit_maintenance_invoice =int(submit_maintenance_invoice)
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
-    leas = get_latest_active_lease(doc.property_name)
+    lease = get_latest_active_lease(doc.property_name)
     
     def _make_sales_invoice(items_list=None, pos=None):
         if not len(items_list) > 0 or not doc.customer:
@@ -37,7 +37,7 @@ def make_sales_invoice(doc):
             update_stock = 1,
             remarks = user_remarks,
             cost_center = cost_center,
-            lease = leas,
+            lease = lease,
             job_card = doc.name
             )).insert(ignore_permissions=True)
         if invoice_doc:
@@ -54,7 +54,7 @@ def make_sales_invoice(doc):
                     item_row.material_status = "Bill"
     
 
-    def get_account_pyment_mode(mode_of_payment,company):
+    def get_account_payment_mode(mode_of_payment,company):
         mode_of_payment_doc = frappe.get_doc("Mode of Payment",mode_of_payment)
         if mode_of_payment_doc:
             for account_row in mode_of_payment_doc.accounts:
@@ -72,21 +72,45 @@ def make_sales_invoice(doc):
         payment_row.mode_of_payment = "Cash"
         payment_row.amount = invoice_doc.grand_total
         payment_row.base_amount = invoice_doc.grand_total
-        payment_row.account = get_account_pyment_mode("Cash",invoice_doc.company)
-        if submit_maintenance_invoice == 1:
-            invoice_doc.submit()
-        else :
-            invoice_doc.save()
+        payment_row.account = get_account_payment_mode("Cash",invoice_doc.company)
+        invoice_doc.submit()
+        
 
-    def check_is_pos():
-        for item_row in doc.materials_billed:
-            if item_row.item and item_row.quantity and item_row.material_status =="Bill" and not item_row.sales_invoice and item_row.is_pos:
-                return True
-        return False
+    # def check_is_pos():
+    #     for item_row in doc.materials_billed:
+    #         if item_row.item and item_row.quantity and item_row.material_status =="Bill" and not item_row.sales_invoice and item_row.is_pos:
+    #             return True
+    #     return False
 
-    if is_grouped == 1 and not check_is_pos():
+    if is_grouped == 1:
         items = []
         for item_row in doc.materials_billed:
+            if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice and item_row.is_pos:
+                item_dict = dict(
+                    item_code = item_row.item,
+                    qty = item_row.quantity,
+                    rate = item_row.rate,
+                    cost_center = cost_center,
+                )
+                items.append(item_dict)
+                item_row.invoiced = 1
+        _make_sales_invoice(items,True)
+
+        items = []
+        for item_row in doc.materials_billed:
+            if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice and not item_row.is_pos:
+                item_dict = dict(
+                    item_code = item_row.item,
+                    qty = item_row.quantity,
+                    rate = item_row.rate,
+                    cost_center = cost_center,
+                )
+                items.append(item_dict)
+                item_row.invoiced = 1
+        _make_sales_invoice(items,False)
+    else :
+        for item_row in doc.materials_billed:
+            items = []
             if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice:
                 item_dict = dict(
                     item_code = item_row.item,
@@ -96,24 +120,12 @@ def make_sales_invoice(doc):
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
-        _make_sales_invoice(items)
-
-    else :
-        for item_row in doc.materials_billed:
-            if item_row.item and item_row.quantity and item_row.material_status =="Bill"and not item_row.sales_invoice:
-                items = []
-                item_dict = dict(
-                    item_code = item_row.item,
-                    qty = item_row.quantity,
-                    rate = item_row.rate,
-                )
-                items.append(item_dict)
-                item_row.invoiced = 1
                 if item_row.is_pos:
                     pos =True
                 else:
                     pos = False
                 _make_sales_invoice(items,pos)
+
 
 
 @frappe.whitelist()
@@ -137,27 +149,14 @@ def get_items_group():
 
 def validate_materials_required(doc):
     if len(doc.materials_required) > 0 and doc.status == "Closed":
-        frappe.throw(_("The Materials Required Table Have items"))
+        frappe.throw(_("The materials required has items and so the job card cannot be closed. Please confirm billing status fo the materials required."))
 
 
-def move_complete_items(doc):
-    for item in doc.materials_required:
-        if item.material_status == "Bill":
-            doc.materials_required.remove(item)
-            doc.append("materials_billed",{
-                "item" : item.item,
-                "quantity" : item.quantity,
-                "uom" : item.uom,
-                "rate" : item.rate,
-                "amount" : item.amount,
-                "is_pos" : item.is_pos,
-                "material_status" : item.material_status
-            })
-        
 
 def validate (doc, method):
-    move_complete_items(doc)
     validate_materials_required(doc)
+    make_sales_invoice(doc)
+    
 
 
 def on_submit(doc, method):
