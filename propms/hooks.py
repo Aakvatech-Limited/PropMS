@@ -77,11 +77,11 @@ doctype_js = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+#	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # Document Events
@@ -89,14 +89,72 @@ doctype_js = {
 # Hook on document methods and events
 
 fixtures = [
-	{"doctype":"Naming Series", "filters": [{"doctype":"Daily Checklist"}]}, 
-	{"doctype":"Custom Field", "filters": [["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Property Setter", "filters": [["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Notification", "filters": [{"is_standard":0}, ["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Auto Email Report", "filters": [["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Translation", "filters": [["_user_tags", "like", ("%PropMS%")]]},
-	{"doctype":"Print Format", "filters": [{"module":"Property Management Solution"}]}, 
-	{"doctype":"Report", "filters": [{"module":"Property Management Solution"}]} 
+	{"doctype":"Custom Field", "filters": [["name", "in", (
+		"Item-reading_required",
+		"Sales Invoice-lease_item",
+		"Sales Invoice-lease_information",
+		"Sales Invoice-lease",
+		"Issue-sub_contractor_name",
+		"Issue-customer_feedback",
+		"Issue-section_break_15",
+		"Issue-col_brk_001",
+		"Issue-property_name",
+		"Issue-person_in_charge",
+		"Material Request-sales_invoice",
+		"Issue-sub_contractor_contact",
+		"Issue-materials_required",
+		"Issue-material_request",
+		"Issue-column_break_14",
+		"Issue-defect_found",
+		"Issue-person_in_charge_name",
+		"Sales Invoice Item-withholding_tax_rate",
+		"Quotation-cost_center"
+	)]]},
+	{"doctype":"Property Setter", "filters": [["name", "in", (
+		"Contact-department-fieldtype",
+		"Contact-department-options",
+		"Security Attendance-default_print_format",
+		"Daily Checklist-default_print_format",
+		"Issue-issue_type-reqd",
+		"Issue-status-options",
+		"Issue-raised_by-in_list_view",
+		"Issue-opening_date-in_list_view",
+		"Issue-default_print_format",
+		"Issue-quick_entry",
+		"Issue-email_account-report_hide",
+		"Issue-raised_by-report_hide",
+		"Issue-section_break_19-collapsible",
+		"Issue-section_break_7-collapsible",
+		"Issue-issue_type-in_standard_filter",
+		"Issue-priority-in_standard_filter",
+		"Lease-security_status-options",
+		"Lease-wtax_paid_by-in_standard_filter",
+		"Lease-property-in_standard_filter",
+		"Lease-security_status-in_standard_filter",
+		"Lease-property_user-in_standard_filter",
+		"Lease-customer-in_standard_filter",
+		"Lease-lease_customer-in_standard_filter",
+		"Lease-property_owner-in_standard_filter",
+		"Payment Entry-default_print_format",
+		"Outsourcing Attendance-default_print_format",
+		"Lease-end_date-in_list_view",
+		"Lease-start_date-in_list_view",
+		"Lease-customer-in_list_view",
+		"Lease-property_owner-in_list_view",
+		"Journal Entry Account-cost_center-columns",
+		"Journal Entry Account-party_type-columns",
+		"Journal Entry Account-party-columns",
+		"Journal Entry Account-account-columns",
+		"Material Request-material_request_type-options",
+		"Key Set Detail-key_set-in_standard_filter",
+		"Key Set Detail-returned-in_standard_filter",
+		"Key Set Detail-taken_by-in_standard_filter",
+		"Property-section_break_22-bold",
+		"Property-section_break_13-bold",
+		"Property-section_break_4-bold",
+		"Property-identification_section-bold",
+		"Unit Type-search_fields"
+	)]]},
 ]
 
 
@@ -130,15 +188,15 @@ doc_events = {
 
 
 scheduler_events = {
- 	"daily": [
- 		"propms.auto_custom.statusChangeBeforeLeaseExpire",
+	"daily": [
+		"propms.auto_custom.statusChangeBeforeLeaseExpire",
 		"propms.auto_custom.statusChangeAfterLeaseExpire"
- 	],
-    	"cron": {
+	],
+	"cron": {
 		"00 12 * * *": [
 			"propms.lease_invoice.leaseInvoiceAutoCreate"
 			]
-    		}
+		}
 }
 
 
@@ -146,10 +204,10 @@ scheduler_events = {
 
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
+#	"*": {
+#		"on_update": "method",
+#		"on_cancel": "method",
+#		"on_trash": "method"
 #	}
 # }
 
@@ -157,21 +215,21 @@ scheduler_events = {
 # ---------------
 
 # scheduler_events = {
-# 	"all": [
-# 		"propms.tasks.all"
-# 	],
-# 	"daily": [
-# 		"propms.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"propms.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"propms.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"propms.tasks.monthly"
-# 	]
+#	"all": [
+#		"propms.tasks.all"
+#	],
+#	"daily": [
+#		"propms.tasks.daily"
+#	],
+#	"hourly": [
+#		"propms.tasks.hourly"
+#	],
+#	"weekly": [
+#		"propms.tasks.weekly"
+#	]
+#	"monthly": [
+#		"propms.tasks.monthly"
+#	]
 # }
 
 # Testing
@@ -183,6 +241,6 @@ scheduler_events = {
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
+#	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
 # }
 

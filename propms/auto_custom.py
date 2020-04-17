@@ -1,35 +1,15 @@
 from __future__ import unicode_literals
-from collections import defaultdict
-from datetime import date
 from datetime import datetime
-from datetime import timedelta
-from erpnext.accounts.utils import get_fiscal_year
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
-from frappe import throw, msgprint, _
-from frappe.client import delete
-from frappe.desk.notifications import clear_notifications
-from frappe.desk.reportview import get_match_cond, get_filters_cond
+from frappe import _
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import cint, format_datetime,get_datetime_str,now_datetime,add_days,today,formatdate,date_diff,getdate,add_months
-from frappe.utils.password import update_password as _update_password
-from frappe.utils.user import get_system_managers
-from dateutil import relativedelta
-from calendar import monthrange
+from frappe.utils import get_datetime_str, add_days, today, date_diff, getdate, add_months
 from propms.lease_invoice import getDueDate
-import collections
 import calendar
 import frappe
 import frappe.permissions
 import frappe.share
-import json
-import logging
-import math
-import random
-import re
-import string
-import time
 import traceback
-import urllib
 
 
 @frappe.whitelist()
@@ -51,7 +31,7 @@ def makeSalesInvoice(self,method):
 
 			if self.status=="Issued":
 				result=checkIssue(self.name)
-				if not result==False:
+				if result:
 					items=[]
 					issue_details=frappe.get_doc("Issue",result)
 					if issue_details.customer:
@@ -109,7 +89,7 @@ def makeSalesInvoice(self,method):
 def checkIssue(name):
 	data=frappe.db.sql("""select parent from `tabIssue Materials Detail` where material_request=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
@@ -142,7 +122,7 @@ def changeStatusKeyset(self,method):
 def getKeysetName(name):
 	data=frappe.db.sql("""select name from `tabKey Set` where name=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
@@ -165,7 +145,7 @@ def changeStatusIssue(name,status):
 def getIssueName(name):
 	data=frappe.db.sql("""select name from `tabIssue Materials Detail` where material_request=%s""",name)
 	if data:
-		if not data[0][0]==None:
+		if not data[0][0] is None:
 			return data[0][0]
 		else:
 			return False
@@ -188,8 +168,8 @@ def statusChangeBeforeLeaseExpire():
 		# Remarked as the users will set the property status manually
 		# lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property  ORDER BY ml.end_date DESC LIMIT  1) AND p.status != 'On Lease' and Now() BETWEEN l.start_date and l.end_date", as_dict=1)
 		# if lease_doclist:
-		# 	for lease in lease_doclist:
-		# 		frappe.db.set_value("Property",lease.property,"status","On lease")
+		#	for lease in lease_doclist:
+		#		frappe.db.set_value("Property",lease.property,"status","On lease")
 		lease_doclist=frappe.db.sql("SELECT l.name, l.property, l.end_date FROM  `tabLease` l  INNER JOIN `tabProperty` p ON l.property = p.name WHERE  l.name = (SELECT ml.name FROM   `tabLease` ml WHERE  ml.property = l.property ORDER BY ml.end_date DESC LIMIT  1) AND l.end_date BETWEEN Now() AND Date_add(Now(), INTERVAL 3 month) AND p.status = 'On Lease'", as_dict=1)
 		if lease_doclist:
 			for lease in lease_doclist:
@@ -355,63 +335,6 @@ def getDateMonthDiff(start_date, end_date, month_factor):
 	return month_count
 
 
-def get_exchange_rate(from_currency, to_currency, transaction_date=None, args=None):
-	if not (from_currency and to_currency):
-		# manqala 19/09/2016: Should this be an empty return or should it throw and exception?
-		print("No need to convert")
-		return
-	if from_currency == to_currency:
-		return 1
-	if not transaction_date:
-		transaction_date = today()
-	currency_settings = frappe.get_doc("Accounts Settings").as_dict()
-	print(transaction_date)
-	allow_stale_rates = currency_settings.get("allow_stale")
-	filters = [
-		["date", "<=", get_datetime_str(transaction_date)],
-		["from_currency", "=", from_currency],
-		["to_currency", "=", to_currency]
-	]
-	if args == "for_buying":
-		filters.append(["for_buying", "=", "1"])
-	elif args == "for_selling":
-		filters.append(["for_selling", "=", "1"])
-	if not allow_stale_rates:
-		stale_days = currency_settings.get("stale_days")
-		checkpoint_date = add_days(transaction_date, -stale_days)
-		filters.append(["date", ">", get_datetime_str(checkpoint_date)])
-
-	# cksgb 19/09/2016: get last entry in Currency Exchange with from_currency and to_currency.
-	entries = frappe.get_all(
-		"Currency Exchange", fields=["exchange_rate"], filters=filters, order_by="date desc",
-		limit=1)
-	if entries:
-		return flt(entries[0].exchange_rate)
-
-	try:
-		cache = frappe.cache()
-		key = "currency_exchange_rate:{0}:{1}".format(from_currency, to_currency)
-		value = cache.get(key)
-
-		if not value:
-			import requests
-			print('Trying to get from Frankfurter')
-			api_url = "https://frankfurter.erpnext.org/{0}".format(transaction_date)
-			response = requests.get(api_url, params={
-				"base": from_currency,
-				"symbols": to_currency
-			})
-			# expire in 6 hours
-			response.raise_for_status()
-			value = response.json()["rates"][to_currency]
-			print(value)
-			cache.setex(key, value, 6 * 60 * 60)
-		return flt(value)
-	except:
-		frappe.msgprint(_("Unable to find exchange rate for {0} to {1} for key date {2}. Please create a Currency Exchange record manually").format(from_currency, to_currency, transaction_date))
-		return 0.0
-
-
 @frappe.whitelist()
 def get_active_meter_from_property(property_id,meter_type):
 	"""Get Active Meter Number"""
@@ -419,7 +342,7 @@ def get_active_meter_from_property(property_id,meter_type):
 		FROM `tabProperty Meter Reading`
 		WHERE parent=%s
 		AND meter_type=%s
-  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+		AND status='Active'""",(property_id,meter_type),as_dict=True)
 	if meter_data:
 		return meter_data[0].meter_number
 	else:
@@ -434,7 +357,7 @@ def get_active_meter_customer_from_property(property_id,meter_type):
 		FROM `tabProperty Meter Reading`
 		WHERE parent=%s
 		AND meter_type=%s
-  		AND status='Active'""",(property_id,meter_type),as_dict=True)
+		AND status='Active'""",(property_id,meter_type),as_dict=True)
 	if meter_data:
 		return meter_data[0].invoice_customer
 	else:
@@ -461,7 +384,7 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 			WHERE parent=%s
 			AND meter_type=%s
 			AND meter_number=%s
-  			AND status='Active'""",(property_id,meter_type,meter_number),as_dict=True)
+			AND status='Active'""",(property_id,meter_type,meter_number),as_dict=True)
 		if len(initial_reading_details) >= 1:
 			return initial_reading_details[0]
 		else:
