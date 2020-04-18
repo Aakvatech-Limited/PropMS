@@ -118,6 +118,22 @@ frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
         refresh_field("materials_required");
 });
 
+
+frappe.ui.form.on("Issue Materials Detail", "material_status", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+    var is_pos =  $("[data-idx='"+item_row.idx+"']").find('[data-fieldname = is_pos]')
+         
+             if (item_row.material_status === "Self Consumption"){
+                 is_pos.css("pointer-events","none");
+                 item_row.is_pos = 0;
+                
+             } else {
+                is_pos.css("pointer-events","auto");
+             }
+        refresh_field("materials_required");
+});
+
+
 frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
     if (!item_row.item){
