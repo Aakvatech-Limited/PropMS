@@ -19,18 +19,27 @@ frappe.ui.form.on('Issue', {
         refresh_field("materials_billed");
     },
     refresh: (frm)=> {
-        // frm.trigger("make_row_readonly");
+        frm.trigger("make_pos_readonly");
     },
-    make_row_readonly:(frm)=> {
-         // make row read only after invoiced
+
+    onload: (frm)=> {
+        frm.trigger("make_pos_readonly");
+    },
+    
+    make_pos_readonly:(frm)=> {
          let child = frm.doc.materials_required;
          child.forEach(function(e){
-             if (e.invoiced === 1){
-                 $("[data-idx='"+e.idx+"']").css("pointer-events","none");
-                 refresh_field("materials_required")
+            $("[data-idx='"+e.idx+"']").find('.btn-open-row').css("pointer-events","none");
+             if (e.material_status === "Self Consumption"){
+                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","none");
+             }
+             else {
+                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","auto");
              }
          });
+        refresh_field("materials_required");
     },
+
     setup: function(frm) {
         frm.set_query('person_in_charge', function() {
             return {
