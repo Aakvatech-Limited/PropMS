@@ -7,7 +7,7 @@ from erpnext.stock.get_item_details import get_pos_profile
 from propms.auto_custom import get_latest_active_lease
 from csf_tz.custom_api import print_out
 
-def make_sales_invoice(doc):
+def make_sales_invoice(doc,for_self_consumption=None):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
     if not is_grouped:
         is_grouped =0
@@ -17,18 +17,23 @@ def make_sales_invoice(doc):
         company = frappe.db.get_single_value('Global Defaults', 'default_company')
     cost_center = frappe.db.get_value("Property", doc.property_name, "cost_center")
     submit_maintenance_invoice = frappe.db.get_value("Property Management Settings", None, "submit_maintenance_invoice")
+    self_consumption_customer = frappe.db.get_value("Property Management Settings", None, "self_consumption_customer")
     if not submit_maintenance_invoice:
         submit_maintenance_invoice =0
     submit_maintenance_invoice =int(submit_maintenance_invoice)
     user_remarks= "Sales invoice for Maintenance Job Card {0}".format(doc.name)
     lease = get_latest_active_lease(doc.property_name)
     
-    def _make_sales_invoice(items_list=None, pos=None):
+    def _make_sales_invoice(items_list=None, pos=None, self_customer=None):
         if not len(items_list) > 0 or not doc.customer:
             return
+        if self_customer:
+            invoice_customer = self_consumption_customer
+        else:
+            invoice_customer = doc.customer
         invoice_doc = frappe.get_doc(dict(
             doctype = "Sales Invoice",
-            customer = doc.customer,
+            customer = invoice_customer,
             company = company,
             posting_date = today(),
             due_date = today(),
@@ -51,7 +56,6 @@ def make_sales_invoice(doc):
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
-                    item_row.material_status = "Bill"
     
 
     def get_account_payment_mode(mode_of_payment,company):
@@ -75,12 +79,6 @@ def make_sales_invoice(doc):
         payment_row.account = get_account_payment_mode("Cash",invoice_doc.company)
         invoice_doc.submit()
         
-
-    # def check_is_pos():
-    #     for item_row in doc.materials_billed:
-    #         if item_row.item and item_row.quantity and item_row.material_status =="Bill" and not item_row.sales_invoice and item_row.is_pos:
-    #             return True
-    #     return False
 
     if is_grouped == 1:
         items = []
@@ -108,6 +106,20 @@ def make_sales_invoice(doc):
                 items.append(item_dict)
                 item_row.invoiced = 1
         _make_sales_invoice(items,False)
+
+        if for_self_consumption:
+            for item_row in doc.materials_billed:
+                if item_row.item and item_row.quantity and item_row.material_status =="Self Consumption" and not item_row.sales_invoice:
+                    item_dict = dict(
+                        item_code = item_row.item,
+                        qty = item_row.quantity,
+                        rate = item_row.rate,
+                        cost_center = cost_center,
+                    )
+                    items.append(item_dict)
+                    item_row.invoiced = 1
+            _make_sales_invoice(items,False,True)
+        
     else :
         for item_row in doc.materials_billed:
             items = []
@@ -125,6 +137,21 @@ def make_sales_invoice(doc):
                 else:
                     pos = False
                 _make_sales_invoice(items,pos)
+        
+        if for_self_consumption:
+            for item_row in doc.materials_billed:
+                items = []
+                if item_row.item and item_row.quantity and item_row.material_status =="Self Consumptio" and not item_row.sales_invoice:
+                    item_dict = dict(
+                        item_code = item_row.item,
+                        qty = item_row.quantity,
+                        rate = item_row.rate,
+                        cost_center = cost_center,
+                    )
+                    items.append(item_dict)
+                    item_row.invoiced = 1
+                    if item_row.is_pos:
+                        _make_sales_invoice(items,False,True)
 
 
 
@@ -148,14 +175,18 @@ def get_items_group():
 
 
 def validate_materials_required(doc):
-    if len(doc.materials_required) > 0 and doc.status == "Closed":
+    have_items = 0
+    for item in doc.materials_required:
+        if item.material_status != "Self Consumption":
+            have_items +=1
+    if have_items > 0 and doc.status == "Closed":
         frappe.throw(_("The materials required has items and so the job card cannot be closed. Please confirm billing status fo the materials required."))
 
 
 
 def validate (doc, method):
     validate_materials_required(doc)
-    make_sales_invoice(doc)
+    make_sales_invoice(doc,False)
     
 
 
@@ -163,4 +194,4 @@ def on_submit(doc, method):
     validate (doc, method)
     if not doc.status == "Closed":
         frappe.throw(_("Should close the document before submit it"))
-    make_sales_invoice(doc)
+    make_sales_invoice(doc,True)

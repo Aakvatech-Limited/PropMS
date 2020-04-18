@@ -1,6 +1,9 @@
 frappe.ui.form.on('Issue', {
     validate: (frm)=> {
         // frm.trigger("make_row_readonly");
+        if (!frm.doc.materials_required){
+            return
+        }
         frm.doc.materials_required.forEach((item,idx)=> {
             if (item.material_status === "Bill") {
                 console.log(item);
@@ -12,9 +15,22 @@ frappe.ui.form.on('Issue', {
                 child.material_status = item.material_status;
                 cur_frm.get_field("materials_required").grid.grid_rows[idx].remove();
             }
+        
+        });
+        frm.doc.materials_required.forEach((item,idx)=> {
+            if (item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
+                console.log(item);
+                let child = frm.add_child("materials_billed");
+                child.item = item.item;
+                child.quantity = item.quantity;
+                child.uom = item.uom;
+                child.amount = item.amount;
+                child.material_status = item.material_status;
+                cur_frm.get_field("materials_required").grid.grid_rows[idx].remove();
+            }
+        });
         refresh_field("materials_required");
         refresh_field("materials_billed");
-        });
     },
     refresh: (frm)=> {
         // frm.trigger("make_row_readonly");
