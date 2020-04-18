@@ -4,6 +4,7 @@ frappe.ui.form.on('Issue', {
         if (!frm.doc.materials_required){
             return
         }
+        let to_update = [];
         frm.doc.materials_required.forEach((item,idx)=> {
             if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
                 let child = frm.add_child("materials_billed");
@@ -11,9 +12,24 @@ frappe.ui.form.on('Issue', {
                 child.quantity = item.quantity;
                 child.uom = item.uom;
                 child.amount = item.amount;
+                child.is_pos = item.is_pos;
                 child.material_status = item.material_status;
-                cur_frm.get_field("materials_required").grid.grid_rows[idx].remove();
             }
+            else {
+                to_update.push(item);
+            }
+        });
+        frm.clear_table("materials_required");
+        refresh_field("materials_required");
+        to_update.forEach(item => {
+            let child = frm.add_child("materials_required");
+            child.item = item.item;
+            child.quantity = item.quantity;
+            child.uom = item.uom;
+            child.amount = item.amount;
+            child.is_pos = item.is_pos;
+            child.material_status = item.material_status;
+            refresh_field("materials_required");
         });
         refresh_field("materials_required");
         refresh_field("materials_billed");
@@ -27,8 +43,11 @@ frappe.ui.form.on('Issue', {
     },
     
     make_pos_readonly:(frm)=> {
-         let child = frm.doc.materials_required;
-         child.forEach(function(e){
+        if (!frm.doc.materials_required){
+            return;
+        }
+        let child = frm.doc.materials_required;
+        child.forEach(function(e){
             $("[data-idx='"+e.idx+"']").find('.btn-open-row').css("pointer-events","none");
              if (e.material_status === "Self Consumption"){
                 $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","none");
