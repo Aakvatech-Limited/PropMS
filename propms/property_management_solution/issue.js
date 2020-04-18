@@ -55,7 +55,7 @@ frappe.ui.form.on('Issue', {
         const new_sorted = [].concat(pos_list,not_list);
         new_sorted.forEach((i,idx) => {
             const row = locals["Issue Materials Billed"][i.name];
-            row.idx = idx;
+            row.idx = idx + 1;
         });
         refresh_field("materials_billed");
     },
