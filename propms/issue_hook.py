@@ -108,6 +108,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
         _make_sales_invoice(items,False)
 
         if for_self_consumption:
+            items = []
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.material_status =="Self Consumption" and not item_row.sales_invoice:
                     item_dict = dict(
