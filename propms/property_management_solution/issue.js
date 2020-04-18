@@ -5,21 +5,7 @@ frappe.ui.form.on('Issue', {
             return
         }
         frm.doc.materials_required.forEach((item,idx)=> {
-            if (item.material_status === "Bill") {
-                console.log(item);
-                let child = frm.add_child("materials_billed");
-                child.item = item.item;
-                child.quantity = item.quantity;
-                child.uom = item.uom;
-                child.amount = item.amount;
-                child.material_status = item.material_status;
-                cur_frm.get_field("materials_required").grid.grid_rows[idx].remove();
-            }
-        
-        });
-        frm.doc.materials_required.forEach((item,idx)=> {
-            if (item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
-                console.log(item);
+            if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
                 let child = frm.add_child("materials_billed");
                 child.item = item.item;
                 child.quantity = item.quantity;
