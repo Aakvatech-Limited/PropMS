@@ -31,7 +31,18 @@ def make_sales_invoice(doc,for_self_consumption=None):
             invoice_customer = self_consumption_customer
         else:
             invoice_customer = doc.customer
+        is_pos = 0
+        pos_profile = ""
+        naming_series = ""
+        if pos:
+            user_pos_profile = get_pos_profile(company)
+            is_pos = 1
+            pos_profile = user_pos_profile.name
+            naming_series = user_pos_profile.naming_series
         invoice_doc = frappe.get_doc(dict(
+            is_pos = is_pos,
+            pos_profile = pos_profile,
+            naming_series = naming_series,
             doctype = "Sales Invoice",
             customer = invoice_customer,
             company = company,
@@ -46,13 +57,15 @@ def make_sales_invoice(doc,for_self_consumption=None):
             job_card = doc.name
             )).insert(ignore_permissions=True)
         if invoice_doc:
+            invoice_url = frappe.utils.get_url_to_form(invoice_doc.doctype, invoice_doc.name)
+            si_msgprint = "Sales invoice Created <a href='{0}'>{1}</a>".format(invoice_url,invoice_doc.name)
             frappe.flags.ignore_account_permission = True
             if submit_maintenance_invoice == 1 and not pos:
                 invoice_doc.submit()
             if pos:
                 make_sales_pos_payment(invoice_doc)
-            invoice_url = frappe.utils.get_url_to_form(invoice_doc.doctype, invoice_doc.name)
-            frappe.msgprint(_("Sales invoice Created <a href='{0}'>{1}</a>".format(invoice_url,invoice_doc.name)))
+                si_msgprint = "POS " + si_msgprint
+            frappe.msgprint(_(si_msgprint))
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
@@ -69,9 +82,6 @@ def make_sales_invoice(doc,for_self_consumption=None):
 
 
     def make_sales_pos_payment(invoice_doc):
-        user_pos_profile = get_pos_profile(company)
-        invoice_doc.is_pos = 1
-        invoice_doc.pos_profile = user_pos_profile.name
         payment_row = invoice_doc.append("payments",{})
         payment_row.mode_of_payment = "Cash"
         payment_row.amount = invoice_doc.grand_total
