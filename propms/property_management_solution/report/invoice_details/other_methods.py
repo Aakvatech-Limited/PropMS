@@ -63,7 +63,7 @@ def check_dates(start_date,end_date,rate,obj,total,months):
     while start < end_date:
         month_string = start.strftime("%b")
         month_no_of_days = calendar.monthrange(start.year, start.month)[1]
-        last_date = datetime.date(start.year, start.month, month_no_of_days)
+        last_date = date(start.year, start.month, month_no_of_days)
         if (last_date - start).days >= 29 or (month_string == "Feb" and (last_date - start).days >= 27):
             if start.year == start_date.year:
                 obj[month_string.lower()] = round(rate, 2)
