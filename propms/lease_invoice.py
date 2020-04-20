@@ -7,7 +7,6 @@ import frappe.permissions
 import frappe.share
 import json
 import traceback
-from frappe.utils import add_days
 
 @frappe.whitelist()
 def app_error_log(title,error):
