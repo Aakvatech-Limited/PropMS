@@ -1,6 +1,6 @@
 import frappe, calendar
 from frappe import _
-from datetime import date
+from datetime import date, timedelta
 def get_residential_columns(year):
     columns = [
         {"fieldname": "apartment_no", "label": _("Apartment No."), "fieldtype": "Data", "width": 150},
