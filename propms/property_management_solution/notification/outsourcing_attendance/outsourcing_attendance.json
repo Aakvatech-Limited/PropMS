@@ -1,0 +1,28 @@
+{
+ "attach_print": 1,
+ "channel": "Email",
+ "condition": "",
+ "creation": "2019-11-27 12:05:54.012151",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Outsourcing Attendance",
+ "enabled": 0,
+ "event": "Submit",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "This email has been sent with data from security attendance submission",
+ "modified": "2020-04-17 19:36:05.145028",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Outsourcing Attendance",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "cc": "",
+   "email_by_role": "Analytics"
+  }
+ ],
+ "sender_email": "notification@aakvatech.com",
+ "subject": "{{ doc.name }} Outsourcing Attendance"
+}

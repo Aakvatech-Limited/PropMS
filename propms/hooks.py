@@ -108,6 +108,9 @@ fixtures = [
 		"Issue-defect_found",
 		"Issue-person_in_charge_name",
 		"Sales Invoice Item-withholding_tax_rate",
+		"Sales Invoice-job_card",
+		"Issue-column_break_4",
+		"Issue-materials_billed",
 		"Quotation-cost_center"
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
@@ -161,8 +164,10 @@ fixtures = [
 doc_events = {
 	"Issue": {
 		"validate": [
-			# "propms.auto_custom.makeSalesInvoice",
-			"propms.issue_hook.make_sales_invoice"
+			"propms.issue_hook.validate",
+			],
+		"on_submit": [
+			"propms.issue_hook.on_submit",
 			]
 	},
 	"Material Request": {

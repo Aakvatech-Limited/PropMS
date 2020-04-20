@@ -1,0 +1,28 @@
+{
+ "attach_print": 1,
+ "channel": "Email",
+ "condition": "",
+ "creation": "2019-11-27 12:05:53.894345",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Daily Checklist",
+ "enabled": 0,
+ "event": "Submit",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "This email has been sent with data from daily report submission",
+ "modified": "2020-04-17 19:36:26.205199",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Daily Checkup Report",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "cc": "",
+   "email_by_role": "Analytics"
+  }
+ ],
+ "sender_email": "notification@aakvatech.com",
+ "subject": "{{ doc.name }} Daily Checkup Report"
+}

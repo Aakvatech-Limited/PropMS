@@ -1,20 +1,90 @@
 frappe.ui.form.on('Issue', {
-    onload: (frm)=> {
-        frm.trigger("make_row_readonly");
+    validate: (frm)=> {
+        // frm.trigger("make_row_readonly");
+        if (!frm.doc.materials_required){
+            return
+        }
+        let to_update = [];
+        frm.doc.materials_required.forEach((item,idx)=> {
+            if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
+                let child = frm.add_child("materials_billed");
+                child.item = item.item;
+                child.quantity = item.quantity;
+                child.uom = item.uom;
+                child.amount = item.amount;
+                child.is_pos = item.is_pos;
+                child.material_status = item.material_status;
+            }
+            else {
+                to_update.push(item);
+            }
+        });
+        frm.clear_table("materials_required");
+        refresh_field("materials_required");
+        to_update.forEach(item => {
+            let child = frm.add_child("materials_required");
+            child.item = item.item;
+            child.quantity = item.quantity;
+            child.uom = item.uom;
+            child.amount = item.amount;
+            child.is_pos = item.is_pos;
+            child.material_status = item.material_status;
+            refresh_field("materials_required");
+        });
+        refresh_field("materials_required");
+        
+        const sort_list = [];
+        frm.doc.materials_billed.forEach((item,idx)=> {
+            const item_inv_no = +item.sales_invoice.slice(9).replace("-","");
+            const item_inv_ser = item.sales_invoice.slice(0,8);
+            sort_list.push({
+                idx: idx,
+                no: item_inv_no,
+                ser: item_inv_ser,
+                pos: item.is_pos,
+                name: item.name
+            })
+        });
+        const sorted_list =sort_list.sort((a,b) => a.no - b.no);
+        const pos_list = [];
+        const not_list = [];
+        sorted_list.forEach(i => {
+            if (i.pos) {pos_list.push(i)}
+            else {not_list.push(i)}
+        });
+        const new_sorted = [].concat(pos_list,not_list);
+        new_sorted.forEach((i,idx) => {
+            const row = locals["Issue Materials Billed"][i.name];
+            row.idx = idx + 1;
+        });
+        refresh_field("materials_billed");
     },
+
     refresh: (frm)=> {
-        frm.trigger("make_row_readonly");
+        frm.trigger("make_pos_readonly");
     },
-    make_row_readonly:(frm)=> {
-         // make row read only after invoiced
-         let child = frm.doc.materials_required;
-         child.forEach(function(e){
-             if (e.invoiced === 1){
-                 $("[data-idx='"+e.idx+"']").css("pointer-events","none");
-                 refresh_field("materials_required")
+
+    onload: (frm)=> {
+        frm.trigger("make_pos_readonly");
+    },
+    
+    make_pos_readonly:(frm)=> {
+        if (!frm.doc.materials_required){
+            return;
+        }
+        let child = frm.doc.materials_required;
+        child.forEach(function(e){
+            $("[data-idx='"+e.idx+"']").find('.btn-open-row').css("pointer-events","none");
+             if (e.material_status === "Self Consumption"){
+                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","none");
+             }
+             else {
+                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","auto");
              }
          });
+        refresh_field("materials_required");
     },
+
     setup: function(frm) {
         frm.set_query('person_in_charge', function() {
             return {
@@ -101,6 +171,22 @@ frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
         item_row.amount = item_row.rate * item_row.quantity;
         refresh_field("materials_required");
 });
+
+
+frappe.ui.form.on("Issue Materials Detail", "material_status", function(frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+    var is_pos =  $("[data-idx='"+item_row.idx+"']").find('[data-fieldname = is_pos]')
+         
+             if (item_row.material_status === "Self Consumption"){
+                 is_pos.css("pointer-events","none");
+                 item_row.is_pos = 0;
+                
+             } else {
+                is_pos.css("pointer-events","auto");
+             }
+        refresh_field("materials_required");
+});
+
 
 frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];

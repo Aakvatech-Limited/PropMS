@@ -20,7 +20,9 @@
   "group_maintenance_job_items",
   "submit_maintenance_invoice",
   "column_break_14",
-  "maintenance_item_group"
+  "maintenance_item_group",
+  "section_break_17",
+  "self_consumption_customer"
  ],
  "fields": [
   {
@@ -106,10 +108,20 @@
    "fieldname": "submit_maintenance_invoice",
    "fieldtype": "Check",
    "label": "Submit Maintenance Invoice"
+  },
+  {
+   "fieldname": "section_break_17",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "self_consumption_customer",
+   "fieldtype": "Link",
+   "label": "Self Consumption Customer",
+   "options": "Customer"
   }
  ],
  "issingle": 1,
- "modified": "2020-03-07 14:11:49.631857",
+ "modified": "2020-04-16 17:12:17.850024",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",
