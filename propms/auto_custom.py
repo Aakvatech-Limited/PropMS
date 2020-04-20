@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 from datetime import datetime
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
-from frappe import _
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import get_datetime_str, add_days, today, date_diff, getdate, add_months
+from frappe.utils import add_days, today, date_diff, getdate, add_months
 from propms.lease_invoice import getDueDate
 import calendar
 import frappe
