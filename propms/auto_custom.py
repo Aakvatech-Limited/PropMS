@@ -393,7 +393,7 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 @frappe.whitelist()
 def make_invoice_meter_reading(self,method):
 	for meter_row in self.meter_reading_detail:
-		if not int(meter_row.do_not_create_invoice) == 1:
+		if int(meter_row.do_not_create_invoice) != 1:
 			item_detail = get_item_details(self.meter_type,meter_row.reading_difference)
 			# Changed from propert/meter customer lookup to pos cusotmer lookup as per conversation with Vimal on 2019-11-08
 			leasename=get_latest_active_lease(meter_row.property)
