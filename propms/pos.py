@@ -13,8 +13,3 @@ def get_pos_data(cost_center):
 		one_lease = frappe.get_doc("Lease",lease[0].name)
 	return one_lease
 	
-	
-@frappe.whitelist()
-def test():
-	return today()
-
