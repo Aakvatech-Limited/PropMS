@@ -5,7 +5,6 @@ from frappe.utils import today
 from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
 from propms.auto_custom import get_latest_active_lease
-from csf_tz.custom_api import print_out
 
 def make_sales_invoice(doc,for_self_consumption=None):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
