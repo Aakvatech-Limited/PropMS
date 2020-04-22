@@ -163,6 +163,12 @@ def get_data():
 					"is_query_report": True,
 					"doctype": "Purchase Invoice",
 				},
+				{
+					"type": "report",
+					"name": "Property Status",
+					"is_query_report": True,
+					"doctype": "Property",
+				},
 			]
 		}
 	]
