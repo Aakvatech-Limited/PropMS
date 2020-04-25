@@ -33,17 +33,23 @@ frappe.ui.form.on('Issue', {
         });
         refresh_field("materials_required");
         
+        if (!frm.doc.materials_billed){
+            return
+        }
         const sort_list = [];
         frm.doc.materials_billed.forEach((item,idx)=> {
-            const item_inv_no = +item.sales_invoice.slice(9).replace("-","");
-            const item_inv_ser = item.sales_invoice.slice(0,8);
-            sort_list.push({
-                idx: idx,
-                no: item_inv_no,
-                ser: item_inv_ser,
-                pos: item.is_pos,
-                name: item.name
-            })
+            if (typeof item.sales_invoice != 'undefined') {
+                console.log("materials billed item.sales_invoice is undefined");
+                const item_inv_no = +item.sales_invoice.slice(9).replace("-","");
+                const item_inv_ser = item.sales_invoice.slice(0,8);
+                sort_list.push({
+                    idx: idx,
+                    no: item_inv_no,
+                    ser: item_inv_ser,
+                    pos: item.is_pos,
+                    name: item.name
+                });
+            }
         });
         const sorted_list =sort_list.sort((a,b) => a.no - b.no);
         const pos_list = [];
