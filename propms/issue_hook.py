@@ -68,6 +68,8 @@ def make_sales_invoice(doc,for_self_consumption=None):
             for item_row in doc.materials_billed:
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
+                    frappe.db.set_value("Issue Materials Billed",item_row.name,"sales_invoice",invoice_doc.name)
+                    frappe.db.commit()
     
 
     def get_account_payment_mode(mode_of_payment,company):

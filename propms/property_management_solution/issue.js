@@ -11,6 +11,7 @@ frappe.ui.form.on('Issue', {
                 child.item = item.item;
                 child.quantity = item.quantity;
                 child.uom = item.uom;
+                child.rate = item.rate;
                 child.amount = item.amount;
                 child.is_pos = item.is_pos;
                 child.material_status = item.material_status;
@@ -26,6 +27,7 @@ frappe.ui.form.on('Issue', {
             child.item = item.item;
             child.quantity = item.quantity;
             child.uom = item.uom;
+            child.rate = item.rate;
             child.amount = item.amount;
             child.is_pos = item.is_pos;
             child.material_status = item.material_status;
@@ -38,10 +40,12 @@ frappe.ui.form.on('Issue', {
         }
         const sort_list = [];
         frm.doc.materials_billed.forEach((item,idx)=> {
-            if (typeof item.sales_invoice != 'undefined') {
-                console.log("materials billed item.sales_invoice is undefined");
-                const item_inv_no = +item.sales_invoice.slice(9).replace("-","");
-                const item_inv_ser = item.sales_invoice.slice(0,8);
+            let item_inv_no = Number.MAX_SAFE_INTEGER;
+            let item_inv_ser = "";
+            if (item.sales_invoice) {
+                item_inv_no = +item.sales_invoice.slice(9).replace("-","");
+                item_inv_ser = item.sales_invoice.slice(0,8);
+            }
                 sort_list.push({
                     idx: idx,
                     no: item_inv_no,
@@ -49,7 +53,6 @@ frappe.ui.form.on('Issue', {
                     pos: item.is_pos,
                     name: item.name
                 });
-            }
         });
         const sorted_list =sort_list.sort((a,b) => a.no - b.no);
         const pos_list = [];
@@ -174,8 +177,8 @@ frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) 
 
 frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
-        item_row.amount = item_row.rate * item_row.quantity;
-        refresh_field("materials_required");
+    item_row.amount = item_row.rate * item_row.quantity;
+    refresh_field("materials_required");
 });
 
 
@@ -199,22 +202,19 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
     if (!item_row.item){
         return;
     }
-        frappe.call({
-            method: "propms.issue_hook.get_item_rate",
-            args: {
-                item: item_row.item,
-                customer: frm.doc.customer,
-            },
-            async: false,
-            callback: function(r) {
-                if (r.message) {
+    frappe.call({
+        method: "propms.issue_hook.get_item_rate",
+        args: {
+            item: item_row.item,
+            customer: frm.doc.customer,
+        },
+        async: false,
+        callback: function(r) {
+            if (r.message) {
                     item_row.rate = r.message;
                     item_row.amount = item_row.rate * item_row.quantity;
                     refresh_field("materials_required");
                 }
             }
         });
-
-    
 });
-
