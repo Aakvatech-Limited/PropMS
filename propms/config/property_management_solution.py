@@ -169,6 +169,12 @@ def get_data():
 					"is_query_report": True,
 					"doctype": "Property",
 				},
+				{
+					"type": "report",
+					"name": "Lease Information",
+					"is_query_report": True,
+					"doctype": "Lease",
+				},
 			]
 		}
 	]
