@@ -165,6 +165,11 @@ frappe.ui.form.on('Issue', {
                 }
             });
         }
+        if (!frm.doc.customer && frm.doc.property_name) {
+            console.log("add fetching...");
+            debugger;
+            frm.add_fetch("property_name", "unit_owner", "customer");
+        }
     },
 });
 
