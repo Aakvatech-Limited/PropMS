@@ -1,0 +1,28 @@
+{
+ "add_total_row": 0,
+ "creation": "2020-04-27 12:48:43.063123",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2020-04-27 12:51:34.100137",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Subscription Service Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT si.name, \r\n       si.customer,\r\n\t   from_date,\r\n\t   to_date\r\nFROM `tabSales Invoice` si LEFT JOIN `tabSales Invoice Item` sii on si.name = sii.parent\r\nWHERE si.from_date IS NOT NULL \r\nAND   si.to_date IS NOT NULL \r\nAND   sii.item_group = 'Services'\r\nAND   si.to_date >= %(as_of)s\r\nAND   si.item_name = %(service_type)s;",
+ "ref_doctype": "Sales Invoice",
+ "report_name": "Subscription Service Report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  }
+ ]
+}

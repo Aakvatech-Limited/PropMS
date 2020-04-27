@@ -211,6 +211,7 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
         async: false,
         callback: function(r) {
             if (r.message) {
+                    console.log("rate received", r.message)
                     item_row.rate = r.message;
                     item_row.amount = item_row.rate * item_row.quantity;
                     refresh_field("materials_required");

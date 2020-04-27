@@ -165,15 +165,19 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "Property Status",
-					"is_query_report": True,
-					"doctype": "Property",
-				},
-				{
-					"type": "report",
 					"name": "Lease Information",
 					"is_query_report": True,
 					"doctype": "Lease",
+					"label": _("Lease Report"),
+					"description": _("This is to show status of every lease by type of property"),
+				},
+				{
+					"type": "report",
+					"name": "Property Status",
+					"is_query_report": True,
+					"doctype": "Property",
+					"label": _("Property Status"),
+					"description": _("Information about all properties in the system"),
 				},
 			]
 		}

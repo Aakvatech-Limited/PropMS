@@ -69,8 +69,8 @@ def make_sales_invoice(doc,for_self_consumption=None):
                 if item_row.item and item_row.quantity and item_row.invoiced == 1 and not item_row.sales_invoice:
                     item_row.sales_invoice = invoice_doc.name
                     frappe.db.set_value("Issue Materials Billed",item_row.name,"sales_invoice",invoice_doc.name)
+                    frappe.msgprint("Issue Materials Billed updated for self consumption " + invoice_doc.name)
                     frappe.db.commit()
-    
 
     def get_account_payment_mode(mode_of_payment,company):
         mode_of_payment_doc = frappe.get_doc("Mode of Payment",mode_of_payment)
@@ -168,7 +168,8 @@ def make_sales_invoice(doc,for_self_consumption=None):
 
 @frappe.whitelist()
 def get_item_rate(item,customer):
-    price_list = frappe.db.get_value("Customer", customer, "default_price_list")
+    price_list = frappe.db.get_single_value('Selling Settings', 'selling_price_list')
+    price_list = price_list or frappe.db.get_value("Customer", customer, "default_price_list")
     customer_group = frappe.db.get_value("Customer", customer, "customer_group")
     company = frappe.db.get_single_value('Global Defaults', 'default_company')
     rate = get_price(item,price_list,customer_group,company)
@@ -198,11 +199,5 @@ def validate_materials_required(doc):
 def validate (doc, method):
     validate_materials_required(doc)
     make_sales_invoice(doc,False)
-    
-
-
-def on_submit(doc, method):
-    validate (doc, method)
-    if not doc.status == "Closed":
-        frappe.throw(_("Should close the document before submit it"))
-    make_sales_invoice(doc,True)
+    if doc.status == "Closed":
+        make_sales_invoice(doc,True)
