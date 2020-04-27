@@ -160,15 +160,14 @@ frappe.ui.form.on('Issue', {
                                     }
                                 }
                             });
+                        } else {
+                            frappe.db.get_value("Property", frm.doc.property_name, "unit_owner", (r) => {
+                                frm.set_value("customer", r.unit_owner);
+                            });
                         }
                     }
                 }
             });
-        }
-        if (!frm.doc.customer && frm.doc.property_name) {
-            console.log("add fetching...");
-            debugger;
-            frm.add_fetch("property_name", "unit_owner", "customer");
         }
     },
 });
