@@ -13,13 +13,11 @@ from csf_tz.custom_api import print_out
 def execute(filters=None):
     data = get_data(filters)
     columns = get_columns(filters)
-    # print_out(filters)
-    # get_data(filters)
     return columns, data
 
-months = []
 
 def get_data(filters):
+    rows = []
     _from_date = "'{from_date}'".format(from_date=filters['from_date'])
     _to_date = "'{to_date}'".format(to_date=filters['to_date'])
     _company = "'{company}'".format(company=filters['company'])
@@ -51,21 +49,38 @@ def get_data(filters):
                 AND company = {company} 
                 AND DATE(posting_date) BETWEEN {start} AND {end} 
                 AND lease != ""
-            ORDER BY posting_date DESC, name DESC
+            ORDER BY lease DESC, posting_date DESC
             """.format(start=_from_date,end=_to_date,company=_company)
 
     sales_invoices = frappe.db.sql(query,as_dict=True)
     # month = int(filters['from_date'].split('-')[1])
     # print_out(calendar.month_name[month])
     
-    rows = []
     for invoice in sales_invoices:
         property_name = frappe.db.get_value("Lease",invoice['lease'],"property")
         # print_out(property_name)
         invoice['property_name'] = property_name
-        # print_out(invoice)
+        rows.append(invoice)
+        
+        invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
 
-    return sales_invoices
+        query_items = """ 
+            SELECT
+                item_code,net_amount as total,service_start_date as from_date,service_end_date as to_date
+            FROM
+                `tabSales Invoice Item`
+            WHERE
+                parent = {invoice_id}
+            """.format(invoice_id=invoice_id)
+
+        items = frappe.db.sql(query_items,as_dict=True)
+        for item in items:
+            item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
+            item["item_group"] = item_group
+            rows.append(item)
+        rows.append({})
+
+    return rows
 
 
 
@@ -104,7 +119,7 @@ def get_columns(filters):
         },
         {
         "label": "Item",
-        "fieldname": "item",
+        "fieldname": "item_code",
         "fieldtype": "link",
         "width": 100,
         },
@@ -136,19 +151,12 @@ def get_columns(filters):
     # print_out(months_list)
 
     for key, value in months_obj.items():
-        print_out(key)
         columns.append({
             "label": key,
             "fieldname": key.lower(),
             "fieldtype": "Currency",
             "width": 100,
         })
-    # columns.append({
-    #     "label": "Total",
-    #     "fieldname": "total",
-    #     "fieldtype": "Currency",
-    #     "width": 180,
-    # })
     return columns
 
 
