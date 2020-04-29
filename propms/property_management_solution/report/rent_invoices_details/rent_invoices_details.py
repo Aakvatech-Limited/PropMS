@@ -21,7 +21,7 @@ def get_data(filters):
     _from_date = "'{from_date}'".format(from_date=filters['from_date'])
     _to_date = "'{to_date}'".format(to_date=filters['to_date'])
     _company = "'{company}'".format(company=filters['company'])
-    _items_grupe = filters['Type']
+    _items_grupe = filters.get('type_name')
     
     # query = """ 
     #         SELECT
@@ -66,7 +66,7 @@ def get_data(filters):
 
         query_items = """ 
             SELECT
-                item_code,net_amount as total,service_start_date as from_date,service_end_date as to_date
+                item_code,net_amount as item_total,service_start_date as from_date,service_end_date as to_date,qty as quantity
             FROM
                 `tabSales Invoice Item`
             WHERE
@@ -77,7 +77,10 @@ def get_data(filters):
         for item in items:
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
-            rows.append(item)
+            if _items_grupe== "All":
+                rows.append(item)
+            elif _items_grupe== item_group:
+                rows.append(item)
         rows.append({})
 
     return rows
@@ -118,14 +121,26 @@ def get_columns(filters):
         "width": 100,
         },
         {
+        "label": "Total",
+        "fieldname": "total",
+        "fieldtype": "Currency",
+        "width": 100,
+        },
+        {
         "label": "Item",
         "fieldname": "item_code",
         "fieldtype": "link",
         "width": 100,
         },
         {
-        "label": "Total",
-        "fieldname": "total",
+        "label": "Quantity",
+        "fieldname": "quantity",
+        "fieldtype": "float",
+        "width": 75,
+        },
+        {
+        "label": "Item Total",
+        "fieldname": "item_total",
         "fieldtype": "Currency",
         "width": 100,
         },

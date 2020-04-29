@@ -13,7 +13,7 @@ frappe.query_reports["Rent Invoices Details"] = {
 			"reqd": 1
         },
         {
-            fieldname: 'Type',
+            fieldname: 'type_name',
             label: __('Type'),
             fieldtype: 'Select',
             options: [
