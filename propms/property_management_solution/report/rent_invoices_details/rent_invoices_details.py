@@ -41,6 +41,7 @@ def get_data(filters):
     sales_invoices = frappe.db.sql(query,as_dict=True)
 
     for invoice in sales_invoices:
+        append = False
         property_name = frappe.db.get_value("Lease",invoice['lease'],"property")
         invoice['property_name'] = property_name
         months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
@@ -48,7 +49,7 @@ def get_data(filters):
             for key,value in months_obj.items():
                 invoice[key] = value
 
-        rows.append(invoice)
+        # rows.append(invoice)
         
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
 
@@ -71,9 +72,13 @@ def get_data(filters):
                     item[key] = value
             if _items_grupe== "All Item Groups":
                 rows.append(item)
+                append = True
             elif _items_grupe== item_group:
                 rows.append(item)
-        rows.append({})
+                append = True
+        if append:
+            rows.append(invoice)
+            rows.append({})
 
     return rows
 
