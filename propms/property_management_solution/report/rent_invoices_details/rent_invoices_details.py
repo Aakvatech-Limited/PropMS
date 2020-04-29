@@ -23,22 +23,7 @@ def get_data(filters):
     _company = "'{company}'".format(company=filters['company'])
     _items_grupe = filters.get('type_name')
     
-    # query = """ 
-    #         SELECT
-    #             si.*,
-    #             si_item.*
-    #         FROM
-    #             `tabSales Invoice` si,
-    #             `tabSales Invoice Item` si_item 
-    #         WHERE
-    #             si.name = si_item.parent 
-    #             AND si.docstatus = 1 
-    #             AND si.company = {company} 
-    #             AND DATE(si.posting_date) BETWEEN {start} AND {end} 
-    #             AND si.lease != ""
-    #         ORDER BY si.posting_date DESC, si.name DESC
-    #         """.format(start=_from_date,end=_to_date,company=_company)
-
+    
     query = """ 
             SELECT
                 name as invoice_id,customer,base_net_total as total,posting_date as date,lease,from_date,to_date
@@ -163,21 +148,27 @@ def get_columns(filters):
     ]
     # month_int_from = int(filters['from_date'].split('-')[1])
     # month_int_to = int(filters['to_date'].split('-')[1])
-
-    dates = [filters['from_date'], filters['to_date']]
-    start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in dates]
-    months_obj = OrderedDict(((start + timedelta(_)).strftime(r"%b-%y"), None) for _ in range((end - start).days))
+    months_list = get_months(filters['from_date'],filters['to_date'])
     # print_out(months_list)
 
-    for key, value in months_obj.items():
+    for month in months_list:
         columns.append({
-            "label": key,
-            "fieldname": key.lower(),
+            "label": month,
+            "fieldname": month.lower(),
             "fieldtype": "Currency",
             "width": 100,
         })
     return columns
 
+
+def get_months(from_date,to_date):
+    months_list = []
+    dates = [from_date, to_date]
+    start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in dates]
+    months_obj = OrderedDict(((start + timedelta(_)).strftime(r"%b-%y"), None) for _ in range((end - start).days))
+    for key, value in months_obj.items():
+        months_list.append(key)
+    return months_list
 
 # def get_sales_invoice1(filters,data,from_other=None, months=None):
 #     # print_out(data)
