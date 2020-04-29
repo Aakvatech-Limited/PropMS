@@ -8,7 +8,7 @@ import calendar
 from datetime import date, timedelta, datetime
 from collections import OrderedDict
 from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months
-from csf_tz.custom_api import print_out
+# from csf_tz.custom_api import print_out
 
 
 def execute(filters=None):
@@ -41,6 +41,7 @@ def get_data(filters):
     sales_invoices = frappe.db.sql(query,as_dict=True)
 
     for invoice in sales_invoices:
+        _items_rwos = []
         append = False
         property_name = frappe.db.get_value("Lease",invoice['lease'],"property")
         invoice['property_name'] = property_name
@@ -71,13 +72,15 @@ def get_data(filters):
                 for key,value in months_obj.items():
                     item[key] = value
             if _items_grupe== "All Item Groups":
-                rows.append(item)
+                _items_rwos.append(item)
                 append = True
             elif _items_grupe== item_group:
-                rows.append(item)
+                _items_rwos.append(item)
                 append = True
         if append:
             rows.append(invoice)
+            for item in _items_rwos:
+                rows.append(item)
             rows.append({})
 
     return rows
