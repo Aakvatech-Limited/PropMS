@@ -7,6 +7,7 @@ from time import strptime
 import calendar
 from datetime import date, timedelta, datetime
 from collections import OrderedDict
+from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months
 from csf_tz.custom_api import print_out
 
 
@@ -38,13 +39,15 @@ def get_data(filters):
             """.format(start=_from_date,end=_to_date,company=_company)
 
     sales_invoices = frappe.db.sql(query,as_dict=True)
-    # month = int(filters['from_date'].split('-')[1])
-    # print_out(calendar.month_name[month])
-    
+
     for invoice in sales_invoices:
         property_name = frappe.db.get_value("Lease",invoice['lease'],"property")
-        # print_out(property_name)
         invoice['property_name'] = property_name
+        months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
+        if months_obj:
+            for key,value in months_obj.items():
+                invoice[key] = value
+
         rows.append(invoice)
         
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
@@ -62,6 +65,10 @@ def get_data(filters):
         for item in items:
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
+            months_obj = calculate_monthly_ammount(item.item_total,item.from_date,item.to_date)
+            if months_obj:
+                for key,value in months_obj.items():
+                    item[key] = value
             if _items_grupe== "All Item Groups":
                 rows.append(item)
             elif _items_grupe== item_group:
@@ -69,7 +76,6 @@ def get_data(filters):
         rows.append({})
 
     return rows
-
 
 
 
@@ -146,10 +152,8 @@ def get_columns(filters):
         "width": 100,
         },
     ]
-    # month_int_from = int(filters['from_date'].split('-')[1])
-    # month_int_to = int(filters['to_date'].split('-')[1])
+ 
     months_list = get_months(filters['from_date'],filters['to_date'])
-    # print_out(months_list)
 
     for month in months_list:
         columns.append({
@@ -170,106 +174,34 @@ def get_months(from_date,to_date):
         months_list.append(key)
     return months_list
 
-# def get_sales_invoice1(filters,data,from_other=None, months=None):
-#     # print_out(data)
-#     total = {}
-#     lease_item = "'" + filters.get("rental") + "' "
-#     # print(lease_item)
-#     if filters.get("maintenance"):
-#         lease_item = "'Service Charge - " + filters.get("rental").split()[0] + "'"
 
-#     query = """ SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {0} and SIT.parent = SI.name )
-#                 and SI.docstatus=%s
-#                 ORDER by SI.customer,SI.from_date ASC""".format(lease_item) % (1)
+def calculate_monthly_ammount(ammount,from_date,to_date):
+    if ammount and from_date and to_date:
+        monthly_aommount_obj = {}
+        days = date_diff(to_date,from_date)+1
+        daily_ammount = ammount/days
+        date = from_date
+        end_date = to_date
+        # days_list= []
+ 
+        while date <= end_date:
+            start_month = getdate(date).month
+            end_month = getdate(to_date).month
+            if start_month == end_month:
+                last_day = end_date
+                days_diff = date_diff(last_day,date)+1
+                # days_list.append(days_diff)
+                month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                date = get_first_day(add_months(date,1))
+                monthly_aommount_obj[month_filed] = days_diff * daily_ammount
 
-#     sales_invoices = frappe.db.sql(query,as_dict=True)
-#     previuos_customer = ""
-#     for i in sales_invoices:
-#         lease = frappe.get_value("Lease", i.lease, "property")
-#         obj = {
-#             "apartment_no":lease or "",
-#             "client": i.customer,
-#             "advance_prev_year": "",
-#             "invoice_no": i.name,
-#             "from": i.from_date if i.from_date else i.posting_date,
-#             "to":i.to_date - timedelta(days=1) if i.to_date else i.posting_date,
-#             "invoice_amount": i.total,
-#         }
-#         set_monthly_amount(i.from_date,i.to_date - timedelta(days=1) if i.to_date else "", obj,filters,total,months)
-#         if previuos_customer != i.customer:
-#             data.append({})
-#         previuos_customer = i.customer
-#         data.append(obj)
-#         if from_other:
-#             data.append(total)
-    # print_out(data)
-
-
-
-# def get_utility_sales_invoice(data, from_other=None, months=None):
-#     total = {}
-#     lease_item = "'Utility Charges' "
-#     query = """ SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {0} and SIT.parent = SI.name )
-#                 and SI.docstatus=%s
-#                 ORDER by SI.customer,SI.from_date ASC""".format(lease_item) % (1)
-
-#     sales_invoices = frappe.db.sql(query,as_dict=True)
-#     previuos_customer = ""
-#     for i in sales_invoices:
-#         lease = frappe.get_value("Lease", i.lease, "property")
-#         obj = {
-#             "apartment_no":lease,
-#             "client": i.customer,
-#             "advance_prev_year": "",
-#             "invoice_no": i.name,
-#             "from": i.from_date if i.from_date else i.posting_date,
-#             "to":i.to_date - timedelta(days=1) if i.to_date else i.posting_date,
-#             "invoice_amount": i.total,
-#         }
-#         set_monthly_amount(i.from_date,i.to_date - timedelta(days=1) if i.to_date else "", obj,total,months)
-#         if previuos_customer != i.customer:
-#             data.append({})
-#         previuos_customer = i.customer
-#         data.append(obj)
-#         if from_other:
-#             data.append(total)
-
-
-# def set_monthly_amount(start_date, end_date, obj,total,months):
-#     rate = get_rate(obj['invoice_no'])
-#     if end_date and rate:
-#         check_dates(start_date,end_date,rate,obj,total,months)
-
-
-# def check_dates(start_date,end_date,rate,obj,total,months):
-#     start = start_date
-#     no_minus = 0
-#     while start < end_date:
-#         month_string = start.strftime("%b")
-#         month_no_of_days = calendar.monthrange(start.year, start.month)[1]
-#         last_date = date(start.year, start.month, month_no_of_days)
-#         if (last_date - start).days >= 29 or (month_string == "Feb" and (last_date - start).days >= 27):
-#             if start.year == start_date.year:
-#                 obj[month_string.lower()] = round(rate, 2)
-#                 if months and month_string.lower() in months:
-#                     total[month_string.lower()] = round(rate, 2) + round(total[month_string.lower()],2) if month_string.lower() in total else round(rate, 2)
-#         else:
-#             if start.year == start_date.year:
-#                 obj[month_string.lower()] = round(round(rate / month_no_of_days,2) * (month_no_of_days - int(start.day)), 2)
-#                 if months and month_string.lower() in months:
-#                     total[month_string.lower()] = round(
-#                         round(rate / month_no_of_days, 2) * (month_no_of_days - int(start.day)), 2) + round(total[
-#                                                                                                                 month_string.lower()],
-#                                                                                                             2) if month_string.lower() in total else round(
-#                         round(rate / month_no_of_days, 2) * (month_no_of_days - int(start.day)), 2)
-#         no_minus = month_no_of_days
-#         start += timedelta(days=month_no_of_days)
-
-
-#     start_last = start - timedelta(days=no_minus)
-
-
-# def get_rate(invoice_name):
-#     filters_value = "and item_code = 'Utility Charges'"
-#     query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {0} {1}""".format( "parent = '" + invoice_name + "' ", filters_value)
-#     print(query)
+            else:
+                last_day = get_last_day(date)
+                days_diff = date_diff(last_day,date)+1
+                # days_list.append(days_diff)
+                month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                date = get_first_day(add_months(date,1))
+                monthly_aommount_obj[month_filed] = days_diff * daily_ammount
+        
+        
+        return monthly_aommount_obj
