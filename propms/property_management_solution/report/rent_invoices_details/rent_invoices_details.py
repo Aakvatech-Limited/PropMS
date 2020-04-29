@@ -41,7 +41,7 @@ def get_data(filters):
 
     query = """ 
             SELECT
-                name as invoice_id,customer,net_total as total,posting_date as date,lease,from_date,to_date
+                name as invoice_id,customer,base_net_total as total,posting_date as date,lease,from_date,to_date
             FROM
                 `tabSales Invoice`
             WHERE
@@ -66,7 +66,7 @@ def get_data(filters):
 
         query_items = """ 
             SELECT
-                item_code,net_amount as item_total,service_start_date as from_date,service_end_date as to_date,qty as quantity
+                item_code,base_net_amount as item_total,service_start_date as from_date,service_end_date as to_date,qty as quantity
             FROM
                 `tabSales Invoice Item`
             WHERE
@@ -77,7 +77,7 @@ def get_data(filters):
         for item in items:
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
-            if _items_grupe== "All":
+            if _items_grupe== "All Item Groups":
                 rows.append(item)
             elif _items_grupe== item_group:
                 rows.append(item)
@@ -93,26 +93,30 @@ def get_columns(filters):
         {
         "label": "Property",
         "fieldname": "property_name",
-        "fieldtype": "Data",
+        "fieldtype": "Link",
+        "options": 'Property',
         "width": 100,
         },
         {
         "label": "Customer",
         "fieldname": "customer",
-        "fieldtype": "link",
+        "fieldtype": "Link",
+        "options": 'Customer',
         "width": 100,
         },
         {
         "label": "Lease",
         "fieldname": "lease",
-        "fieldtype": "Data",
+        "fieldtype": "Link",
+        "options": 'Lease',
         "width": 100,
         },
         {
         "label": "Invoice",
         "fieldname": "invoice_id",
-        "fieldtype": "Data",
-        "width": 100,
+        "fieldtype": "Link",
+        "options": 'Sales Invoice',
+        "width": 150,
         },
         {
         "label": "Date",
@@ -129,13 +133,13 @@ def get_columns(filters):
         {
         "label": "Item",
         "fieldname": "item_code",
-        "fieldtype": "link",
+        "fieldtype": "Link",
+        "options": 'Item',
         "width": 100,
         },
         {
         "label": "Quantity",
         "fieldname": "quantity",
-        "fieldtype": "float",
         "width": 75,
         },
         {
