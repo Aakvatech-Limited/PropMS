@@ -143,12 +143,12 @@ frappe.ui.form.on('Issue', {
                 async: false,
                 callback: function(r, rt) {
                     if (r.message) {
-                        if (r.message.status == 'On lease' || r.message.status == 'Off Lease in 3 Months') {
+                        if (r.message.status.toLowerCase() == 'on lease' || r.message.status.toLowerCase() == 'off lease in 3 months') {
                             frappe.call({
                                 method: 'frappe.client.get_value',
                                 args: {
                                     doctype: 'Lease',
-                                    fieldname: 'customer',
+                                    fieldname: ['name', 'customer'],
                                     filters: {
                                         property: frm.doc.property_name
                                     },
@@ -156,7 +156,8 @@ frappe.ui.form.on('Issue', {
                                 async: false,
                                 callback: function(r, rt) {
                                     if (r.message) {
-                                        frappe.model.set_value(cdt, cdn, 'customer', r.message.customer);
+                                        frm.set_value("customer", r.message.customer);
+                                        refresh_field("customer")
                                     }
                                 }
                             });
@@ -215,7 +216,6 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
         async: false,
         callback: function(r) {
             if (r.message) {
-                    console.log("rate received", r.message)
                     item_row.rate = r.message;
                     item_row.amount = item_row.rate * item_row.quantity;
                     refresh_field("materials_required");
