@@ -59,7 +59,10 @@ def get_data(filters):
         invoice['property_name'] = property_name
         if invoice.total == invoice.foreign_total:
             invoice.foreign_total,invoice.exchange_rate = "", ""
-        months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
+        if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
+            months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
+        else:
+            months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
         if months_obj:
             for key,value in months_obj.items():
                 invoice[key] = value
@@ -70,7 +73,13 @@ def get_data(filters):
 
         query_items = """ 
             SELECT
-                item_code,base_net_amount as item_total,service_start_date as from_date,service_end_date as to_date,qty as quantity
+                item_code, 
+                base_net_amount as item_total, 
+                net_amount as item_foreign_total,
+                service_start_date as from_date, 
+                service_end_date as to_date, 
+                qty as quantity, 
+                net_rate
             FROM
                 `tabSales Invoice Item`
             WHERE
@@ -81,6 +90,8 @@ def get_data(filters):
         for item in items:
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
+            if filters.get("foreign_currency"):
+                item.item_total = item.item_foreign_total
             months_obj = calculate_monthly_ammount(item.item_total,item.from_date,item.to_date)
             if months_obj:
                 for key,value in months_obj.items():
@@ -91,7 +102,7 @@ def get_data(filters):
             elif _items_grupe== item_group:
                 _items_rwos.append(item)
                 append = True
-        if append:
+        if append and (filters.foreign_currency == invoice.currency or not filters.foreign_currency):
             rows.append(invoice)
             for item in _items_rwos:
                 rows.append(item)
@@ -102,16 +113,22 @@ def get_data(filters):
 
 
 def get_columns(filters):
-    if filters.get("foreign_currency"):
-        foreign_currency = filters["foreign_currency"]
-    else:
-        foreign_currency = ""
-    
     if filters.get("company"):
         currency = get_company_currency(filters["company"])
     else:
         company = get_default_company()
         currency = get_company_currency(company)
+
+    if filters.get("foreign_currency"):
+        _foreign_currency = filters["foreign_currency"]
+    else:
+        _foreign_currency = currency
+
+    if _foreign_currency == currency:
+        foreign_currency = "Foreign"
+    else:
+        foreign_currency = filters["foreign_currency"]
+        
     columns = [
         {
         "label": "Property",
@@ -201,7 +218,7 @@ def get_columns(filters):
 
     for month in months_list:
         columns.append({
-            "label": "{0} {1}".format(month,foreign_currency),
+            "label": "{0} {1}".format(month,_foreign_currency),
             "fieldname": month.lower(),
             "fieldtype": "Float",
             "width": 100,
