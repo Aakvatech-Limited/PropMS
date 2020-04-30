@@ -7,9 +7,9 @@ from time import strptime
 import calendar
 from datetime import date, timedelta, datetime
 from collections import OrderedDict
-from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months
-# from csf_tz.custom_api import print_out
+from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor
 from erpnext import get_company_currency, get_default_company
+# from csf_tz.custom_api import print_out
 
 
 def execute(filters=None):
@@ -236,33 +236,62 @@ def get_months(from_date,to_date):
     return months_list
 
 
+def check_full_month(from_date,to_date):
+    month_start_day = get_first_day(from_date)
+    month_end_day = get_last_day(from_date)
+    if from_date == month_start_day and to_date == month_end_day:
+        return True
+    else:
+        return False
+
+
+
 def calculate_monthly_ammount(ammount,from_date,to_date):
     if ammount and from_date and to_date:
-        monthly_aommount_obj = {}
-        days = date_diff(to_date,from_date)+1
-        daily_ammount = ammount/days
+        monthly_ammount_obj = {}
+        days = 0
         date = from_date
         end_date = to_date
+        field_list = []
         # days_list= []
  
         while date <= end_date:
             start_month = getdate(date).month
             end_month = getdate(to_date).month
+
             if start_month == end_month:
                 last_day = end_date
                 days_diff = date_diff(last_day,date)+1
+                if check_full_month(date,last_day):
+                    days_diff= 30
+                days += days_diff
                 # days_list.append(days_diff)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                field_list.append({
+                    "days_diff" : days_diff,
+                    "month_filed":month_filed
+                })
                 date = get_first_day(add_months(date,1))
-                monthly_aommount_obj[month_filed] = days_diff * daily_ammount
 
             else:
                 last_day = get_last_day(date)
                 days_diff = date_diff(last_day,date)+1
+                if check_full_month(date,last_day):
+                    days_diff= 30
+                days += days_diff
                 # days_list.append(days_diff)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                field_list.append({
+                    "days_diff" : days_diff,
+                    "month_filed" :month_filed
+                })
                 date = get_first_day(add_months(date,1))
-                monthly_aommount_obj[month_filed] = days_diff * daily_ammount
-        
-        
-        return monthly_aommount_obj
+
+        if floor(days/30) != (days/30):
+            days += 1 
+        daily_ammount = ammount/(days)
+
+        for i in field_list:
+            monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * daily_ammount
+ 
+        return monthly_ammount_obj
