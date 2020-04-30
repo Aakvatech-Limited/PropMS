@@ -9,6 +9,7 @@ from datetime import date, timedelta, datetime
 from collections import OrderedDict
 from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months
 # from csf_tz.custom_api import print_out
+from erpnext import get_company_currency, get_default_company
 
 
 def execute(filters=None):
@@ -27,7 +28,16 @@ def get_data(filters):
     
     query = """ 
             SELECT
-                name as invoice_id,customer,base_net_total as total,posting_date as date,lease,from_date,to_date
+                name as invoice_id, 
+                customer, 
+                base_net_total as total, 
+                net_total as foreign_total,
+                currency, 
+                conversion_rate as exchange_rate, 
+                posting_date as date, 
+                lease, 
+                from_date, 
+                to_date
             FROM
                 `tabSales Invoice`
             WHERE
@@ -47,6 +57,8 @@ def get_data(filters):
         append = False
         property_name = frappe.db.get_value("Lease",invoice['lease'],"property")
         invoice['property_name'] = property_name
+        if invoice.total == invoice.foreign_total:
+            invoice.foreign_total,invoice.exchange_rate = "", ""
         months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
         if months_obj:
             for key,value in months_obj.items():
@@ -90,6 +102,16 @@ def get_data(filters):
 
 
 def get_columns(filters):
+    if filters.get("foreign_currency"):
+        foreign_currency = filters["foreign_currency"]
+    else:
+        foreign_currency = ""
+    
+    if filters.get("company"):
+        currency = get_company_currency(filters["company"])
+    else:
+        company = get_default_company()
+        currency = get_company_currency(company)
     columns = [
         {
         "label": "Property",
@@ -126,9 +148,21 @@ def get_columns(filters):
         "width": 100,
         },
         {
-        "label": "Total",
+        "label": "Total {0}".format(currency),
         "fieldname": "total",
-        "fieldtype": "Currency",
+        "fieldtype": "Float",
+        "width": 100,
+        },
+        {
+        "label": "Exchange Rate",
+        "fieldname": "exchange_rate",
+        "fieldtype": "Float",
+        "width": 100,
+        },
+        {
+        "label": "Total {0}".format(foreign_currency or "Foreign"),
+        "fieldname": "foreign_total",
+        "fieldtype": "Float",
         "width": 100,
         },
         {
@@ -146,7 +180,7 @@ def get_columns(filters):
         {
         "label": "Item Total",
         "fieldname": "item_total",
-        "fieldtype": "Currency",
+        "fieldtype": "Float",
         "width": 100,
         },
         {
@@ -167,9 +201,9 @@ def get_columns(filters):
 
     for month in months_list:
         columns.append({
-            "label": month,
+            "label": "{0} {1}".format(month,foreign_currency),
             "fieldname": month.lower(),
-            "fieldtype": "Currency",
+            "fieldtype": "Float",
             "width": 100,
         })
     return columns
