@@ -35,6 +35,8 @@ def get_data(filters):
                 AND company = {company} 
                 AND DATE(posting_date) BETWEEN {start} AND {end} 
                 AND lease != ""
+                AND from_date != ""
+                AND to_date != ""
             ORDER BY lease DESC, posting_date DESC
             """.format(start=_from_date,end=_to_date,company=_company)
 
@@ -71,7 +73,7 @@ def get_data(filters):
             if months_obj:
                 for key,value in months_obj.items():
                     item[key] = value
-            if _items_grupe== "All Item Groups":
+            if _items_grupe== "All":
                 _items_rwos.append(item)
                 append = True
             elif _items_grupe== item_group:
