@@ -9,7 +9,7 @@ from datetime import date, timedelta, datetime
 from collections import OrderedDict
 from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor
 from erpnext import get_company_currency, get_default_company
-# from csf_tz.custom_api import print_out
+from csf_tz.custom_api import print_out
 
 
 def execute(filters=None):
@@ -292,8 +292,11 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 })
                 date = get_first_day(add_months(date,1))
 
-        if floor(days/30) != (days/30):
-            days += 1 
+        if floor(days/30) != (days/30) and (floor(days/30) * 30 + 6) < days:
+            days = (floor(days/30)+1) * 30
+        elif floor(days/30) != (days/30) and floor(days/30) * 30 < days:
+            days = floor(days/30) * 30
+        
         daily_ammount = ammount/(days)
         
         m = 1
