@@ -67,7 +67,6 @@ def get_data(filters):
             for key,value in months_obj.items():
                 invoice[key] = value
 
-        # rows.append(invoice)
         
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
 
@@ -195,7 +194,7 @@ def get_columns(filters):
         "width": 75,
         },
         {
-        "label": "Item Total",
+        "label": "Item Total {0}".format(_foreign_currency),
         "fieldname": "item_total",
         "fieldtype": "Float",
         "width": 100,
@@ -253,6 +252,8 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
         date = from_date
         end_date = to_date
         field_list = []
+        first_last = 0
+        sub_ammount = 0
         # days_list= []
  
         while date <= end_date:
@@ -267,9 +268,11 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 days += days_diff
                 # days_list.append(days_diff)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
                     "days_diff" : days_diff,
-                    "month_filed":month_filed
+                    "month_filed": month_filed,
+                    "month_len": month_len
                 })
                 date = get_first_day(add_months(date,1))
 
@@ -281,17 +284,34 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 days += days_diff
                 # days_list.append(days_diff)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
+                month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
                     "days_diff" : days_diff,
-                    "month_filed" :month_filed
+                    "month_filed" :month_filed,
+                    "month_len": month_len
                 })
                 date = get_first_day(add_months(date,1))
 
         if floor(days/30) != (days/30):
             days += 1 
         daily_ammount = ammount/(days)
-
+        
+        m = 1
         for i in field_list:
-            monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * daily_ammount
- 
+            if m ==1 and i["days_diff"] < 30:
+                first_last += i["days_diff"]
+            elif m == len(field_list) and i["days_diff"] < 30:
+                first_last += i["days_diff"]
+            else:
+                sub_ammount += i["days_diff"] * daily_ammount
+        
+        n = 1
+        for i in field_list:
+            if n ==1 and i["days_diff"] < 30:
+                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * ((ammount - sub_ammount)/first_last)
+            elif n == len(field_list) and i["days_diff"] < 30:
+                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * ((ammount - sub_ammount)/first_last)
+            else:
+                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * daily_ammount
+            n += 1
         return monthly_ammount_obj
