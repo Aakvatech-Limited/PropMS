@@ -14,16 +14,11 @@ frappe.query_reports["Rent Invoices Details"] = {
         },
         {
             fieldname: 'type_name',
-            label: __('Type'),
-            fieldtype: 'Select',
-            options: [
-                'All',
-                'Rent',
-				'Maintenance',
-                'Utility'
-            ],
-			default: 'All',
-			reqd: 1
+            label: __('Item Group'),
+            fieldtype: 'Link',
+            options: 'Item Group',
+			default: 'All Item Groups',
+			"reqd": 1
 		},
 		{
             fieldname:"from_date",

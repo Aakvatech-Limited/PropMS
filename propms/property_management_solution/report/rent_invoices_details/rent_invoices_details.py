@@ -7,7 +7,7 @@ from time import strptime
 import calendar
 from datetime import date, timedelta, datetime
 from collections import OrderedDict
-from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor
+from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor, add_days
 from erpnext import get_company_currency, get_default_company
 # from csf_tz.custom_api import print_out
 
@@ -95,7 +95,7 @@ def get_data(filters):
             if months_obj:
                 for key,value in months_obj.items():
                     item[key] = value
-            if _items_grupe== "All":
+            if _items_grupe== "All Item Groups":
                 _items_rwos.append(item)
                 append = True
             elif _items_grupe== item_group:
@@ -267,6 +267,8 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                     days_diff= 30
                 days += days_diff
                 # days_list.append(days_diff)
+                if date == last_day:
+                    last_day = add_days(last_day,1)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
                 month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
