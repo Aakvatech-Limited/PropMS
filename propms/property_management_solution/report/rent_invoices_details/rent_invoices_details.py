@@ -9,7 +9,7 @@ from datetime import date, timedelta, datetime
 from collections import OrderedDict
 from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor
 from erpnext import get_company_currency, get_default_company
-from csf_tz.custom_api import print_out
+# from csf_tz.custom_api import print_out
 
 
 def execute(filters=None):
