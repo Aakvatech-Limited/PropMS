@@ -35,9 +35,7 @@ def get_data(filters):
                 currency, 
                 conversion_rate as exchange_rate, 
                 posting_date as date, 
-                lease, 
-                from_date, 
-                to_date
+                lease
             FROM
                 `tabSales Invoice`
             WHERE
@@ -47,6 +45,7 @@ def get_data(filters):
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
+                AND is_return != 1
             ORDER BY lease DESC, posting_date DESC
             """.format(start=_from_date,end=_to_date,company=_company)
 
@@ -59,13 +58,13 @@ def get_data(filters):
         invoice['property_name'] = property_name
         if invoice.total == invoice.foreign_total:
             invoice.foreign_total,invoice.exchange_rate = "", ""
-        if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
-            months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
-        else:
-            months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
-        if months_obj:
-            for key,value in months_obj.items():
-                invoice[key] = value
+        # if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
+        #     months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
+        # else:
+        #     months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
+        # if months_obj:
+        #     for key,value in months_obj.items():
+        #         invoice[key] = value
 
         
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
@@ -102,10 +101,11 @@ def get_data(filters):
                 _items_rwos.append(item)
                 append = True
         if append and (filters.foreign_currency == invoice.currency or not filters.foreign_currency):
-            rows.append(invoice)
+            # rows.append(invoice)
             for item in _items_rwos:
+                item.update(invoice)
                 rows.append(item)
-            rows.append({})
+            # rows.append({})
 
     return rows
 
@@ -163,24 +163,24 @@ def get_columns(filters):
         "fieldtype": "date",
         "width": 100,
         },
-        {
-        "label": "Total {0}".format(currency),
-        "fieldname": "total",
-        "fieldtype": "Float",
-        "width": 100,
-        },
-        {
-        "label": "Exchange Rate",
-        "fieldname": "exchange_rate",
-        "fieldtype": "Float",
-        "width": 100,
-        },
-        {
-        "label": "Total {0}".format(foreign_currency or "Foreign"),
-        "fieldname": "foreign_total",
-        "fieldtype": "Float",
-        "width": 100,
-        },
+        # {
+        # "label": "Total {0}".format(currency),
+        # "fieldname": "total",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
+        # {
+        # "label": "Exchange Rate",
+        # "fieldname": "exchange_rate",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
+        # {
+        # "label": "Total {0}".format(foreign_currency or "Foreign"),
+        # "fieldname": "foreign_total",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
         {
         "label": "Item",
         "fieldname": "item_code",
