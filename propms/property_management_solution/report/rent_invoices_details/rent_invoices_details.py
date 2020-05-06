@@ -288,6 +288,8 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                     days_diff= 30
                 days += days_diff
                 # days_list.append(days_diff)
+                if date == last_day:
+                    last_day = add_days(last_day,1)
                 month_filed= (get_months(str(date),str(last_day))[0]).lower()
                 month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
