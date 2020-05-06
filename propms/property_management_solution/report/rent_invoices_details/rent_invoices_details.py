@@ -7,7 +7,7 @@ from time import strptime
 import calendar
 from datetime import date, timedelta, datetime
 from collections import OrderedDict
-from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor, add_days
+from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor, add_days, flt, cint
 from erpnext import get_company_currency, get_default_company
 # from csf_tz.custom_api import print_out
 
@@ -24,7 +24,7 @@ def get_data(filters):
     _to_date = "'{to_date}'".format(to_date=filters['to_date'])
     _company = "'{company}'".format(company=filters['company'])
     _items_grupe = filters.get('type_name')
-    
+    float_precision = cint(frappe.db.get_default("float_precision")) or 2
     
     query = """ 
             SELECT
@@ -35,9 +35,7 @@ def get_data(filters):
                 currency, 
                 conversion_rate as exchange_rate, 
                 posting_date as date, 
-                lease, 
-                from_date, 
-                to_date
+                lease
             FROM
                 `tabSales Invoice`
             WHERE
@@ -47,6 +45,7 @@ def get_data(filters):
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
+                AND is_return != 1
             ORDER BY lease DESC, posting_date DESC
             """.format(start=_from_date,end=_to_date,company=_company)
 
@@ -59,13 +58,13 @@ def get_data(filters):
         invoice['property_name'] = property_name
         if invoice.total == invoice.foreign_total:
             invoice.foreign_total,invoice.exchange_rate = "", ""
-        if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
-            months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
-        else:
-            months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
-        if months_obj:
-            for key,value in months_obj.items():
-                invoice[key] = value
+        # if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
+        #     months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
+        # else:
+        #     months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
+        # if months_obj:
+        #     for key,value in months_obj.items():
+        #         invoice[key] = value
 
         
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice['invoice_id'])
@@ -90,7 +89,9 @@ def get_data(filters):
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
             if filters.get("foreign_currency"):
-                item.item_total = item.item_foreign_total
+                item.item_total = flt(item.item_foreign_total,float_precision)
+            else:
+                item.item_total = flt(item.item_total,float_precision)
             months_obj = calculate_monthly_ammount(item.item_total,item.from_date,item.to_date)
             if months_obj:
                 for key,value in months_obj.items():
@@ -102,10 +103,11 @@ def get_data(filters):
                 _items_rwos.append(item)
                 append = True
         if append and (filters.foreign_currency == invoice.currency or not filters.foreign_currency):
-            rows.append(invoice)
+            # rows.append(invoice)
             for item in _items_rwos:
+                item.update(invoice)
                 rows.append(item)
-            rows.append({})
+            # rows.append({})
 
     return rows
 
@@ -163,24 +165,24 @@ def get_columns(filters):
         "fieldtype": "date",
         "width": 100,
         },
-        {
-        "label": "Total {0}".format(currency),
-        "fieldname": "total",
-        "fieldtype": "Float",
-        "width": 100,
-        },
-        {
-        "label": "Exchange Rate",
-        "fieldname": "exchange_rate",
-        "fieldtype": "Float",
-        "width": 100,
-        },
-        {
-        "label": "Total {0}".format(foreign_currency or "Foreign"),
-        "fieldname": "foreign_total",
-        "fieldtype": "Float",
-        "width": 100,
-        },
+        # {
+        # "label": "Total {0}".format(currency),
+        # "fieldname": "total",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
+        # {
+        # "label": "Exchange Rate",
+        # "fieldname": "exchange_rate",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
+        # {
+        # "label": "Total {0}".format(foreign_currency or "Foreign"),
+        # "fieldname": "foreign_total",
+        # "fieldtype": "Float",
+        # "width": 100,
+        # },
         {
         "label": "Item",
         "fieldname": "item_code",
@@ -246,6 +248,7 @@ def check_full_month(from_date,to_date):
 
 
 def calculate_monthly_ammount(ammount,from_date,to_date):
+    float_precision = cint(frappe.db.get_default("float_precision")) or 2
     if ammount and from_date and to_date:
         monthly_ammount_obj = {}
         days = 0
@@ -313,10 +316,10 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
         n = 1
         for i in field_list:
             if n ==1 and i["days_diff"] < 30:
-                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * ((ammount - sub_ammount)/first_last)
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * ((ammount - sub_ammount)/first_last),float_precision)
             elif n == len(field_list) and i["days_diff"] < 30:
-                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * ((ammount - sub_ammount)/first_last)
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * ((ammount - sub_ammount)/first_last),float_precision)
             else:
-                monthly_ammount_obj[i["month_filed"]] = i["days_diff"] * daily_ammount
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * daily_ammount,float_precision)
             n += 1
         return monthly_ammount_obj
