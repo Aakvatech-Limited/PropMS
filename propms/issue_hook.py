@@ -87,7 +87,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
 			{'parent': pos_profile_name, 'default': 1},
 			['mode_of_payment', 'type', 'account'], as_dict=1)
         payment_row = invoice_doc.append("payments",{})
-        payment_row.mode_of_payment = default_mode_of_payment.type
+        payment_row.mode_of_payment = default_mode_of_payment.mode_of_payment
         payment_row.amount = invoice_doc.grand_total
         payment_row.base_amount = invoice_doc.grand_total
         payment_row.account = default_mode_of_payment.account
