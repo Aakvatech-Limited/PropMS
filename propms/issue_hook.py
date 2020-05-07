@@ -4,6 +4,7 @@ from frappe import _
 from frappe.utils import today
 from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
+from erpnext.accounts.doctype.sales_invoice.pos import get_mode_of_payment
 from propms.auto_custom import get_latest_active_lease
 
 def make_sales_invoice(doc,for_self_consumption=None):
@@ -62,7 +63,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
             if submit_maintenance_invoice == 1 and not pos:
                 invoice_doc.submit()
             if pos:
-                make_sales_pos_payment(invoice_doc)
+                make_sales_pos_payment(invoice_doc,user_pos_profile.name)
                 si_msgprint = "POS " + si_msgprint
             frappe.msgprint(_(si_msgprint))
             for item_row in doc.materials_billed:
@@ -71,22 +72,25 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     frappe.db.set_value("Issue Materials Billed",item_row.name,"sales_invoice",invoice_doc.name)
                     frappe.db.commit()
 
-    def get_account_payment_mode(mode_of_payment,company):
-        mode_of_payment_doc = frappe.get_doc("Mode of Payment",mode_of_payment)
-        if mode_of_payment_doc:
-            for account_row in mode_of_payment_doc.accounts:
-                if account_row.company == company:
-                    return account_row.default_account
-        else:
-            frappe.throw(_("Default Account Not Defined In Mode of Payment"))
+    # def get_account_payment_mode(mode_of_payment,company):
+    #     mode_of_payment_doc = frappe.get_doc("Mode of Payment",mode_of_payment)
+    #     if mode_of_payment_doc:
+    #         for account_row in mode_of_payment_doc.accounts:
+    #             if account_row.company == company:
+    #                 return account_row.default_account
+    #     else:
+    #         frappe.throw(_("Default Account Not Defined In Mode of Payment"))
 
 
-    def make_sales_pos_payment(invoice_doc):
+    def make_sales_pos_payment(invoice_doc,pos_profile_name):
+        default_mode_of_payment = frappe.db.get_value('Sales Invoice Payment',
+			{'parent': pos_profile_name, 'default': 1},
+			['mode_of_payment', 'type', 'account'], as_dict=1)
         payment_row = invoice_doc.append("payments",{})
-        payment_row.mode_of_payment = "Cash"
+        payment_row.mode_of_payment = default_mode_of_payment.type
         payment_row.amount = invoice_doc.grand_total
         payment_row.base_amount = invoice_doc.grand_total
-        payment_row.account = get_account_payment_mode("Cash",invoice_doc.company)
+        payment_row.account = default_mode_of_payment.account
         invoice_doc.submit()
         
 
