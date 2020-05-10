@@ -25,6 +25,11 @@ def get_data(filters):
     _company = "'{company}'".format(company=filters['company'])
     _items_grupe = filters.get('type_name')
     float_precision = cint(frappe.db.get_default("float_precision")) or 2
+    if filters.get("company"):
+        default_currency = get_company_currency(filters["company"])
+    else:
+        company = get_default_company()
+        default_currency = get_company_currency(company)
     
     query = """ 
             SELECT
@@ -88,11 +93,9 @@ def get_data(filters):
         for item in items:
             item_group = frappe.db.get_value("Item",item['item_code'],"item_group")
             item["item_group"] = item_group
-            if filters.get("foreign_currency"):
-                item.item_total = flt(item.item_foreign_total,float_precision)
-            else:
-                item.item_total = flt(item.item_total,float_precision)
-            months_obj = calculate_monthly_ammount(item.item_total,item.from_date,item.to_date)
+            item.item_foreign_total = flt(item.item_foreign_total,float_precision)
+            item.item_total = flt(item.item_total,float_precision)
+            months_obj = calculate_monthly_ammount(item.item_total,default_currency,item.from_date,item.to_date,item.item_foreign_total,filters.get("foreign_currency"))
             if months_obj:
                 for key,value in months_obj.items():
                     item[key] = value
@@ -102,6 +105,10 @@ def get_data(filters):
             elif _items_grupe== item_group:
                 _items_rwos.append(item)
                 append = True
+            if filters.get("foreign_currency"):
+                item.item_total = flt(item.item_foreign_total,float_precision)
+            else:
+                item.item_total = flt(item.item_total,float_precision)
         if append and (filters.foreign_currency == invoice.currency or not filters.foreign_currency):
             # rows.append(invoice)
             for item in _items_rwos:
@@ -171,12 +178,12 @@ def get_columns(filters):
         # "fieldtype": "Float",
         # "width": 100,
         # },
-        # {
-        # "label": "Exchange Rate",
-        # "fieldname": "exchange_rate",
-        # "fieldtype": "Float",
-        # "width": 100,
-        # },
+        {
+        "label": "Exchange Rate",
+        "fieldname": "exchange_rate",
+        "fieldtype": "Float",
+        "width": 100,
+        },
         # {
         # "label": "Total {0}".format(foreign_currency or "Foreign"),
         # "fieldname": "foreign_total",
@@ -219,11 +226,19 @@ def get_columns(filters):
 
     for month in months_list:
         columns.append({
-            "label": "{0} {1}".format(month,_foreign_currency),
-            "fieldname": month.lower(),
+            "label": "{0} {1}".format(month,currency),
+            "fieldname": "{0} {1}".format(month.lower(),currency),
             "fieldtype": "Float",
             "width": 100,
         })
+        if filters.get("foreign_currency") and filters.get("foreign_currency") != currency:
+            columns.append({
+                "label": "{0} {1}".format(month,filters.get("foreign_currency")),
+            "fieldname": "{0} {1}".format(month.lower(),filters.get("foreign_currency")),
+            "fieldtype": "Float",
+            "width": 100,
+            })
+            
     return columns
 
 
@@ -247,7 +262,7 @@ def check_full_month(from_date,to_date):
 
 
 
-def calculate_monthly_ammount(ammount,from_date,to_date):
+def calculate_monthly_ammount(ammount,default_currency,from_date,to_date,foreign_ammount,foreign_currency=None):
     float_precision = cint(frappe.db.get_default("float_precision")) or 2
     if ammount and from_date and to_date:
         monthly_ammount_obj = {}
@@ -255,8 +270,11 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
         date = from_date
         end_date = to_date
         field_list = []
+        field_list_foreign = []
         first_last = 0
+        first_last_foreign = 0
         sub_ammount = 0
+        sub_ammount_foreign = 0
         # days_list= []
  
         while date <= end_date:
@@ -276,9 +294,17 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
                     "days_diff" : days_diff,
-                    "month_filed": month_filed,
-                    "month_len": month_len
+                    "month_filed": "{0} {1}".format(month_filed,default_currency),
+                    "month_len": month_len,
+                    "foreign" : False,
                 })
+                if foreign_currency and foreign_currency != default_currency:
+                    field_list_foreign.append({
+                        "days_diff" : days_diff,
+                        "month_filed" : "{0} {1}".format(month_filed,foreign_currency),
+                        "month_len": month_len,
+                        "foreign" : True,
+                    })
                 date = get_first_day(add_months(date,1))
 
             else:
@@ -294,9 +320,17 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 month_len = date_diff(get_last_day(date),get_first_day(date))
                 field_list.append({
                     "days_diff" : days_diff,
-                    "month_filed" :month_filed,
-                    "month_len": month_len
+                    "month_filed" : "{0} {1}".format(month_filed,default_currency),
+                    "month_len" : month_len,
+                    "foreign" : False,
                 })
+                if foreign_currency and foreign_currency != default_currency:
+                    field_list_foreign.append({
+                        "days_diff" : days_diff,
+                        "month_filed" : "{0} {1}".format(month_filed,foreign_currency),
+                        "month_len" : month_len,
+                        "foreign" : True,
+                    })
                 date = get_first_day(add_months(date,1))
 
         if floor(days/30) != (days/30) and (floor(days/30) * 30 + 6) < days:
@@ -305,6 +339,7 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
             days = floor(days/30) * 30
         
         daily_ammount = ammount/(days)
+        daily_ammount_foreign = foreign_ammount/(days)
         
         m = 1
         for i in field_list:
@@ -314,8 +349,29 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
                 first_last += i["days_diff"]
             else:
                 sub_ammount += i["days_diff"] * daily_ammount
+            m +=1
+
+        m = 1    
+        for i in field_list_foreign:
+            if m ==1 and i["days_diff"] < 30:
+                first_last_foreign += i["days_diff"]
+            elif m == len(field_list) and i["days_diff"] < 30:
+                first_last_foreign += i["days_diff"]
+            else:
+                sub_ammount_foreign += i["days_diff"] * daily_ammount_foreign
+            m +=1
         
         n = 1
+        for i in field_list_foreign:
+            if n ==1 and i["days_diff"] < 30:
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * ((foreign_ammount - sub_ammount_foreign)/first_last),float_precision)
+            elif n == len(field_list) and i["days_diff"] < 30:
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * ((foreign_ammount - sub_ammount_foreign)/first_last),float_precision)
+            else:
+                monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * daily_ammount_foreign,float_precision)
+            n += 1
+        
+        n = 1   
         for i in field_list:
             if n ==1 and i["days_diff"] < 30:
                 monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * ((ammount - sub_ammount)/first_last),float_precision)
@@ -324,4 +380,5 @@ def calculate_monthly_ammount(ammount,from_date,to_date):
             else:
                 monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * daily_ammount,float_precision)
             n += 1
+        
         return monthly_ammount_obj
