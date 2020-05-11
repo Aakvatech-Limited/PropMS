@@ -31,6 +31,10 @@ def get_data(filters):
         company = get_default_company()
         default_currency = get_company_currency(company)
     
+    conditions = ""
+    if not filters.get("extand"):
+        conditions = "AND DATE(posting_date) BETWEEN {start} AND {end}".format(start=_from_date,end=_to_date)
+    
     query = """ 
             SELECT
                 name as invoice_id, 
@@ -46,13 +50,13 @@ def get_data(filters):
             WHERE
                 docstatus = 1 
                 AND company = {company} 
-                AND DATE(posting_date) BETWEEN {start} AND {end} 
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
                 AND is_return != 1
+                {conditions}
             ORDER BY lease DESC, posting_date DESC
-            """.format(start=_from_date,end=_to_date,company=_company)
+            """.format(conditions=conditions,company=_company)
 
     sales_invoices = frappe.db.sql(query,as_dict=True)
 
