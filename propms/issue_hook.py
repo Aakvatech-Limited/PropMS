@@ -6,6 +6,7 @@ from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
 from erpnext.accounts.doctype.sales_invoice.pos import get_mode_of_payment
 from propms.auto_custom import get_latest_active_lease
+from erpnext.controllers.accounts_controller import get_taxes_and_charges
 
 def make_sales_invoice(doc,for_self_consumption=None):
     is_grouped = frappe.db.get_value("Property Management Settings", None, "group_maintenance_job_items")
@@ -103,6 +104,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
+                    item_tax_template= get_taxe_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -116,6 +118,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
+                    item_tax_template= get_taxe_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -130,6 +133,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                         qty = item_row.quantity,
                         rate = item_row.rate,
                         cost_center = cost_center,
+                        item_tax_template= get_taxe_template(item_row.item)
                     )
                     items.append(item_dict)
                     item_row.invoiced = 1
@@ -144,6 +148,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
+                    item_tax_template= get_taxe_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -162,6 +167,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                         qty = item_row.quantity,
                         rate = item_row.rate,
                         cost_center = cost_center,
+                        item_tax_template= get_taxe_template(item_row.item)
                     )
                     items.append(item_dict)
                     item_row.invoiced = 1
@@ -204,3 +210,11 @@ def validate (doc, method):
     make_sales_invoice(doc,False)
     if doc.status == "Closed":
         make_sales_invoice(doc,True)
+
+
+def get_taxe_template(item_code):
+    item_tax_template = get_taxes_and_charges("Item",item_code)
+    if len(item_tax_template) > 0:
+        return item_tax_template[0]["item_tax_template"]
+    else:
+        return ""
