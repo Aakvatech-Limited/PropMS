@@ -59,7 +59,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
             taxes_and_charges=default_tax_template,
             job_card = doc.name
             )).insert(ignore_permissions=True)
-        if invoice_doc.taxes_and_charges:
+        if invoice_doc.taxes_and_charges and not pos:
             getTax(invoice_doc)
         invoice_doc.calculate_taxes_and_totals()
         if invoice_doc:
