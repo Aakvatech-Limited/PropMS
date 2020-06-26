@@ -9,7 +9,7 @@ from datetime import date, timedelta, datetime
 from collections import OrderedDict
 from frappe.utils import getdate, date_diff, month_diff, get_last_day, get_first_day, add_months, floor, add_days, flt, cint
 from erpnext import get_company_currency, get_default_company
-# from csf_tz.custom_api import print_out
+from csf_tz.custom_api import print_out
 
 
 def execute(filters=None):
@@ -31,6 +31,10 @@ def get_data(filters):
         company = get_default_company()
         default_currency = get_company_currency(company)
     
+    conditions = ""
+    if not filters.get("extand"):
+        conditions = "AND DATE(posting_date) BETWEEN {start} AND {end}".format(start=_from_date,end=_to_date)
+    
     query = """ 
             SELECT
                 name as invoice_id, 
@@ -46,13 +50,13 @@ def get_data(filters):
             WHERE
                 docstatus = 1 
                 AND company = {company} 
-                AND DATE(posting_date) BETWEEN {start} AND {end} 
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
                 AND is_return != 1
+                {conditions}
             ORDER BY lease DESC, posting_date DESC
-            """.format(start=_from_date,end=_to_date,company=_company)
+            """.format(conditions=conditions,company=_company)
 
     sales_invoices = frappe.db.sql(query,as_dict=True)
 
@@ -95,7 +99,15 @@ def get_data(filters):
             item["item_group"] = item_group
             item.item_foreign_total = flt(item.item_foreign_total,float_precision)
             item.item_total = flt(item.item_total,float_precision)
-            months_obj = calculate_monthly_ammount(item.item_total,default_currency,item.from_date,item.to_date,item.item_foreign_total,filters.get("foreign_currency"))
+            months_obj = calculate_monthly_ammount(
+                item.item_total,
+                default_currency,
+                item.from_date,
+                item.to_date,
+                item.item_foreign_total,
+                filters.get("foreign_currency"),
+                filters
+                )
             if months_obj:
                 for key,value in months_obj.items():
                     item[key] = value
@@ -157,6 +169,12 @@ def get_columns(filters):
         "fieldname": "lease",
         "fieldtype": "Link",
         "options": 'Lease',
+        "width": 100,
+        },
+        {
+        "label": "Advance Before {0}".format(_foreign_currency),
+        "fieldname": "advance_before",
+        "fieldtype": "Float",
         "width": 100,
         },
         {
@@ -234,11 +252,18 @@ def get_columns(filters):
         if filters.get("foreign_currency") and filters.get("foreign_currency") != currency:
             columns.append({
                 "label": "{0} {1}".format(month,filters.get("foreign_currency")),
-            "fieldname": "{0} {1}".format(month.lower(),filters.get("foreign_currency")),
-            "fieldtype": "Float",
-            "width": 100,
+                "fieldname": "{0} {1}".format(month.lower(),filters.get("foreign_currency")),
+                "fieldtype": "Float",
+                "width": 100,
             })
             
+    columns.append({
+        "label": "Advance After {0}".format(_foreign_currency),
+        "fieldname": "advance_after",
+        "fieldtype": "Float",
+        "width": 100,
+        })
+
     return columns
 
 
@@ -262,8 +287,13 @@ def check_full_month(from_date,to_date):
 
 
 
-def calculate_monthly_ammount(ammount,default_currency,from_date,to_date,foreign_ammount,foreign_currency=None):
+def calculate_monthly_ammount(ammount,default_currency,from_date,to_date,foreign_ammount,foreign_currency=None,filters=None):
     float_precision = cint(frappe.db.get_default("float_precision")) or 2
+    months_report_list = []
+    for month in get_months(filters['from_date'],filters['to_date']):
+        months_report_list.append("{0} {1}".format(month.lower(),default_currency))
+        if filters.get("foreign_currency") and filters.get("foreign_currency") != default_currency:
+            months_report_list.append("{0} {1}".format(month.lower(),filters.get("foreign_currency")))
     if ammount and from_date and to_date:
         monthly_ammount_obj = {}
         days = 0
@@ -380,5 +410,21 @@ def calculate_monthly_ammount(ammount,default_currency,from_date,to_date,foreign
             else:
                 monthly_ammount_obj[i["month_filed"]] = flt(i["days_diff"] * daily_ammount,float_precision)
             n += 1
-        
+        advance_before = 0
+        advance_after = 0
+        first_month = datetime.strptime(months_report_list[0][:6].replace("-"," 20"), "%b %Y")
+        last_month = datetime.strptime(months_report_list[-1][:6].replace("-"," 20"), "%b %Y")
+        for key,value in monthly_ammount_obj.items():
+            key_currency = key[7:]
+            currency = foreign_currency or default_currency
+            if key not in months_report_list and key_currency == currency:
+                mydate = datetime.strptime(str(key)[:6].replace("-"," 20"), "%b %Y")
+                if mydate > last_month:
+                    advance_after += value
+                elif mydate < first_month:
+                    advance_before += value
+        if advance_after:
+            monthly_ammount_obj["advance_after"] = advance_after
+        if advance_before:
+            monthly_ammount_obj["advance_before"] = advance_before
         return monthly_ammount_obj

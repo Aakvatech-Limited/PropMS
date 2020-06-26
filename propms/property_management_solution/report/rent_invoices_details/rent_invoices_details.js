@@ -41,5 +41,11 @@ frappe.query_reports["Rent Invoices Details"] = {
             default: 'USD',
 			options: erpnext.get_presentation_currency_list()
         },
+        {
+            fieldname: 'extand',
+            label: __('Extand'),
+            fieldtype: 'Check',
+            default: '0',
+        },
 	]
 };
