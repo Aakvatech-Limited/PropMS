@@ -33,6 +33,7 @@ def makeSalesInvoice(self,method):
 				if result:
 					items=[]
 					issue_details=frappe.get_doc("Issue",result)
+					propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 					if issue_details.customer:
 						material_request_details=frappe.get_doc("Material Request",self.name)
 						if not material_request_details.sales_invoice:
@@ -48,12 +49,15 @@ def makeSalesInvoice(self,method):
 										fiscal_year=frappe.db.get_single_value('Global Defaults', 'current_fiscal_year'),
 										posting_date=today(),
 										items=items,
+										taxes_and_charges=propm_setting.default_tax_template,
 										customer=str(issue_details.customer),
 										due_date=add_days(today(),2),
 										update_stock=1
 								)).insert()
 								if sales_invoice.name:
 									assignInvoiceNameInMR(sales_invoice.name,material_request_details.name)
+									getTax(sales_invoice)
+									sales_invoice.calculate_taxes_and_totals()
 			changeStatusIssue(self.name,self.status)
 		else:
 			if self.customer:
@@ -75,14 +79,24 @@ def makeSalesInvoice(self,method):
 										fiscal_year=frappe.db.get_single_value('Global Defaults', 'current_fiscal_year'),
 										posting_date=today(),
 										items=items,
+										taxes_and_charges=propm_setting.default_tax_template,
 										customer=str(self.customer),
 										due_date=add_days(today(),2),
 										update_stock=1
 								)).insert()
 								if sales_invoice.name:
 									assignInvoiceNameInMR(sales_invoice.name,material_request_details.name)
+									if sales_invoice.taxes_and_charges:
+										getTax(sales_invoice)
+										sales_invoice.calculate_taxes_and_totals()
 	except Exception as e:
 		app_error_log(frappe.session.user,str(e))
+
+
+def getTax(sales_invoice):
+	taxes = get_taxes_and_charges('Sales Taxes and Charges Template',sales_invoice.taxes_and_charges)
+	for tax in taxes:
+		sales_invoice.append('taxes', tax)
 
 
 def checkIssue(name):
