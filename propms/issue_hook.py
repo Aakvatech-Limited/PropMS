@@ -27,6 +27,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
     lease = get_latest_active_lease(doc.property_name)
     
     def _make_sales_invoice(items_list=None, pos=None, self_customer=None):
+        default_tax_template = frappe.db.get_value("Property Management Settings", None, "default_tax_template")
         if not len(items_list) > 0 or not doc.customer:
             return
         if self_customer:
@@ -41,6 +42,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
             is_pos = 1
             pos_profile = user_pos_profile.name
             naming_series = user_pos_profile.naming_series
+            default_tax_template = user_pos_profile.taxes_and_charges or default_tax_template
         invoice_doc = frappe.get_doc(dict(
             is_pos = is_pos,
             pos_profile = pos_profile,
@@ -56,7 +58,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
             remarks = user_remarks,
             cost_center = cost_center,
             lease = lease,
-            taxes_and_charges=user_pos_profile.taxes_and_charges or default_tax_template,
+            taxes_and_charges=default_tax_template,
             job_card = doc.name
             )).insert(ignore_permissions=True)
         if invoice_doc.taxes_and_charges and not pos:
