@@ -27,6 +27,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
     lease = get_latest_active_lease(doc.property_name)
     
     def _make_sales_invoice(items_list=None, pos=None, self_customer=None):
+        default_tax_template = frappe.db.get_value("Property Management Settings", None, "default_tax_template")
         if not len(items_list) > 0 or not doc.customer:
             return
         if self_customer:
@@ -41,6 +42,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
             is_pos = 1
             pos_profile = user_pos_profile.name
             naming_series = user_pos_profile.naming_series
+            default_tax_template = user_pos_profile.taxes_and_charges or default_tax_template
         invoice_doc = frappe.get_doc(dict(
             is_pos = is_pos,
             pos_profile = pos_profile,
@@ -106,7 +108,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
-                    item_tax_template= get_taxe_template(item_row.item)
+                    item_tax_template= get_taxes_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -120,7 +122,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
-                    item_tax_template= get_taxe_template(item_row.item)
+                    item_tax_template= get_taxes_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -135,7 +137,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                         qty = item_row.quantity,
                         rate = item_row.rate,
                         cost_center = cost_center,
-                        item_tax_template= get_taxe_template(item_row.item)
+                        item_tax_template= get_taxes_template(item_row.item)
                     )
                     items.append(item_dict)
                     item_row.invoiced = 1
@@ -150,7 +152,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                     qty = item_row.quantity,
                     rate = item_row.rate,
                     cost_center = cost_center,
-                    item_tax_template= get_taxe_template(item_row.item)
+                    item_tax_template= get_taxes_template(item_row.item)
                 )
                 items.append(item_dict)
                 item_row.invoiced = 1
@@ -169,7 +171,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
                         qty = item_row.quantity,
                         rate = item_row.rate,
                         cost_center = cost_center,
-                        item_tax_template= get_taxe_template(item_row.item)
+                        item_tax_template= get_taxes_template(item_row.item)
                     )
                     items.append(item_dict)
                     item_row.invoiced = 1
@@ -214,7 +216,7 @@ def validate (doc, method):
         make_sales_invoice(doc,True)
 
 
-def get_taxe_template(item_code):
+def get_taxes_template(item_code):
     item_tax_template = get_taxes_and_charges("Item",item_code)
     if len(item_tax_template) > 0:
         return item_tax_template[0]["item_tax_template"]
