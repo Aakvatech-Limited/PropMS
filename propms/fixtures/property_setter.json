@@ -257,22 +257,6 @@
  },
  {
   "default_value": null,
-  "doc_type": "Payment Entry",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "modified": "2019-03-04 11:51:07.546547",
-  "name": "Payment Entry-default_print_format",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "default_print_format",
-  "property_type": "Data",
-  "value": "AV Payment Entry Voucher VIVA"
- },
- {
-  "default_value": null,
   "doc_type": "Unit Type",
   "docstatus": 0,
   "doctype": "Property Setter",
@@ -302,22 +286,6 @@
   "property": "default_print_format",
   "property_type": "Data",
   "value": "Viva Daily Checklist"
- },
- {
-  "default_value": null,
-  "doc_type": "Issue",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "modified": "2019-12-05 15:54:16.892134",
-  "name": "Issue-default_print_format",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "default_print_format",
-  "property_type": "Data",
-  "value": "Viva Maintenance Job Card"
  },
  {
   "default_value": null,
@@ -417,22 +385,6 @@
  },
  {
   "default_value": null,
-  "doc_type": "Security Attendance",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "modified": "2019-12-05 17:19:23.048161",
-  "name": "Security Attendance-default_print_format",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "default_print_format",
-  "property_type": "Data",
-  "value": "Attendance Report"
- },
- {
-  "default_value": null,
   "doc_type": "Material Request",
   "docstatus": 0,
   "doctype": "Property Setter",
@@ -446,22 +398,6 @@
   "property": "options",
   "property_type": "Text",
   "value": "Material Issue\nPurchase\nMaterial Transfer\nManufacture"
- },
- {
-  "default_value": null,
-  "doc_type": "Outsourcing Attendance",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocType",
-  "field_name": null,
-  "modified": "2019-02-07 11:52:43.455243",
-  "name": "Outsourcing Attendance-default_print_format",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "default_print_format",
-  "property_type": "Data",
-  "value": "Outsourcing Attendance"
  },
  {
   "default_value": null,
