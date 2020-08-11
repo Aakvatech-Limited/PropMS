@@ -3,6 +3,15 @@
 cur_frm.add_fetch('property', 'unit_owner', 'property_owner');
 
 frappe.ui.form.on('Lease', {
+	setup: function(frm) {
+		frm.set_query("lease_item", "lease_item", function() {
+			return {
+				"filters": [
+                    ["item_group","=", "Lease Items"],
+				]
+			};
+		});
+	},
 	refresh: function(frm) {
 		cur_frm.add_custom_button(__("Make Invoice Schedule"), function() {
 			make_lease_invoice_schedule(cur_frm);
