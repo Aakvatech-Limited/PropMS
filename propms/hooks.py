@@ -107,7 +107,6 @@ fixtures = [
 		"Issue-column_break_14",
 		"Issue-defect_found",
 		"Issue-person_in_charge_name",
-		"Sales Invoice Item-withholding_tax_rate",
 		"Sales Invoice-job_card",
 		"Issue-column_break_4",
 		"Issue-materials_billed",
