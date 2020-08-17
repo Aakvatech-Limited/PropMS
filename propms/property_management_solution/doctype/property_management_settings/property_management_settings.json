@@ -16,6 +16,7 @@
   "default_tax_account_head",
   "column_break_10",
   "default_tax_template",
+  "default_maintenance_tax_template",
   "section_break_12",
   "group_maintenance_job_items",
   "submit_maintenance_invoice",
@@ -118,10 +119,16 @@
    "fieldtype": "Link",
    "label": "Self Consumption Customer",
    "options": "Customer"
+  },
+  {
+   "fieldname": "default_maintenance_tax_template",
+   "fieldtype": "Link",
+   "label": "Default Maintenance Tax Template",
+   "options": "Sales Taxes and Charges Template"
   }
  ],
  "issingle": 1,
- "modified": "2020-04-16 17:12:17.850024",
+ "modified": "2020-08-16 16:46:35.268651",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",

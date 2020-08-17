@@ -19,7 +19,6 @@ def make_sales_invoice(doc,for_self_consumption=None):
     cost_center = frappe.db.get_value("Property", doc.property_name, "cost_center")
     submit_maintenance_invoice = frappe.db.get_value("Property Management Settings", None, "submit_maintenance_invoice")
     self_consumption_customer = frappe.db.get_value("Property Management Settings", None, "self_consumption_customer")
-    default_tax_template = frappe.db.get_value("Property Management Settings", None, "default_tax_template")
     if not submit_maintenance_invoice:
         submit_maintenance_invoice =0
     submit_maintenance_invoice =int(submit_maintenance_invoice)
@@ -27,7 +26,10 @@ def make_sales_invoice(doc,for_self_consumption=None):
     lease = get_latest_active_lease(doc.property_name)
     
     def _make_sales_invoice(items_list=None, pos=None, self_customer=None):
-        default_tax_template = frappe.db.get_value("Property Management Settings", None, "default_tax_template")
+        default_tax_template = frappe.db.get_value("Property Management Settings", None, "default_maintenance_tax_template")
+        if not default_tax_template:
+            url = frappe.utils.get_url_to_form("Property Management Settings", "Property Management Settings")
+            frappe.throw(_("Please Setup Default Maintenance Tax Template in <a href='{0}'>{1}</a>".format(url,"Property Management Settings")))
         if not len(items_list) > 0 or not doc.customer:
             return
         if self_customer:
@@ -61,9 +63,13 @@ def make_sales_invoice(doc,for_self_consumption=None):
             taxes_and_charges=default_tax_template,
             job_card = doc.name
             )).insert(ignore_permissions=True)
+        invoice_doc.reload()
         if invoice_doc.taxes_and_charges and not pos:
             getTax(invoice_doc)
         invoice_doc.calculate_taxes_and_totals()
+        invoice_doc.run_method("set_missing_values")
+        invoice_doc.run_method("calculate_taxes_and_totals")
+        invoice_doc.save()
         if invoice_doc:
             invoice_url = frappe.utils.get_url_to_form(invoice_doc.doctype, invoice_doc.name)
             si_msgprint = "Sales invoice Created <a href='{0}'>{1}</a>".format(invoice_url,invoice_doc.name)
