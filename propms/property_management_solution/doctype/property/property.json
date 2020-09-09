@@ -12,6 +12,8 @@
   "identification_section",
   "name1",
   "parent_property",
+  "company",
+  "cost_center",
   "column_break_2",
   "photo",
   "section_break_4",
@@ -40,8 +42,7 @@
   "property_meters_section",
   "property_meter_reading",
   "description_section",
-  "description",
-  "cost_center"
+  "description"
  ],
  "fields": [
   {
@@ -174,7 +175,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn Lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating"
+   "options": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn Lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating\nOn lease"
   },
   {
    "bold": 1,
@@ -222,12 +223,22 @@
   {
    "fieldname": "cost_center",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Cost Center",
-   "options": "Cost Center"
+   "options": "Cost Center",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
   }
  ],
  "icon": "octicon octicon-home",
- "modified": "2019-12-05 17:16:46.412476",
+ "modified": "2020-09-07 09:07:46.356946",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property",
