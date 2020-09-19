@@ -23,7 +23,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 	"""Create sales invoice from lease invoice schedule."""
 	try:
 		company = frappe.get_value("Lease", lease, "company")
-		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+		default_tax_template =frappe.get_value("Company", company, "default_tax_template")
 		if qty != int(qty):
 			#it means the last invoice for the lease that may have fraction of months
 			subs_end_date=frappe.get_value("Lease", lease, "end_date")
@@ -40,7 +40,7 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 			currency=currency,
 			lease=lease,
 			lease_item=lease_item,
-			taxes_and_charges=propm_setting.default_tax_template,
+			taxes_and_charges=default_tax_template,
 			from_date=schedule_start_date,
 			to_date=subs_end_date,
 			cost_center=getCostCenter(lease)

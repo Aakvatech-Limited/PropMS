@@ -35,6 +35,7 @@ doctype_js = {
 	"Sales Invoice" : "property_management_solution/sales_invoice.js",
 	"Journal Entry Account" : "property_management_solution/journal_entry_account.js",
 	"Issue" : "property_management_solution/issue.js",
+	"Company" : "property_management_solution/company.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -110,7 +111,12 @@ fixtures = [
 		"Sales Invoice-job_card",
 		"Issue-column_break_4",
 		"Issue-materials_billed",
-		"Quotation-cost_center"
+		"Quotation-cost_center",
+		"Company-property_management_settings",
+		"Company-security_account_code",
+		"Company-default_tax_account_head",
+		"Company-default_tax_template",
+		"Company-default_maintenance_tax_template"
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Contact-department-fieldtype",
