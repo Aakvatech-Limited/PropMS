@@ -22,6 +22,7 @@ def app_error_log(title,error):
 def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty=None,schedule_start_date=None):
 	"""Create sales invoice from lease invoice schedule."""
 	try:
+		company = frappe.get_value("Lease", lease, "company")
 		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 		if qty != int(qty):
 			#it means the last invoice for the lease that may have fraction of months
@@ -30,18 +31,19 @@ def makeInvoice(date,customer,items,currency=None,lease=None,lease_item=None,qty
 			#month qty is not fractional
 			subs_end_date = add_days(add_months(schedule_start_date,qty), -1)
 		sales_invoice=frappe.get_doc(dict(
-					doctype='Sales Invoice',
-					posting_date=today(),
-					items=json.loads(items),
-					customer=str(customer),
-					due_date=getDueDate(today(),str(customer)),
-					currency=currency,
-					lease=lease,
-					lease_item=lease_item,
-					taxes_and_charges=propm_setting.default_tax_template,
-					from_date=schedule_start_date,
-					to_date=subs_end_date,
-					cost_center=getCostCenter(lease)
+			doctype='Sales Invoice',
+			company = company,
+			posting_date=today(),
+			items=json.loads(items),
+			customer=str(customer),
+			due_date=getDueDate(today(),str(customer)),
+			currency=currency,
+			lease=lease,
+			lease_item=lease_item,
+			taxes_and_charges=propm_setting.default_tax_template,
+			from_date=schedule_start_date,
+			to_date=subs_end_date,
+			cost_center=getCostCenter(lease)
 		)).insert()
 		if sales_invoice.taxes_and_charges:
 			getTax(sales_invoice)

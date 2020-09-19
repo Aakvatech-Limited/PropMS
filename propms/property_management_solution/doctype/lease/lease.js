@@ -11,6 +11,13 @@ frappe.ui.form.on('Lease', {
 				]
 			};
 		});
+		frm.set_query("property", function() {
+			return {
+				"filters": {
+                    "company": frm.doc.company,
+				},
+			};
+		});
 	},
 	refresh: function(frm) {
 		cur_frm.add_custom_button(__("Make Invoice Schedule"), function() {

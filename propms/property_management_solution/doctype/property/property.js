@@ -4,7 +4,19 @@
 frappe.ui.form.on('Property', {
 	refresh: function(frm) {
 
-	}
+	},
+	setup: function(frm) {
+		frm.set_query("cost_center", function() {
+			return {
+				"filters": {
+                    "company": frm.doc.company,
+				},
+			};
+		});
+	},
+	company: function(frm) {
+		frm.set_value("cost_center", "");
+	},
 });
 
 frappe.ui.form.on('Property Meter Reading', {
