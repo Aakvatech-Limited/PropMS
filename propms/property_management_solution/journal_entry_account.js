@@ -13,7 +13,7 @@ frappe.ui.form.on('Journal Entry Account', {
                 },
                 callback: function(r, rt) {
                     if (r.message) {
-                        if (r.message.status == "On lease") {
+                        if (r.message.status == "On Lease") {
                             frappe.call({
                                 method: "frappe.client.get_value",
                                 args: {
