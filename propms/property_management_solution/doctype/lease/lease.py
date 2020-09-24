@@ -33,11 +33,11 @@ class Lease(Document):
 	def validate(self):
 		try:
 			if (self.start_date <= today() <= add_months(self.end_date, -3)):
-				frappe.db.set_value("Property",self.property,"status","On lease")
+				frappe.db.set_value("Property",self.property,"status","On Lease")
 				frappe.msgprint("Property set to On Lease")
 			if (add_months(self.end_date, -3) <= today() <= add_months(self.end_date, 3)):
-				frappe.db.set_value("Property",self.property,"status","Off lease in 3 months")
-				frappe.msgprint("Property set to Off lease in 3 months")
+				frappe.db.set_value("Property",self.property,"status","Off Lease in 3 Months")
+				frappe.msgprint("Property set to Off Lease in 3 Months")
 		except Exception as e:
 			app_error_log(frappe.session.user,str(e))
 
