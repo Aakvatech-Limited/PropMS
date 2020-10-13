@@ -13,7 +13,7 @@ def make_sales_invoice(doc,for_self_consumption=None):
     if not is_grouped:
         is_grouped =0
     is_grouped =int(is_grouped)
-    company = frappe.db.get_value("Property Management Settings", None, "company")
+    company = doc.company
     if not company:
         company = frappe.db.get_single_value('Global Defaults', 'default_company')
     cost_center = frappe.db.get_value("Property", doc.property_name, "cost_center")
@@ -228,3 +228,20 @@ def get_taxes_template(item_code):
         return item_tax_template[0]["item_tax_template"]
     else:
         return ""
+    
+
+@frappe.whitelist()
+def get_stock_availability(item_code, company, is_pos):
+    warehouse = ""
+    if int(is_pos) == 1:
+        user_pos_profile = get_pos_profile(company)
+        warehouse = user_pos_profile.warehouse
+    if not warehouse:
+        warehouse = frappe.db.get_single_value('Stock Settings', 'default_warehouse')
+    latest_sle = frappe.db.sql("""select sum(actual_qty) as  actual_qty
+        from `tabStock Ledger Entry` 
+        where item_code = %s and warehouse = %s
+        limit 1""", (item_code, warehouse), as_dict=1)
+
+    sle_qty = latest_sle[0].actual_qty or 0 if latest_sle else 0
+    return sle_qty

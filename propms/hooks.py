@@ -156,7 +156,8 @@ fixtures = [
 		"Property-section_break_4-bold",
 		"Property-identification_section-bold",
 		"Unit Type-search_fields",
-		"Issue-customer-fetch_from"
+		"Issue-customer-fetch_from",
+		"Issue-company-fetch_from",
 	)]]},
 ]
 
