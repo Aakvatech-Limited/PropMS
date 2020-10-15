@@ -21,7 +21,11 @@ frappe.ui.form.on('Issue', {
                     }
                 }
             });
-            if ((item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") &&  sle_qty > 0) {                
+            if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
+                if (sle_qty < item.quantity) {
+                    frappe.throw(__(`Existing stock quantity of item ${item.item} is ${sle_qty} not enough`))
+                    return
+                }
                 let child = frm.add_child("materials_billed");
                 child.item = item.item;
                 child.quantity = item.quantity;
