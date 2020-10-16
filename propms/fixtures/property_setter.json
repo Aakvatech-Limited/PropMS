@@ -622,5 +622,21 @@
   "property": "columns",
   "property_type": "Int",
   "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Issue",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "company",
+  "modified": "2020-10-13 04:17:10.536770",
+  "name": "Issue-company-fetch_from",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "fetch_from",
+  "property_type": "Small Text",
+  "value": "property_name.company"
  }
 ]

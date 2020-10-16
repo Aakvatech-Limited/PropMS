@@ -6,7 +6,26 @@ frappe.ui.form.on('Issue', {
         }
         let to_update = [];
         frm.doc.materials_required.forEach((item,idx)=> {
+            var sle_qty = 0
+            frappe.call({
+                method: "propms.issue_hook.get_stock_availability",
+                args: {
+                    item_code: item.item,
+                    company: frm.doc.company,
+                    is_pos : item.is_pos
+                },
+                async: false,
+                callback: function(r) {
+                    if (r.message){
+                        sle_qty = r.message;
+                    }
+                }
+            });
             if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
+                if (sle_qty < item.quantity) {
+                    frappe.throw(__(`Existing stock quantity of item ${item.item} is ${sle_qty} not enough`))
+                    return
+                }
                 let child = frm.add_child("materials_billed");
                 child.item = item.item;
                 child.quantity = item.quantity;
