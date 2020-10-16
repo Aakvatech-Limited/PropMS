@@ -8,15 +8,11 @@
   "company",
   "section_break_2",
   "security_deposit_item",
-  "security_account_code",
   "column_break_5",
   "security_deposit_payment_type",
   "damage_charge_item",
   "section_break_8",
-  "default_tax_account_head",
   "column_break_10",
-  "default_tax_template",
-  "default_maintenance_tax_template",
   "section_break_12",
   "group_maintenance_job_items",
   "submit_maintenance_invoice",
@@ -45,28 +41,10 @@
    "options": "Item"
   },
   {
-   "fieldname": "security_account_code",
-   "fieldtype": "Link",
-   "label": "Security Account Code",
-   "options": "Account"
-  },
-  {
    "fieldname": "security_deposit_payment_type",
    "fieldtype": "Link",
    "label": "Security Deposit Payment Type",
    "options": "Mode of Payment"
-  },
-  {
-   "fieldname": "default_tax_account_head",
-   "fieldtype": "Link",
-   "label": "Default Tax Account Head",
-   "options": "Account"
-  },
-  {
-   "fieldname": "default_tax_template",
-   "fieldtype": "Link",
-   "label": "Default Tax Template",
-   "options": "Sales Taxes and Charges Template"
   },
   {
    "default": "0",
@@ -119,16 +97,10 @@
    "fieldtype": "Link",
    "label": "Self Consumption Customer",
    "options": "Customer"
-  },
-  {
-   "fieldname": "default_maintenance_tax_template",
-   "fieldtype": "Link",
-   "label": "Default Maintenance Tax Template",
-   "options": "Sales Taxes and Charges Template"
   }
  ],
  "issingle": 1,
- "modified": "2020-08-16 16:46:35.268651",
+ "modified": "2020-09-19 05:29:24.583850",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",
