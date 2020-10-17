@@ -30,8 +30,8 @@ def make_sales_invoice(doc,for_self_consumption=None):
             return
         default_tax_template = frappe.db.get_value("Company", company, "default_maintenance_tax_template")
         if not default_tax_template:
-            url = frappe.utils.get_url_to_form("Property Management Settings", "Property Management Settings")
-            frappe.throw(_("Please Setup Default Maintenance Tax Template in <a href='{0}'>{1}</a>".format(url,"Property Management Settings")))
+            url = frappe.utils.get_url_to_form("Company", company)
+            frappe.throw(_("Please Setup Default Maintenance Tax Template in <a href='{0}'>{1}</a>".format(url,company)))
         if self_customer:
             invoice_customer = self_consumption_customer
         else:
