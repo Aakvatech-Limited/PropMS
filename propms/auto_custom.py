@@ -33,7 +33,7 @@ def makeSalesInvoice(self,method):
 				if result:
 					items=[]
 					issue_details=frappe.get_doc("Issue",result)
-					propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
+					company=self.company
 					if issue_details.customer:
 						material_request_details=frappe.get_doc("Material Request",self.name)
 						if not material_request_details.sales_invoice:
@@ -45,11 +45,11 @@ def makeSalesInvoice(self,method):
 									items.append(item_json)
 								sales_invoice = frappe.get_doc(dict(
 										doctype='Sales Invoice',
-										company=frappe.db.get_single_value('Global Defaults', 'default_company'),
+										company=company,
 										fiscal_year=frappe.db.get_single_value('Global Defaults', 'current_fiscal_year'),
 										posting_date=today(),
 										items=items,
-										taxes_and_charges=propm_setting.default_tax_template,
+										taxes_and_charges= frappe.get_value("Company", company, "default_tax_template"),
 										customer=str(issue_details.customer),
 										due_date=add_days(today(),2),
 										update_stock=1
@@ -75,11 +75,11 @@ def makeSalesInvoice(self,method):
 									items.append(item_json)
 								sales_invoice = frappe.get_doc(dict(
 										doctype='Sales Invoice',
-										company=frappe.db.get_single_value('Global Defaults', 'default_company'),
+										company=company,
 										fiscal_year=frappe.db.get_single_value('Global Defaults', 'current_fiscal_year'),
 										posting_date=today(),
 										items=items,
-										taxes_and_charges=propm_setting.default_tax_template,
+										taxes_and_charges=frappe.get_value("Company", company, "default_tax_template"),
 										customer=str(self.customer),
 										due_date=add_days(today(),2),
 										update_stock=1
