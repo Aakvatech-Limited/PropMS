@@ -421,17 +421,18 @@ def make_invoice_meter_reading(self,method):
 
 @frappe.whitelist()
 def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None,to_date=None):
+	company = frappe.db.get_value("Property",property_id,"company")
 	try:
-		propm_setting=frappe.get_doc("Property Management Settings","Property Management Settings")
 		sales_invoice=frappe.get_doc(dict(
 					doctype='Sales Invoice',
+					company=company,
 					posting_date=meter_date,
 					items=items,
 					lease=get_latest_active_lease(property_id),
 					lease_item=lease_item,
 					customer=str(customer),
 					due_date=getDueDate(meter_date,str(customer)),
-					taxes_and_charges=propm_setting.default_tax_template,
+					taxes_and_charges= frappe.get_value("Company", company, "default_tax_template"),
 					cost_center=get_cost_center(property_id),
 					from_date=from_date,
 					to_date=to_date
