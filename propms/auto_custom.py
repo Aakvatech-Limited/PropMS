@@ -415,9 +415,10 @@ def make_invoice_meter_reading(self,method):
 			#customer = get_active_meter_customer_from_property(meter_row.property,self.meter_type)
 			customer = lease.customer
 			if customer:
-				si_no = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
-				frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
-
+				meter_row.invoice_number = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
+				# meter_row.invoice_number = si_no
+				# frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
+	self.db_update()
 
 @frappe.whitelist()
 def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None,to_date=None):

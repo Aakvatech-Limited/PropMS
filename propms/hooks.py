@@ -186,7 +186,7 @@ doc_events = {
 		"on_change": "propms.auto_custom.changeStatusKeyset"
 	},
 	"Meter Reading": {
-		"before_submit": "propms.auto_custom.make_invoice_meter_reading"
+		"on_submit": "propms.auto_custom.make_invoice_meter_reading"
 	}
 
 
