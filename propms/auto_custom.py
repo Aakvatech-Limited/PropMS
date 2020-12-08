@@ -402,14 +402,14 @@ def get_previous_meter_reading(meter_number,property_id,meter_type):
 def make_invoice_meter_reading(self,method):
 	for meter_row in self.meter_reading_detail:
 		if int(meter_row.do_not_create_invoice) != 1:
-			item_detail = get_item_details(self.meter_type,meter_row.reading_difference)
+			item_detail = get_item_details(self.meter_type,meter_row.reading_difference,meter_row.previous_reading_date,add_days(self.reading_date,-1))
 			# Changed from propert/meter customer lookup to pos cusotmer lookup as per conversation with Vimal on 2019-11-08
 			leasename=get_latest_active_lease(meter_row.property)
 			lease = frappe.get_doc("Lease",leasename)
 			#customer = get_active_meter_customer_from_property(meter_row.property,self.meter_type)
 			customer = lease.customer
 			if customer:
-				meter_row.invoice_number = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,1))
+				meter_row.invoice_number = make_invoice(self.reading_date,customer,meter_row.property,item_detail,self.meter_type,meter_row.previous_reading_date,add_days(self.reading_date,-1))
 				# meter_row.invoice_number = si_no
 				# frappe.db.set_value("Meter Reading Detail",meter_row.name,"invoice_number",si_no)
 	self.db_update()
@@ -419,18 +419,18 @@ def make_invoice(meter_date,customer,property_id,items,lease_item,from_date=None
 	company = frappe.db.get_value("Property",property_id,"company")
 	try:
 		sales_invoice=frappe.get_doc(dict(
-					doctype='Sales Invoice',
-					company=company,
-					posting_date=meter_date,
-					items=items,
-					lease=get_latest_active_lease(property_id),
-					lease_item=lease_item,
-					customer=str(customer),
-					due_date=getDueDate(meter_date,str(customer)),
-					taxes_and_charges= frappe.get_value("Company", company, "default_tax_template"),
-					cost_center=get_cost_center(property_id),
-					from_date=from_date,
-					to_date=to_date
+			doctype='Sales Invoice',
+			company=company,
+			posting_date=meter_date,
+			items=items,
+			lease=get_latest_active_lease(property_id),
+			lease_item=lease_item,
+			customer=str(customer),
+			due_date=getDueDate(meter_date,str(customer)),
+			taxes_and_charges= frappe.get_value("Company", company, "default_tax_template"),
+			cost_center=get_cost_center(property_id),
+			from_date=from_date,
+			to_date=to_date
 		)).insert()
 		if sales_invoice.taxes_and_charges:
 			get_tax(sales_invoice)
@@ -454,11 +454,13 @@ def get_cost_center(property_id):
 
 
 @frappe.whitelist()
-def get_item_details(item,qty):
+def get_item_details(item,qty,service_start_date,service_end_date):
 	item_dict = []
 	item_json = {}
 	item_json["item_code"] = item
 	item_json["qty"] = qty
+	item_json["service_start_date"] = service_start_date
+	item_json["service_end_date"] = service_end_date
 	item_dict.append(item_json)
 	return item_dict
 
