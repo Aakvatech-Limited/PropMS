@@ -5,8 +5,8 @@ try {
 	erpnext.pos.PointOfSale = erpnext.pos.PointOfSale.extend({
 	});
 } catch (e) { //online POS
-	class NewPOSCart extends POSCart{
-		constructor(wrapper){
+	class NewPOSCart extends POSCart {
+		constructor(wrapper) {
 			super(wrapper);
 		}
 		make() {
@@ -26,10 +26,10 @@ try {
 					fieldname: 'cost_center',
 					options: 'Cost Center',
 					reqd: 0,
-					get_query: function() {
+					get_query: function () {
 						return {
 							filters: {
-								"is_group":0
+								"is_group": 0
 							}
 						}
 					},
@@ -38,18 +38,18 @@ try {
 							method: "propms.pos.get_pos_data",
 							freeze: true,
 							args: {
-								'cost_center':this.cost_center_field.get_value()
+								'cost_center': this.cost_center_field.get_value()
 							}
 						}).then(r => {
 							var pos_customer = "Cash Customer"
-							if (r.message){
-								if (r.message.hasOwnProperty('customer')){
+							if (r.message) {
+								if (r.message.hasOwnProperty('customer')) {
 									pos_customer = r.message.customer
 								}
 							}
 							this.customer_field.set_value(pos_customer);
 							this.frm.set_value('customer', pos_customer);
-						//for(var i = 0; i< r.message.lease_item.length; i++ ){
+							//for(var i = 0; i< r.message.lease_item.length; i++ ){
 							//	this.events.on_field_change(r.message.lease_item[i].lease_item);
 							//}
 						});
@@ -63,15 +63,14 @@ try {
 	POSCart = NewPOSCart;
 
 	class PointOfSale extends erpnext.pos.PointOfSale {
-		constructor(wrapper){
+		constructor(wrapper) {
 			super(wrapper);
 		}
 
 		submit_sales_invoice() {
-			for(var i = 0; i< this.frm.doc.items.length; i++ ){
+			for (var i = 0; i < this.frm.doc.items.length; i++) {
 				console.log("AakvaERP POS ", document.querySelector('input[data-fieldname="cost_center"]').value)
 				this.frm.doc.items[i].cost_center = document.querySelector('input[data-fieldname="cost_center"]').value;
-							//this.frm.doc.items[i].cost_center =  this.cost_center_field.get_value()
 			}
 			this.frm.doc.cost_center = document.querySelector('input[data-fieldname="cost_center"]').value;
 			this.frm.savesubmit()
