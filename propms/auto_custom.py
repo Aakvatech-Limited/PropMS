@@ -20,6 +20,8 @@ def app_error_log(title,error):
 @frappe.whitelist()
 def makeSalesInvoice(self,method):
 	try:
+		if self.doctype=="Stock Entry":
+			return
 		if self.doctype=="Material Request":
 
 			if self.status=="Issued":
