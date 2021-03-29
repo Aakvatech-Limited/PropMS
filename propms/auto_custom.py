@@ -22,7 +22,7 @@ def makeSalesInvoice(self,method):
 	try:
 		if self.doctype=="Stock Entry":
 			return
-		if self.doctype=="Material Request":
+		if self.doctype=="Material Request" and self.material_request_type == "Material Issue":
 
 			if self.status=="Issued":
 				result=checkIssue(self.name)
