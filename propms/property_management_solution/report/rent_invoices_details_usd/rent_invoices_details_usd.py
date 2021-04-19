@@ -20,9 +20,11 @@ from frappe.utils import (
     cint,
 )
 from erpnext import get_company_currency, get_default_company
+from erpnext.setup.utils import get_exchange_rate
 
 
 def execute(filters=None):
+    filters["foreign_currency"] = "USD"
     data = get_data(filters)
     columns = get_columns(filters)
     return columns, data
@@ -80,14 +82,10 @@ def get_data(filters):
         property_name = frappe.db.get_value("Lease", invoice["lease"], "property")
         invoice["property_name"] = property_name
         if invoice.total == invoice.foreign_total:
-            invoice.foreign_total, invoice.exchange_rate = "", ""
-        # if filters.get("foreign_currency") and get_company_currency(filters.company) != filters.foreign_currency:
-        #     months_obj = calculate_monthly_ammount(invoice.foreign_total,invoice.from_date,invoice.to_date)
-        # else:
-        #     months_obj = calculate_monthly_ammount(invoice.total,invoice.from_date,invoice.to_date)
-        # if months_obj:
-        #     for key,value in months_obj.items():
-        #         invoice[key] = value
+            invoice.exchange_rate = get_exchange_rate(
+                "USD", default_currency, invoice.posting_date
+            )
+            invoice.foreign_total = invoice.total / invoice.exchange_rate
 
         invoice_id = "'{invoice_id}'".format(invoice_id=invoice["invoice_id"])
 
@@ -114,6 +112,8 @@ def get_data(filters):
             item["item_group"] = item_group
             item.item_foreign_total = flt(item.item_foreign_total, float_precision)
             item.item_total = flt(item.item_total, float_precision)
+            if item.item_foreign_total == item.item_total:
+                item.item_foreign_total = item.item_total / invoice.exchange_rate
             months_obj = calculate_monthly_ammount(
                 item.item_total,
                 default_currency,
@@ -136,14 +136,10 @@ def get_data(filters):
                 item.item_total = flt(item.item_foreign_total, float_precision)
             else:
                 item.item_total = flt(item.item_total, float_precision)
-        if append and (
-            filters.foreign_currency == invoice.currency or not filters.foreign_currency
-        ):
-            # rows.append(invoice)
+        if append:
             for item in _items_rwos:
                 item.update(invoice)
                 rows.append(item)
-            # rows.append({})
 
     return rows
 
@@ -422,8 +418,8 @@ def calculate_monthly_ammount(
         elif floor(days / 30) != (days / 30) and floor(days / 30) * 30 < days:
             days = floor(days / 30) * 30
 
-        daily_ammount = ammount / (days)
-        daily_ammount_foreign = foreign_ammount / (days)
+        daily_ammount = 0 if days == 0 else ammount / (days)
+        daily_ammount_foreign = 0 if days == 0 else foreign_ammount / (days)
 
         m = 1
         for i in field_list:

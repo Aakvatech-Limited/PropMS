@@ -35,13 +35,6 @@ frappe.query_reports["Rent Invoices Details USD"] = {
 			reqd: 1
 		},
 		{
-			fieldname: 'foreign_currency',
-			label: __('Currency'),
-			fieldtype: 'Select',
-			default: 'USD',
-			options: erpnext.get_presentation_currency_list()
-		},
-		{
 			fieldname: 'extand',
 			label: __('Extand'),
 			fieldtype: 'Check',
