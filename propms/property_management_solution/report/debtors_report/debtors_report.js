@@ -1,7 +1,7 @@
 frappe.query_reports["Debtors Report"] = {
     "formatter": function (value, row, column, data, default_formatter) {
 		value = default_formatter(value, row, column, data);
-        console.log(column)
+        // console.log(column)
         if (column.id == "usd") {
             value = "<span style='float:right;'>" + value + "</span>";
         }
