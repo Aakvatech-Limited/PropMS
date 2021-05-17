@@ -5,10 +5,18 @@ frappe.query_reports["Debtors Report"] = {
         if (column.id == "usd") {
             value = "<span style='float:right;'>" + value + "</span>";
         }
+        if (column.id == "tzs") {
+          value = "<span style='float:right;'>" + value + "</span>";
+        }
 
-        if (data["items"] == "TOTAL"){
+
+        if (data["invoice_no"] == "TOTAL"){
             value = "<span style='font-weight:bold;'>" + value + "</span>";
-            if (column.id == "due_date"){
+            if (column.id == "due_date") {
+              value = "";
+            }
+            
+            if (column.id == "items"){
                 value = ""
             }
             if (column.id == "from_date") {
