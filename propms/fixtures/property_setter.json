@@ -1,6 +1,40 @@
 [
  {
   "default_value": null,
+  "doc_type": "Property",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "status",
+  "modified": "2020-07-25 17:21:20.402797",
+  "name": "Property-status-options",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "options",
+  "property_type": "Text",
+  "row_name": null,
+  "value": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff lease in 3 months\nOn lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Issue",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "customer",
+  "modified": "2020-04-27 16:29:19.220528",
+  "name": "Issue-customer-fetch_from",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "fetch_from",
+  "property_type": "Small Text",
+  "row_name": null,
+  "value": "property_name.unit_owner"
+ },
+ {
+  "default_value": null,
   "doc_type": "Journal Entry Account",
   "docstatus": 0,
   "doctype": "Property Setter",
@@ -13,6 +47,7 @@
   "parenttype": null,
   "property": "columns",
   "property_type": "Int",
+  "row_name": null,
   "value": "2"
  },
  {
@@ -29,6 +64,7 @@
   "parenttype": null,
   "property": "bold",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -45,6 +81,7 @@
   "parenttype": null,
   "property": "bold",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -61,6 +98,7 @@
   "parenttype": null,
   "property": "bold",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -77,6 +115,7 @@
   "parenttype": null,
   "property": "bold",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -93,6 +132,7 @@
   "parenttype": null,
   "property": "collapsible",
   "property_type": "Check",
+  "row_name": null,
   "value": "0"
  },
  {
@@ -109,6 +149,7 @@
   "parenttype": null,
   "property": "collapsible",
   "property_type": "Check",
+  "row_name": null,
   "value": "0"
  },
  {
@@ -125,6 +166,7 @@
   "parenttype": null,
   "property": "report_hide",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -141,6 +183,7 @@
   "parenttype": null,
   "property": "report_hide",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -157,6 +200,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -173,23 +217,8 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "0"
- },
- {
-  "default_value": null,
-  "doc_type": "Journal Entry Account",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocField",
-  "field_name": "party",
-  "modified": "2019-01-06 22:08:42.766126",
-  "name": "Journal Entry Account-party-columns",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "columns",
-  "property_type": "Int",
-  "value": "2"
  },
  {
   "default_value": null,
@@ -205,6 +234,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -221,6 +251,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -237,6 +268,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -253,6 +285,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -269,6 +302,7 @@
   "parenttype": null,
   "property": "search_fields",
   "property_type": "Data",
+  "row_name": null,
   "value": "unit_type"
  },
  {
@@ -285,6 +319,7 @@
   "parenttype": null,
   "property": "default_print_format",
   "property_type": "Data",
+  "row_name": null,
   "value": "Viva Daily Checklist"
  },
  {
@@ -301,6 +336,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -317,6 +353,7 @@
   "parenttype": null,
   "property": "in_list_view",
   "property_type": "Check",
+  "row_name": null,
   "value": "0"
  },
  {
@@ -333,6 +370,7 @@
   "parenttype": null,
   "property": "reqd",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -349,6 +387,7 @@
   "parenttype": null,
   "property": "options",
   "property_type": "Text",
+  "row_name": null,
   "value": "Open\nIn Progress\nAwaiting Parts\nUnder Observation\nIn Discussion\nAppointment\nHold\nClosed"
  },
  {
@@ -365,6 +404,7 @@
   "parenttype": null,
   "property": "fieldtype",
   "property_type": "Select",
+  "row_name": null,
   "value": "Select"
  },
  {
@@ -381,6 +421,7 @@
   "parenttype": null,
   "property": "options",
   "property_type": "Text",
+  "row_name": null,
   "value": "\nOutsourcing - Cleaning"
  },
  {
@@ -397,6 +438,7 @@
   "parenttype": null,
   "property": "options",
   "property_type": "Text",
+  "row_name": null,
   "value": "Material Issue\nPurchase\nMaterial Transfer\nManufacture"
  },
  {
@@ -413,6 +455,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -429,6 +472,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -445,6 +489,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -461,6 +506,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -477,6 +523,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -493,6 +540,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -509,6 +557,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -525,6 +574,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -541,6 +591,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -557,6 +608,7 @@
   "parenttype": null,
   "property": "in_standard_filter",
   "property_type": "Check",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -573,6 +625,7 @@
   "parenttype": null,
   "property": "options",
   "property_type": "Text",
+  "row_name": null,
   "value": "\nProforma Invoice raised\nReceiving in process\nReceived\nReceived in part\nReturn in part\nReturned\nRecovered for rent\nRecovered for repairs\nNot required"
  },
  {
@@ -589,23 +642,8 @@
   "parenttype": null,
   "property": "quick_entry",
   "property_type": "Check",
+  "row_name": null,
   "value": "0"
- },
- {
-  "default_value": null,
-  "doc_type": "Journal Entry Account",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocField",
-  "field_name": "party_type",
-  "modified": "2020-03-13 16:16:22.025623",
-  "name": "Journal Entry Account-party_type-columns",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "columns",
-  "property_type": "Int",
-  "value": "1"
  },
  {
   "default_value": null,
@@ -621,6 +659,7 @@
   "parenttype": null,
   "property": "columns",
   "property_type": "Int",
+  "row_name": null,
   "value": "1"
  },
  {
@@ -637,6 +676,7 @@
   "parenttype": null,
   "property": "fetch_from",
   "property_type": "Small Text",
+  "row_name": null,
   "value": "property_name.company"
  }
 ]

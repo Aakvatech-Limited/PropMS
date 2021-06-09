@@ -25,17 +25,17 @@ app_license = "MIT"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 page_js = {
-	"pos" : "property_management_solution/point_of_sale.js",
-	"point-of-sale" : "property_management_solution/point_of_sale.js"
+    "pos": "property_management_solution/point_of_sale.js",
+    "point-of-sale": "property_management_solution/point_of_sale.js",
 }
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_js = {
-	"Sales Invoice" : "property_management_solution/sales_invoice.js",
-	"Journal Entry Account" : "property_management_solution/journal_entry_account.js",
-	"Issue" : "property_management_solution/issue.js",
-	"Company" : "property_management_solution/company.js",
+    "Sales Invoice": "property_management_solution/sales_invoice.js",
+    "Journal Entry Account": "property_management_solution/journal_entry_account.js",
+    "Issue": "property_management_solution/issue.js",
+    "Company": "property_management_solution/company.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -49,7 +49,7 @@ doctype_js = {
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Website user home page (by function)
@@ -78,11 +78,11 @@ doctype_js = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-#	"Event": "frappe.desk.doctype.event.event.has_permission",
+# 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # Document Events
@@ -90,152 +90,154 @@ doctype_js = {
 # Hook on document methods and events
 
 fixtures = [
-	{"doctype":"Custom Field", "filters": [["name", "in", (
-		"Item-reading_required",
-		"Sales Invoice-lease_item",
-		"Sales Invoice-lease_information",
-		"Sales Invoice-lease",
-		"Issue-sub_contractor_name",
-		"Issue-customer_feedback",
-		"Issue-section_break_15",
-		"Issue-col_brk_001",
-		"Issue-property_name",
-		"Issue-person_in_charge",
-		"Material Request-sales_invoice",
-		"Issue-sub_contractor_contact",
-		"Issue-materials_required",
-		"Issue-material_request",
-		"Issue-column_break_14",
-		"Issue-defect_found",
-		"Issue-person_in_charge_name",
-		"Sales Invoice-job_card",
-		"Issue-column_break_4",
-		"Issue-materials_billed",
-		"Quotation-cost_center",
-		"Company-property_management_settings",
-		"Company-security_account_code",
-		"Company-default_tax_account_head",
-		"Company-default_tax_template",
-		"Company-default_maintenance_tax_template"
-	)]]},
-	{"doctype":"Property Setter", "filters": [["name", "in", (
-		"Contact-department-fieldtype",
-		"Contact-department-options",
-		# "Security Attendance-default_print_format",
-		"Daily Checklist-default_print_format",
-		"Issue-issue_type-reqd",
-		"Issue-status-options",
-		"Issue-raised_by-in_list_view",
-		"Issue-opening_date-in_list_view",
-		# "Issue-default_print_format",
-		"Issue-quick_entry",
-		"Issue-email_account-report_hide",
-		"Issue-raised_by-report_hide",
-		"Issue-section_break_19-collapsible",
-		"Issue-section_break_7-collapsible",
-		"Issue-issue_type-in_standard_filter",
-		"Issue-priority-in_standard_filter",
-		"Lease-security_status-options",
-		"Lease-wtax_paid_by-in_standard_filter",
-		"Lease-property-in_standard_filter",
-		"Lease-security_status-in_standard_filter",
-		"Lease-property_user-in_standard_filter",
-		"Lease-customer-in_standard_filter",
-		"Lease-lease_customer-in_standard_filter",
-		"Lease-property_owner-in_standard_filter",
-		# "Payment Entry-default_print_format",
-		# "Outsourcing Attendance-default_print_format",
-		"Lease-end_date-in_list_view",
-		"Lease-start_date-in_list_view",
-		"Lease-customer-in_list_view",
-		"Lease-property_owner-in_list_view",
-		"Journal Entry Account-cost_center-columns",
-		"Journal Entry Account-party_type-columns",
-		"Journal Entry Account-party-columns",
-		"Journal Entry Account-account-columns",
-		"Material Request-material_request_type-options",
-		"Key Set Detail-key_set-in_standard_filter",
-		"Key Set Detail-returned-in_standard_filter",
-		"Key Set Detail-taken_by-in_standard_filter",
-		"Property-section_break_22-bold",
-		"Property-section_break_13-bold",
-		"Property-section_break_4-bold",
-		"Property-identification_section-bold",
-		"Unit Type-search_fields",
-		"Issue-company-fetch_from",
-	)]]},
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                (
+                    "Company-default_maintenance_tax_template",
+                    "Company-default_tax_account_head",
+                    "Company-default_tax_template",
+                    "Company-property_management_settings",
+                    "Company-security_account_code",
+                    "Issue Materials Detail-mateiral_request",
+                    "Issue-col_brk_001",
+                    "Issue-column_break_14",
+                    "Issue-column_break_4",
+                    "Issue-customer_feedback",
+                    "Issue-defect_found",
+                    "Issue-material_request",
+                    "Issue-materials_billed",
+                    "Issue-materials_required",
+                    "Issue-person_in_charge_name",
+                    "Issue-person_in_charge",
+                    "Issue-property_name",
+                    "Issue-section_break_15",
+                    "Issue-sub_contractor_contact",
+                    "Issue-sub_contractor_name",
+                    "Item-reading_required",
+                    "Material Request Item-material_request",
+                    "Material Request-sales_invoice",
+                    "Quotation-cost_center",
+                    "Sales Invoice-job_card",
+                    "Sales Invoice-lease_information",
+                    "Sales Invoice-lease_item",
+                    "Sales Invoice-lease",
+                ),
+            ]
+        ],
+    },
+    {
+        "doctype": "Property Setter",
+        "filters": [
+            [
+                "name",
+                "in",
+                (
+                    "Contact-department-fieldtype",
+                    "Contact-department-options",
+                    "Daily Checklist-default_print_format",
+                    "Issue-company-fetch_from",
+                    "Issue-customer-fetch_from",
+                    "Issue-email_account-report_hide",
+                    "Issue-issue_type-in_standard_filter",
+                    "Issue-issue_type-reqd",
+                    "Issue-opening_date-in_list_view",
+                    "Issue-priority-in_standard_filter",
+                    "Issue-quick_entry",
+                    "Issue-raised_by-in_list_view",
+                    "Issue-raised_by-report_hide",
+                    "Issue-section_break_19-collapsible",
+                    "Issue-section_break_7-collapsible",
+                    "Issue-status-options",
+                    "Journal Entry Account-account-columns",
+                    "Journal Entry Account-cost_center-columns",
+                    "Key Set Detail-key_set-in_standard_filter",
+                    "Key Set Detail-returned-in_standard_filter",
+                    "Key Set Detail-taken_by-in_standard_filter",
+                    "Lease-customer-in_list_view",
+                    "Lease-customer-in_standard_filter",
+                    "Lease-end_date-in_list_view",
+                    "Lease-lease_customer-in_standard_filter",
+                    "Lease-property_owner-in_list_view",
+                    "Lease-property_owner-in_standard_filter",
+                    "Lease-property_user-in_standard_filter",
+                    "Lease-property-in_standard_filter",
+                    "Lease-security_status-in_standard_filter",
+                    "Lease-security_status-options",
+                    "Lease-start_date-in_list_view",
+                    "Lease-wtax_paid_by-in_standard_filter",
+                    "Material Request-material_request_type-options",
+                    "Property-identification_section-bold",
+                    "Property-section_break_13-bold",
+                    "Property-section_break_22-bold",
+                    "Property-section_break_4-bold",
+                    "Property-status-options",
+                    "Unit Type-search_fields",
+                ),
+            ]
+        ],
+    },
 ]
 
 
 doc_events = {
-	"Issue": {
-		"validate": [
-			"propms.issue_hook.validate",
-			],
-	},
-	"Material Request": {
-		"validate": "propms.auto_custom.makeSalesInvoice",
-		"on_update":"propms.auto_custom.makeSalesInvoice",
-		"on_change":"propms.auto_custom.makeSalesInvoice"
-
-	},
-	"Sales Order": {
-		"validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"
-	},
-	"Key Set Detail": {
-		"on_change": "propms.auto_custom.changeStatusKeyset"
-	},
-	"Meter Reading": {
-		"on_submit": "propms.auto_custom.make_invoice_meter_reading"
-	}
-
-
+    "Issue": {
+        "validate": [
+            "propms.issue_hook.validate",
+        ],
+    },
+    "Material Request": {
+        "validate": "propms.auto_custom.makeSalesInvoice",
+        "on_update": "propms.auto_custom.makeSalesInvoice",
+        "on_change": "propms.auto_custom.makeSalesInvoice",
+    },
+    "Sales Order": {
+        "validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"
+    },
+    "Key Set Detail": {"on_change": "propms.auto_custom.changeStatusKeyset"},
+    "Meter Reading": {"on_submit": "propms.auto_custom.make_invoice_meter_reading"},
 }
 
 
 scheduler_events = {
-	"daily": [
-		"propms.auto_custom.statusChangeBeforeLeaseExpire",
-		"propms.auto_custom.statusChangeAfterLeaseExpire"
-	],
-	"cron": {
-		"00 12 * * *": [
-			"propms.lease_invoice.leaseInvoiceAutoCreate"
-			]
-		}
+    "daily": [
+        "propms.auto_custom.statusChangeBeforeLeaseExpire",
+        "propms.auto_custom.statusChangeAfterLeaseExpire",
+    ],
+    "cron": {"00 12 * * *": ["propms.lease_invoice.leaseInvoiceAutoCreate"]},
 }
 
 
-
-
-
 # doc_events = {
-#	"*": {
-#		"on_update": "method",
-#		"on_cancel": "method",
-#		"on_trash": "method"
-#	}
+# 	"*": {
+# 		"on_update": "method",
+# 		"on_cancel": "method",
+# 		"on_trash": "method"
+# 	}
 # }
 
 # Scheduled Tasks
 # ---------------
 
 # scheduler_events = {
-#	"all": [
-#		"propms.tasks.all"
-#	],
-#	"daily": [
-#		"propms.tasks.daily"
-#	],
-#	"hourly": [
-#		"propms.tasks.hourly"
-#	],
-#	"weekly": [
-#		"propms.tasks.weekly"
-#	]
-#	"monthly": [
-#		"propms.tasks.monthly"
-#	]
+# 	"all": [
+# 		"propms.tasks.all"
+# 	],
+# 	"daily": [
+# 		"propms.tasks.daily"
+# 	],
+# 	"hourly": [
+# 		"propms.tasks.hourly"
+# 	],
+# 	"weekly": [
+# 		"propms.tasks.weekly"
+# 	]
+# 	"monthly": [
+# 		"propms.tasks.monthly"
+# 	]
 # }
 
 # Testing
@@ -247,6 +249,5 @@ scheduler_events = {
 # ------------------------------
 #
 # override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
+# 	"frappe.desk.doctype.event.event.get_events": "propms.event.get_events"
 # }
-
