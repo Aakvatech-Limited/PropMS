@@ -12,6 +12,7 @@
   "property",
   "column_break_4",
   "lease_date",
+  "lease_status",
   "document_reminders_section",
   "signed_agreement_received",
   "column_break_1",
@@ -311,9 +312,15 @@
    "fieldname": "days_to_invoice_in_advance",
    "fieldtype": "Int",
    "label": "Days to invoice in advance"
+  },
+  {
+   "fieldname": "lease_status",
+   "fieldtype": "Select",
+   "label": "Lease Status",
+   "options": "\nActive\nClosed\nNot Materialized\nRenewal to Previous Lease\nAdendum to Previous Lease\nVacating"
   }
  ],
- "modified": "2020-09-06 17:09:59.439649",
+ "modified": "2021-06-09 17:20:19.067591",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease",
