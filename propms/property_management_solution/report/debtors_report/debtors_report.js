@@ -17,6 +17,10 @@ frappe.query_reports["Debtors Report"] = {
         value = "";
       }
 
+      if (column.id == "cost_center") {
+        value = "";
+      }
+
       if (column.id == "items") {
         value = "";
       }
