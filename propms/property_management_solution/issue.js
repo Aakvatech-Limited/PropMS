@@ -169,7 +169,9 @@ frappe.ui.form.on('Issue', {
                                     doctype: 'Lease',
                                     fieldname: ['name', 'customer'],
                                     filters: {
-                                        property: frm.doc.property_name
+                                        property: frm.doc.property_name,
+                                        start_date: ["<=", frappe.datetime.nowdate()],
+                                        end_date: [">=", frappe.datetime.nowdate()]
                                     },
                                 },
                                 async: false,
