@@ -1,22 +1,22 @@
 frappe.ui.form.on('Issue', {
-    validate: (frm)=> {
+    validate: (frm) => {
         // frm.trigger("make_row_readonly");
-        if (!frm.doc.materials_required){
+        if (!frm.doc.materials_required) {
             return
         }
         let to_update = [];
-        frm.doc.materials_required.forEach((item,idx)=> {
+        frm.doc.materials_required.forEach((item, idx) => {
             var sle_qty = 0
             frappe.call({
                 method: "propms.issue_hook.get_stock_availability",
                 args: {
                     item_code: item.item,
                     company: frm.doc.company,
-                    is_pos : item.is_pos
+                    is_pos: item.is_pos
                 },
                 async: false,
-                callback: function(r) {
-                    if (r.message){
+                callback: function (r) {
+                    if (r.message) {
                         sle_qty = r.message;
                     }
                 }
@@ -53,75 +53,75 @@ frappe.ui.form.on('Issue', {
             refresh_field("materials_required");
         });
         refresh_field("materials_required");
-        
-        if (!frm.doc.materials_billed){
+
+        if (!frm.doc.materials_billed) {
             return
         }
         const sort_list = [];
-        frm.doc.materials_billed.forEach((item,idx)=> {
+        frm.doc.materials_billed.forEach((item, idx) => {
             let item_inv_no = Number.MAX_SAFE_INTEGER;
             let item_inv_ser = "";
             if (item.sales_invoice) {
-                item_inv_no = +item.sales_invoice.slice(9).replace("-","");
-                item_inv_ser = item.sales_invoice.slice(0,8);
+                item_inv_no = +item.sales_invoice.slice(9).replace("-", "");
+                item_inv_ser = item.sales_invoice.slice(0, 8);
             }
-                sort_list.push({
-                    idx: idx,
-                    no: item_inv_no,
-                    ser: item_inv_ser,
-                    pos: item.is_pos,
-                    name: item.name
-                });
+            sort_list.push({
+                idx: idx,
+                no: item_inv_no,
+                ser: item_inv_ser,
+                pos: item.is_pos,
+                name: item.name
+            });
         });
-        const sorted_list =sort_list.sort((a,b) => a.no - b.no);
+        const sorted_list = sort_list.sort((a, b) => a.no - b.no);
         const pos_list = [];
         const not_list = [];
         sorted_list.forEach(i => {
-            if (i.pos) {pos_list.push(i)}
-            else {not_list.push(i)}
+            if (i.pos) { pos_list.push(i) }
+            else { not_list.push(i) }
         });
-        const new_sorted = [].concat(pos_list,not_list);
-        new_sorted.forEach((i,idx) => {
+        const new_sorted = [].concat(pos_list, not_list);
+        new_sorted.forEach((i, idx) => {
             const row = locals["Issue Materials Billed"][i.name];
             row.idx = idx + 1;
         });
         refresh_field("materials_billed");
     },
 
-    refresh: (frm)=> {
+    refresh: (frm) => {
         frm.trigger("make_pos_readonly");
     },
 
-    onload: (frm)=> {
+    onload: (frm) => {
         frm.trigger("make_pos_readonly");
     },
-    
-    make_pos_readonly:(frm)=> {
-        if (!frm.doc.materials_required){
+
+    make_pos_readonly: (frm) => {
+        if (!frm.doc.materials_required) {
             return;
         }
         let child = frm.doc.materials_required;
-        child.forEach(function(e){
-            $("[data-idx='"+e.idx+"']").find('.btn-open-row').css("pointer-events","none");
-             if (e.material_status === "Self Consumption"){
-                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","none");
-             }
-             else {
-                $("[data-idx='"+e.idx+"']").find('[data-fieldname = is_pos]').css("pointer-events","auto");
-             }
-         });
+        child.forEach(function (e) {
+            $("[data-idx='" + e.idx + "']").find('.btn-open-row').css("pointer-events", "none");
+            if (e.material_status === "Self Consumption") {
+                $("[data-idx='" + e.idx + "']").find('[data-fieldname = is_pos]').css("pointer-events", "none");
+            }
+            else {
+                $("[data-idx='" + e.idx + "']").find('[data-fieldname = is_pos]').css("pointer-events", "auto");
+            }
+        });
         refresh_field("materials_required");
     },
 
-    setup: function(frm) {
-        frm.set_query('person_in_charge', function() {
+    setup: function (frm) {
+        frm.set_query('person_in_charge', function () {
             return {
                 filters: {
                     'department': ['like', 'Maintenance - %']
                 }
             }
         });
-        frm.set_query('sub_contractor_contact', function() {
+        frm.set_query('sub_contractor_contact', function () {
             return {
                 filters: {
                     'supplier_group': 'Sub-Contractor'
@@ -131,14 +131,14 @@ frappe.ui.form.on('Issue', {
         frappe.call({
             method: "propms.issue_hook.get_items_group",
             async: false,
-            callback: function(r) {
-                if (r.message){
+            callback: function (r) {
+                if (r.message) {
                     let maintenance_item_group = r.message;
-                    frm.fields_dict["materials_required"].grid.get_field("item").get_query = function(doc, cdt, cdn) {
+                    frm.fields_dict["materials_required"].grid.get_field("item").get_query = function (doc, cdt, cdn) {
                         return {
                             filters: [
                                 ["Item", "item_group", "in", maintenance_item_group],
-                                
+
                             ]
                         }
                     }
@@ -146,7 +146,7 @@ frappe.ui.form.on('Issue', {
             }
         });
     },
-    property_name: function(frm, cdt, cdn) {
+    property_name: function (frm, cdt, cdn) {
         // frappe.msgprint(__("Testing"))
         frappe.model.set_value(cdt, cdn, 'customer', '');
         if (frm.doc.property_name) {
@@ -160,7 +160,7 @@ frappe.ui.form.on('Issue', {
                     },
                 },
                 async: false,
-                callback: function(r, rt) {
+                callback: function (r, rt) {
                     if (r.message) {
                         if (r.message.status.toLowerCase() == 'on lease' || r.message.status.toLowerCase() == 'off lease in 3 months') {
                             frappe.call({
@@ -175,7 +175,7 @@ frappe.ui.form.on('Issue', {
                                     },
                                 },
                                 async: false,
-                                callback: function(r, rt) {
+                                callback: function (r, rt) {
                                     if (r.message) {
                                         frm.set_value("customer", r.message.customer);
                                         refresh_field("customer")
@@ -194,38 +194,38 @@ frappe.ui.form.on('Issue', {
     },
 });
 
-frappe.ui.form.on("Issue Materials Detail", "quantity", function(frm, cdt, cdn) {
-    var item_row = locals[cdt][cdn];
-        item_row.amount = item_row.rate * item_row.quantity;
-        refresh_field("materials_required");
-});
-
-
-frappe.ui.form.on("Issue Materials Detail", "rate", function(frm, cdt, cdn) {
+frappe.ui.form.on("Issue Materials Detail", "quantity", function (frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
     item_row.amount = item_row.rate * item_row.quantity;
     refresh_field("materials_required");
 });
 
 
-frappe.ui.form.on("Issue Materials Detail", "material_status", function(frm, cdt, cdn) {
+frappe.ui.form.on("Issue Materials Detail", "rate", function (frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
-    var is_pos =  $("[data-idx='"+item_row.idx+"']").find('[data-fieldname = is_pos]')
-         
-             if (item_row.material_status === "Self Consumption"){
-                 is_pos.css("pointer-events","none");
-                 item_row.is_pos = 0;
-                
-             } else {
-                is_pos.css("pointer-events","auto");
-             }
-        refresh_field("materials_required");
+    item_row.amount = item_row.rate * item_row.quantity;
+    refresh_field("materials_required");
 });
 
 
-frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
+frappe.ui.form.on("Issue Materials Detail", "material_status", function (frm, cdt, cdn) {
     var item_row = locals[cdt][cdn];
-    if (!item_row.item){
+    var is_pos = $("[data-idx='" + item_row.idx + "']").find('[data-fieldname = is_pos]')
+
+    if (item_row.material_status === "Self Consumption") {
+        is_pos.css("pointer-events", "none");
+        item_row.is_pos = 0;
+
+    } else {
+        is_pos.css("pointer-events", "auto");
+    }
+    refresh_field("materials_required");
+});
+
+
+frappe.ui.form.on("Issue Materials Detail", "item", function (frm, cdt, cdn) {
+    var item_row = locals[cdt][cdn];
+    if (!item_row.item) {
         return;
     }
     frappe.call({
@@ -235,12 +235,12 @@ frappe.ui.form.on("Issue Materials Detail", "item", function(frm, cdt, cdn) {
             customer: frm.doc.customer,
         },
         async: false,
-        callback: function(r) {
+        callback: function (r) {
             if (r.message) {
-                    item_row.rate = r.message;
-                    item_row.amount = item_row.rate * item_row.quantity;
-                    refresh_field("materials_required");
-                }
+                item_row.rate = r.message;
+                item_row.amount = item_row.rate * item_row.quantity;
+                refresh_field("materials_required");
             }
-        });
+        }
+    });
 });
