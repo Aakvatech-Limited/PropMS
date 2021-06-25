@@ -68,7 +68,7 @@ def get_data(filters):
                 AND from_date != ""
                 AND to_date != ""
                 {conditions}
-            ORDER BY lease DESC, posting_date DESC
+            ORDER BY lease DESC, posting_date ASC
             """.format(
         conditions=conditions, company=_company
     )
