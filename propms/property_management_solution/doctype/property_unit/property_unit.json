@@ -645,7 +645,7 @@
             "label": "Status active",
             "length": 0,
             "no_copy": 0,
-            "options": "Available\nBooked\nSale\nOn Lease\nOff lease in 3 months\nSold\nManaged for customer",
+            "options": "Available\nBooked\nSale\nOn Lease\nOff Lease in 3 Months\nSold\nManaged for customer",
             "permlevel": 0,
             "precision": "",
             "print_hide": 0,
