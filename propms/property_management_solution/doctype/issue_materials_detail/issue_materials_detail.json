@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2018-11-22 07:16:14.803984",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -10,7 +11,8 @@
   "rate",
   "amount",
   "is_pos",
-  "material_status"
+  "material_status",
+  "material_request"
  ],
  "fields": [
   {
@@ -72,10 +74,17 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Is POS"
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Data",
+   "label": "Material Request"
   }
  ],
+ "index_web_pages_for_search": 1,
  "istable": 1,
- "modified": "2020-04-18 19:29:58.777299",
+ "links": [],
+ "modified": "2021-07-03 23:43:04.350234",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Issue Materials Detail",
