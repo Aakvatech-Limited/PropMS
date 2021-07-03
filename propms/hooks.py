@@ -140,7 +140,6 @@ fixtures = [
                     "Contact-department-options",
                     "Daily Checklist-default_print_format",
                     "Issue-company-fetch_from",
-                    "Issue-customer-fetch_from",
                     "Issue-email_account-report_hide",
                     "Issue-issue_type-in_standard_filter",
                     "Issue-issue_type-reqd",
