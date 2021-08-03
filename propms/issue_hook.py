@@ -4,7 +4,6 @@ from frappe import _
 from frappe.utils import today
 from erpnext.utilities.product import get_price
 from erpnext.stock.get_item_details import get_pos_profile
-from erpnext.accounts.doctype.sales_invoice.pos import get_mode_of_payment
 from propms.auto_custom import get_latest_active_lease
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
 
