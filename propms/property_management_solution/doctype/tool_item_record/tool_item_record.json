@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "format:{tool_item_set}-{taken_by}-{######}",
+ "color": "#ff0102",
+ "creation": "2021-08-24 08:51:03.124133",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tool_item_set",
+  "set_name",
+  "staff_type",
+  "taken_by",
+  "reason_for_tool_item_taken",
+  "datetime_taken",
+  "returned",
+  "return_date_and_time",
+  "other_remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "tool_item_set",
+   "fieldtype": "Link",
+   "label": "Tool Item Set",
+   "options": "Tool Item Set"
+  },
+  {
+   "fieldname": "set_name",
+   "fieldtype": "Data",
+   "label": "Set Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "staff_type",
+   "fieldtype": "Select",
+   "label": "Staff Type",
+   "options": "\nSpik n Span\nViva Staff\nViva Security\nConsultant\nOthers",
+   "reqd": 1
+  },
+  {
+   "fieldname": "taken_by",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Taken by"
+  },
+  {
+   "fieldname": "reason_for_tool_item_taken",
+   "fieldtype": "Data",
+   "label": "Reason for tool item taken",
+   "reqd": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "datetime_taken",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Datetime taken",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "returned",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Returned"
+  },
+  {
+   "fieldname": "return_date_and_time",
+   "fieldtype": "Datetime",
+   "label": "Return Date and Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "other_remarks",
+   "fieldtype": "Text",
+   "label": "Other remarks"
+  }
+ ],
+ "icon": "octicon octicon-key",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-08-24 08:51:03.124133",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Tool Item Record",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

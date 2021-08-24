@@ -1,0 +1,42 @@
+{
+ "actions": [],
+ "autoname": "field:tool_item_number",
+ "creation": "2021-08-24 08:47:41.318127",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tool_item_number",
+  "status_active"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "status_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Status Active"
+  },
+  {
+   "fieldname": "tool_item_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tool Item Number",
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-08-24 08:52:04.782917",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Tool Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
