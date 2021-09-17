@@ -273,23 +273,6 @@
   },
   {
     "default_value": null,
-    "doc_type": "Daily Checklist",
-    "docstatus": 0,
-    "doctype": "Property Setter",
-    "doctype_or_field": "DocType",
-    "field_name": null,
-    "modified": "2019-12-05 17:17:42.450023",
-    "name": "Daily Checklist-default_print_format",
-    "parent": null,
-    "parentfield": null,
-    "parenttype": null,
-    "property": "default_print_format",
-    "property_type": "Data",
-    "row_name": null,
-    "value": "Viva Daily Checklist"
-  },
-  {
-    "default_value": null,
     "doc_type": "Issue",
     "docstatus": 0,
     "doctype": "Property Setter",
