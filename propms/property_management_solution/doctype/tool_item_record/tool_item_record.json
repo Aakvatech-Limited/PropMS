@@ -36,7 +36,7 @@
    "fieldname": "staff_type",
    "fieldtype": "Select",
    "label": "Staff Type",
-   "options": "\nSpik n Span\nViva Staff\nViva Security\nConsultant\nOthers",
+   "options": "\nSpik n Span\nStaff\nSecurity\nConsultant\nOthers",
    "reqd": 1
   },
   {

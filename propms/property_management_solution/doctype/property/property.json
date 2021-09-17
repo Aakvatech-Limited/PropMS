@@ -58,7 +58,6 @@
       "unique": 1
     },
     {
-      "default": "Viva Tower",
       "fieldname": "parent_property",
       "fieldtype": "Link",
       "label": "Parent property",

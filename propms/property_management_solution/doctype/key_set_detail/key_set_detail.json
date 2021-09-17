@@ -100,7 +100,7 @@
    "label": "Staff Type",
    "length": 0,
    "no_copy": 0,
-   "options": "\nSpik n Span\nViva Staff\nViva Security\nConsultant\nOthers",
+   "options": "\nSpik n Span\nStaff\nSecurity\nConsultant\nOthers",
    "permlevel": 0,
    "precision": "",
    "print_hide": 0,

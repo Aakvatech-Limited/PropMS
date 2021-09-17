@@ -15,7 +15,7 @@
  "modified": "2020-03-10 13:21:25.083309",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
- "name": "Viva Daily Checklist",
+ "name": "Daily Checklist",
  "owner": "Administrator",
  "print_format_builder": 1,
  "print_format_type": "Jinja",
