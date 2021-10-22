@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2019-01-10 09:46:13.704896",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -13,6 +14,8 @@
   "damage_charge_item",
   "section_break_8",
   "column_break_10",
+  "section_break_9",
+  "invoice_start_date",
   "section_break_12",
   "group_maintenance_job_items",
   "submit_maintenance_invoice",
@@ -97,10 +100,21 @@
    "fieldtype": "Link",
    "label": "Self Consumption Customer",
    "options": "Customer"
+  },
+  {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "invoice_start_date",
+   "fieldtype": "Date",
+   "label": "Invoice Start Date"
   }
  ],
+ "index_web_pages_for_search": 1,
  "issingle": 1,
- "modified": "2020-09-19 05:29:24.583850",
+ "links": [],
+ "modified": "2021-09-27 12:28:52.887903",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",
