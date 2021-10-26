@@ -15,7 +15,7 @@
   "location_no",
   "status",
   "duplicate_of",
-  "disable"
+  "disabled"
  ],
  "fields": [
   {
@@ -60,14 +60,14 @@
   },
   {
    "default": "0",
-   "fieldname": "disable",
+   "fieldname": "disabled",
    "fieldtype": "Check",
-   "label": "Disable?"
+   "label": "Disabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-21 13:47:09.188141",
+ "modified": "2021-10-26 15:30:23.859967",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Key Set",
