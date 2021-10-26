@@ -21,7 +21,8 @@ frappe.ui.form.on("Key Set Detail","onload",function(){
 cur_frm.set_query("key_set", function() {
     return {
         filters: {
-            'status': 'In'
+            'status': 'In',
+            'disabled': 0
         }
     }
 });
