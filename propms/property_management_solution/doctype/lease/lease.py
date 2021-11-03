@@ -3,11 +3,12 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
+from datetime import datetime
 import frappe
 from frappe.model.document import Document
 from frappe.utils import add_days, today, getdate, add_months
 from propms.auto_custom import app_error_log, makeInvoiceSchedule, getDateMonthDiff
-
+from datetime import datetime
 
 class Lease(Document):
     def on_submit(self):
@@ -174,8 +175,9 @@ def make_lease_invoice_schedule(leasedoc):
                 invoice_qty = float(frequency_factor)
                 end_date = lease.end_date
                 invoice_date = lease.start_date
+                date_invoice_start_date = datetime.strptime(invoice_start_date, '%Y-%m-%d').date()
                 # Find out the first invoice date on or after Invoice Start Date process.
-                while end_date >= invoice_date and invoice_date < invoice_start_date:
+                while end_date >= invoice_date and invoice_date < date_invoice_start_date:
                     invoice_period_end = add_days(
                         add_months(invoice_date, frequency_factor), -1
                     )
