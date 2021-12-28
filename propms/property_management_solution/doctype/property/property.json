@@ -71,6 +71,7 @@
   {
    "fieldname": "photo",
    "fieldtype": "Attach Image",
+   "hidden": 1,
    "label": "Photo"
   },
   {
@@ -238,8 +239,9 @@
   }
  ],
  "icon": "octicon octicon-home",
+ "image_field": "photo",
  "links": [],
- "modified": "2021-09-17 11:46:13.065177",
+ "modified": "2021-12-28 10:41:16.765776",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property",
