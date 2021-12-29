@@ -13,6 +13,7 @@
   "identification_section",
   "name1",
   "parent_property",
+  "is_group",
   "column_break_2",
   "photo",
   "company",
@@ -43,7 +44,10 @@
   "property_meters_section",
   "property_meter_reading",
   "description_section",
-  "description"
+  "description",
+  "lft",
+  "rgt",
+  "old_parent"
  ],
  "fields": [
   {
@@ -56,6 +60,7 @@
    "fieldname": "name1",
    "fieldtype": "Data",
    "label": "Name",
+   "reqd": 1,
    "unique": 1
   },
   {
@@ -236,15 +241,53 @@
    "label": "Company",
    "options": "Company",
    "reqd": 1
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Old Parent",
+   "options": "Property",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parent_property",
+   "fieldtype": "Link",
+   "label": "Parent property",
+   "options": "Property"
   }
  ],
  "icon": "octicon octicon-home",
  "image_field": "photo",
+ "is_tree": 1,
  "links": [],
- "modified": "2021-12-28 10:50:15.777401",
+ "modified": "2021-12-29 14:57:26.678556",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property",
+ "nsm_parent_field": "parent_property",
  "owner": "Administrator",
  "permissions": [
   {
