@@ -13,10 +13,10 @@
   "identification_section",
   "name1",
   "parent_property",
-  "company",
-  "cost_center",
   "column_break_2",
   "photo",
+  "company",
+  "cost_center",
   "section_break_4",
   "unit_owner",
   "title_deed_number",
@@ -71,6 +71,7 @@
   {
    "fieldname": "photo",
    "fieldtype": "Attach Image",
+   "hidden": 1,
    "label": "Photo"
   },
   {
@@ -238,8 +239,9 @@
   }
  ],
  "icon": "octicon octicon-home",
+ "image_field": "photo",
  "links": [],
- "modified": "2021-09-17 11:46:13.065177",
+ "modified": "2021-12-28 10:50:15.777401",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property",
