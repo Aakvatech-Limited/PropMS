@@ -13,6 +13,8 @@ frappe.ui.form.on('Property', {
 				},
 			};
 		});
+
+		frm.set_query("parent_property", {is_group: 1});
 	},
 	company: function(frm) {
 		frm.set_value("cost_center", "");
