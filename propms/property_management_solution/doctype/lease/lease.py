@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import add_days, today, getdate, add_months
+from frappe.utils import add_days, today, getdate, add_months, get_datetime, now
 from propms.auto_custom import app_error_log, makeInvoiceSchedule, getDateMonthDiff
 
 
@@ -34,10 +34,18 @@ class Lease(Document):
 
     def validate(self):
         try:
-            if self.start_date <= today() <= add_months(self.end_date, -3):
+            if (
+                get_datetime(self.start_date)
+                <= get_datetime(now())
+                <= get_datetime(add_months(self.end_date, -3))
+            ):
                 frappe.db.set_value("Property", self.property, "status", "On Lease")
                 frappe.msgprint("Property set to On Lease")
-            if add_months(self.end_date, -3) <= today() <= add_months(self.end_date, 3):
+            if (
+                get_datetime(add_months(self.end_date, -3))
+                <= get_datetime(now())
+                <= get_datetime(add_months(self.end_date, 3))
+            ):
                 frappe.db.set_value(
                     "Property", self.property, "status", "Off Lease in 3 Months"
                 )
