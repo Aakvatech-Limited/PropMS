@@ -14,7 +14,8 @@
   "shelf_no",
   "location_no",
   "status",
-  "duplicate_of"
+  "duplicate_of",
+  "disabled"
  ],
  "fields": [
   {
@@ -56,11 +57,17 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "No. of Tool Items"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-08-24 08:51:32.562766",
+ "modified": "2022-05-16 17:06:37.003473",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Tool Item Set",
