@@ -64,6 +64,17 @@
    "link_to": "Key Set",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tool Item Set",
+   "link_to": "Tool Item Set",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -99,6 +110,7 @@
    "label": "Documents",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -117,6 +129,17 @@
    "link_to": "Key Set Detail",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tool Item Record",
+   "link_to": "Tool Item Record",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -253,7 +276,7 @@
    "type": "Link"
   }
  ],
- "modified": "2021-08-03 16:19:44.501988",
+ "modified": "2022-05-16 16:58:39.426498",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property MS",
