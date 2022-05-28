@@ -32,6 +32,7 @@ def makeInvoice(
     lease_item=None,
     qty=None,
     schedule_start_date=None,
+    doctype="Sales Invoice", # Allow to create Sales Invoice or Sales Order
 ):
     """Create sales invoice from lease invoice schedule."""
     try:
@@ -45,9 +46,9 @@ def makeInvoice(
         else:
             # month qty is not fractional
             subs_end_date = add_days(add_months(schedule_start_date, qty), -1)
-        sales_invoice = frappe.get_doc(
+        doc = frappe.get_doc(
             dict(
-                doctype="Sales Invoice",
+                doctype=doctype,
                 company=company,
                 posting_date=today(),
                 items=json.loads(items),
@@ -62,12 +63,12 @@ def makeInvoice(
                 cost_center=getCostCenter(lease),
             )
         ).insert()
-        if sales_invoice.taxes_and_charges:
-            getTax(sales_invoice)
-        sales_invoice.calculate_taxes_and_totals()
+        if doc.taxes_and_charges:
+            getTax(doc)
+        doc.calculate_taxes_and_totals()
         #frappe.msgprint("Department " + str(sales_invoice.department))
-        sales_invoice.save()
-        return sales_invoice
+        doc.save()
+        return doc
     except Exception as e:
         app_error_log(frappe.session.user, str(e))
 
@@ -162,6 +163,7 @@ def leaseInvoiceAutoCreate():
                     invoice_item.lease_item,
                     invoice_item.qty,
                     invoice_item.schedule_start_date,
+                    doctype=invoice_item.document_type,
                 )
                 #frappe.msgprint("Result: " + str(res))
                 if res:
@@ -172,7 +174,7 @@ def leaseInvoiceAutoCreate():
                         frappe.db.set_value(
                             "Lease Invoice Schedule",
                             lease_invoice_schedule_name,
-                            "invoice_number",
+                            "invoice_number" if res.doctype == "Sales Invoice" else "sales_order_number",
                             res.name,
                         )
                     frappe.msgprint(
@@ -225,6 +227,7 @@ def leaseInvoiceAutoCreate():
             invoice_item.lease_item,
             invoice_item.qty,
             invoice_item.schedule_start_date,
+            doctype=invoice_item.document_type,
         )
         if res:
             # Loop through all list invoice names that were created and update them with same invoice number
@@ -233,7 +236,7 @@ def leaseInvoiceAutoCreate():
                 frappe.db.set_value(
                     "Lease Invoice Schedule",
                     lease_invoice_schedule_name,
-                    "invoice_number",
+                    "invoice_number" if res.doctype == "Sales Invoice" else "sales_order_number",
                     res.name,
                 )
             frappe.msgprint("Lease Invoice generated with number: " + str(res.name))

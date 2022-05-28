@@ -370,6 +370,7 @@ def makeInvoiceSchedule(
     tax=None,
     days_to_invoice_in_advance=None,
     invoice_item_group=None,
+    document_type="Sales Invoice",
 ):
     try:
         date_to_invoice = add_days(date, -1 * (days_to_invoice_in_advance or 0))
@@ -390,6 +391,7 @@ def makeInvoiceSchedule(
                 currency=currency,
                 tax=tax,
                 invoice_item_group=invoice_item_group,
+                document_type=document_type,
             )
         ).insert()
         # frappe.msgprint(str(doc.name))

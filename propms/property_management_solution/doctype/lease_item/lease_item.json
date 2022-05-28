@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "autoname": "LI.#####",
  "creation": "2018-05-01 22:14:35.767947",
  "description": "Percentage of Witholding tax applicable to this item",
@@ -14,7 +15,8 @@
   "charge_rate",
   "witholding_tax",
   "paid_by",
-  "invoice_item_group"
+  "invoice_item_group",
+  "document_type"
  ],
  "fields": [
   {
@@ -81,10 +83,17 @@
    "fieldtype": "Select",
    "label": "Invoice Item Group",
    "options": "1\n2\n3"
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Select",
+   "label": "Document Type",
+   "options": "Sales Invoice\nSales Order"
   }
  ],
  "istable": 1,
- "modified": "2019-12-20 00:03:30.173123",
+ "links": [],
+ "modified": "2022-05-26 16:44:32.329102",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease Item",
