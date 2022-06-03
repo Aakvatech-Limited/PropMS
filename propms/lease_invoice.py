@@ -62,7 +62,10 @@ def makeInvoice(
                 to_date=subs_end_date,
                 cost_center=getCostCenter(lease),
             )
-        ).insert()
+        )
+        if doc.doctype == "Sales Order":
+            doc.delivery_date = doc.to_date
+        doc.insert()
         if doc.taxes_and_charges:
             getTax(doc)
         doc.calculate_taxes_and_totals()
