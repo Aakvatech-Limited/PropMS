@@ -7,7 +7,7 @@ import frappe.permissions
 import frappe.share
 import json
 import traceback
-
+from frappe import _
 
 @frappe.whitelist()
 def app_error_log(title, error):
@@ -36,6 +36,8 @@ def makeInvoice(
 ):
     """Create sales invoice from lease invoice schedule."""
     try:
+        if not customer:
+            frappe.throw(_("Please select a Customer in Lease {0}").format(lease))
         company = frappe.get_value("Lease", lease, "company")
         default_tax_template = frappe.get_value(
             "Company", company, "default_tax_template"
