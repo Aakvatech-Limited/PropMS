@@ -372,6 +372,8 @@ def makeInvoiceSchedule(
     invoice_item_group=None,
     document_type="Sales Invoice",
 ):
+    if not document_type:
+        document_type = "Sales Invoice"
     try:
         date_to_invoice = add_days(date, -1 * (days_to_invoice_in_advance or 0))
         frappe.get_doc(
