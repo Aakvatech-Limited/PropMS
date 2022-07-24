@@ -219,7 +219,7 @@ def make_lease_invoice_schedule(leasedoc):
                             item.witholding_tax,
                             lease.days_to_invoice_in_advance,
                             item.invoice_item_group,
-                            item.document_type
+                            item.document_type,
                         )
                         idx += 1
                         invoice_date = add_days(invoice_period_end, 1)
@@ -257,7 +257,7 @@ def make_lease_invoice_schedule(leasedoc):
                             item.witholding_tax,
                             lease.days_to_invoice_in_advance,
                             item.invoice_item_group,
-                            item.document_type
+                            item.document_type,
                         )
                         idx += 1
                         invoice_date = add_days(invoice_period_end, 1)
@@ -322,7 +322,7 @@ def make_lease_invoice_schedule(leasedoc):
                         item.witholding_tax,
                         lease.days_to_invoice_in_advance,
                         item.invoice_item_group,
-                        item.document_type
+                        item.document_type,
                     )
                     idx += 1
                     invoice_date = add_days(invoice_period_end, 1)

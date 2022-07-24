@@ -4,5 +4,6 @@
 from __future__ import unicode_literals
 import unittest
 
+
 class TestSecurityAttendanceDetails(unittest.TestCase):
-	pass
+    pass
