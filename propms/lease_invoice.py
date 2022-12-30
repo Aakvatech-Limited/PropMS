@@ -120,11 +120,13 @@ def leaseInvoiceAutoCreate():
             filters={
                 "date_to_invoice": ["between", (invoice_start_date, today())],
                 "invoice_number": "",
+                "sales_order_number": ""
             },
             fields=[
                 "name",
                 "date_to_invoice",
                 "invoice_number",
+                "sales_order_number",
                 "parent",
                 "parent",
                 "invoice_item_group",
