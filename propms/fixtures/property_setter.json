@@ -14,7 +14,7 @@
   "property": "options",
   "property_type": "Text",
   "row_name": null,
-  "value": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff lease in 3 months\nOn lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating"
+  "value": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating"
  },
  {
   "default_value": null,
