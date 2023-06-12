@@ -271,12 +271,6 @@
    "label": "Old Parent",
    "options": "Property",
    "read_only": 1
-  },
-  {
-   "fieldname": "parent_property",
-   "fieldtype": "Link",
-   "label": "Parent property",
-   "options": "Property"
   }
  ],
  "icon": "octicon octicon-home",
