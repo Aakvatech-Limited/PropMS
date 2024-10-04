@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant</title>
+    <!-- Include Bootstrap CSS for responsiveness -->
+</head>
+
+<body>
+
+    <section class="section about-section gray-bg" id="about">
+        <div class="container">
+            <div class="row align-items-center flex-row-reverse">
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-text go-to">
+                        <h3 class="dark-color"><u>About</u></h3>
+                        <div class="row about-list">
+                            <div class="col-md-6">
+                                <div class="media">
+                                    <label>Full name</label>
+                                    <p id="user-name"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Username</label>
+                                    <p id="user-username"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Gender</label>
+                                    <p id="user-gender"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="media">
+                                    <label>E-mail</label>
+                                    <p id="user-email"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Phone</label>
+                                    <p id="user-phone"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Address</label>
+                                    <p id="user-location"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 text-center">
+                    <div class="about-avatar">
+                        <img src="" id="user-image" title="" alt="" class="rounded img-fluid">
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="counter">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <div class="count-data text-center">
+                            <p class="m-0px font-w-600">Upcoming Rent Payments</p>
+                            <div class="currency-amount">
+                                <span class="currency-symbol count h2" data-to="500" data-speed="500" id="currency">$</span>
+                                <span class="amount count h2" data-to="500" data-speed="500" id="upcoming_rent">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="count-data text-center">
+                            <p class="m-0px font-w-600">Outstanding Balances</p>
+                            <div class="currency-amount">
+                                <span class="currency-symbol count h2" data-to="500" data-speed="500" id="currency2">$</span>
+                                <span class="amount count h2" data-to="500" data-speed="500" id="all_upcoming_rent">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="count-data text-center">
+                            <p class="m-0px font-w-600">Service Requests</p>
+                            <div class="currency-amount">
+                                <span class="amount count h2" data-to="500" data-speed="500" id="lease_item_names">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="about-text go-to text-center">
+        <h3 class="dark-color"><u>Payments History</u></h3>
+    </div>
+
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Invoice Number</th>
+                        <th scope="col">Date to Invoice</th>
+                        <th scope="col">Lease Item Name</th>
+                        <th scope="col">Lease Amount</th>
+                        <th scope="col">Currency</th>
+                    </tr>
+                </thead>
+                <tbody id="payments-history-body">
+                    <!-- Dynamically filled rows will go here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

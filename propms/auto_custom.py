@@ -618,3 +618,17 @@ def get_latest_active_lease(property_id):
         return lease_details[0].name
     else:
         return ""
+
+def custom_session_start():
+    # Get the current session user
+    user = frappe.session.user
+
+    # Check if the user is not "Guest" and not "Administrator"
+    if user != "Guest" and user != "Administrator":
+        # Get user roles
+        roles = frappe.get_roles(user)
+
+        # Check if the user has the "Tenant" role
+        if "Tenant" in roles:
+            # Redirect to the tenant-dashboard page
+            frappe.local.response["home_page"] = "/app/tenant-dashboard"

@@ -1,0 +1,29 @@
+{
+ "content": null,
+ "creation": "2024-09-17 17:56:26.479508",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2024-09-20 10:05:00.967749",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "tenant-dashboard",
+ "owner": "Administrator",
+ "page_name": "tenant-dashboard",
+ "roles": [
+  {
+   "role": "Customer"
+  },
+  {
+   "role": "Administrator"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Tenant Dashboard"
+}

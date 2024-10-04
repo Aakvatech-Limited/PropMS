@@ -1,0 +1,119 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-10-01 12:54:24.677896",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "property_user_infomation_section",
+  "property_user",
+  "email",
+  "column_break_gysx",
+  "phone_number",
+  "address",
+  "naming_series",
+  "sevice_request_section",
+  "service",
+  "service_date",
+  "column_break_dicu",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "property_user_infomation_section",
+   "fieldtype": "Section Break",
+   "label": "Property User Infomation"
+  },
+  {
+   "fieldname": "property_user",
+   "fieldtype": "Data",
+   "label": "Property User"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "column_break_gysx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address"
+  },
+  {
+   "fieldname": "sevice_request_section",
+   "fieldtype": "Section Break",
+   "label": "Sevice Request"
+  },
+  {
+   "fieldname": "service",
+   "fieldtype": "Data",
+   "label": "Service"
+  },
+  {
+   "fieldname": "service_date",
+   "fieldtype": "Date",
+   "label": "Service Date"
+  },
+  {
+   "fieldname": "column_break_dicu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "TSR-.MM..YY.-"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-10-01 16:07:37.516487",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Service Request",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Customer",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
