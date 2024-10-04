@@ -75,6 +75,8 @@ after_migrate = [
     "propms.utils.create_property_setter.execute",
 ]
 
+on_session_creation = "propms.auto_custom.custom_session_start"
+
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
@@ -213,8 +215,7 @@ scheduler_events = {
     "daily": [
         "propms.auto_custom.statusChangeBeforeLeaseExpire",
         "propms.auto_custom.statusChangeAfterLeaseExpire",
-    ],
-    "cron": {"00 12 * * *": ["propms.lease_invoice.leaseInvoiceAutoCreate"]},
+    ]
 }
 
 
