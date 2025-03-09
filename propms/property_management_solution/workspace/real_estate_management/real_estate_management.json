@@ -1,20 +1,53 @@
 {
  "charts": [],
- "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Your Shortcuts</span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lease\",\"col\":4}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property\",\"col\":4}},{\"type\":\"card\",\"data\":{\"card_name\":\"Documents\",\"col\":5}}]",
+ "content": "[{\"id\":\"7IQ5o5tu3V\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shortcuts</span>\",\"col\":12}},{\"id\":\"mmDDbmrwfx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lease\",\"col\":6}},{\"id\":\"Ko3y3DNVaO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property\",\"col\":6}},{\"id\":\"nt1DT-vX4o\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents</b></span>\",\"col\":12}},{\"id\":\"4OvHczRAAh\",\"type\":\"card\",\"data\":{\"card_name\":\"Property Management\",\"col\":4}},{\"id\":\"bjKUDrqDcX\",\"type\":\"card\",\"data\":{\"card_name\":\"Utilities and Tools\",\"col\":4}},{\"id\":\"-bjzyOR-Eh\",\"type\":\"card\",\"data\":{\"card_name\":\"Keys and Security\",\"col\":4}},{\"id\":\"5Dhgd1tVx2\",\"type\":\"card\",\"data\":{\"card_name\":\"Outsourcing\",\"col\":4}},{\"id\":\"a4xwDEBSQp\",\"type\":\"card\",\"data\":{\"card_name\":\"Monitoring and Maintanance\",\"col\":4}}]",
  "creation": "2020-12-28 17:56:01.070160",
+ "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
  "hide_custom": 0,
  "idx": 0,
+ "is_hidden": 0,
  "label": "Real Estate Management",
  "links": [
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Documents",
-   "link_count": 2,
+   "label": "Property Management",
+   "link_count": 5,
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leases",
+   "link_count": 0,
+   "link_to": "Lease",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Exits",
+   "link_count": 0,
+   "link_to": "Exit",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Unit Type",
+   "link_count": 0,
+   "link_to": "Unit Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -29,18 +62,205 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Daily Checklist Detail",
+   "label": "Property Management Settings",
    "link_count": 0,
-   "link_to": "Daily Checklist Detail",
+   "link_to": "Property Management Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Monitoring and Maintanance",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Daily Checklist",
+   "link_count": 0,
+   "link_to": "Daily Checklist",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Checklist Checkup Area",
+   "link_count": 0,
+   "link_to": "Checklist Checkup Area",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Custom Error Log",
+   "link_count": 0,
+   "link_to": "Custom Error Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Keys and Security",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Key Set",
+   "link_count": 0,
+   "link_to": "Key Set",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Key Set Detail",
+   "link_count": 0,
+   "link_to": "Key Set Detail",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Guard Shift",
+   "link_count": 0,
+   "link_to": "Guard Shift",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Security Attendance",
+   "link_count": 0,
+   "link_to": "Security Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Outsourcing",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Outsourcing Shift",
+   "link_count": 0,
+   "link_to": "Outsourcing Shift",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Outsourcing Category",
+   "link_count": 0,
+   "link_to": "Outsourcing Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Outsourcing Attendance",
+   "link_count": 0,
+   "link_to": "Outsourcing Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Utilities and Tools",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Insurance",
+   "link_count": 0,
+   "link_to": "Insurance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Meter",
+   "link_count": 0,
+   "link_to": "Meter",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Meter Reading",
+   "link_count": 0,
+   "link_to": "Meter Reading",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tool Item Set",
+   "link_count": 0,
+   "link_to": "Tool Item Set",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tool Item Record",
+   "link_count": 0,
+   "link_to": "Tool Item Record",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2022-12-11 18:45:25.174279",
- "modified_by": "av-dev1@aakvatech.com",
+ "modified": "2025-03-07 16:42:45.122835",
+ "modified_by": "kwamewilfrednk@gmail.com",
  "module": "Property Management Solution",
  "name": "Real Estate Management",
+ "number_cards": [],
  "owner": "info@aakvatech.com",
  "public": 1,
  "quick_lists": [],
