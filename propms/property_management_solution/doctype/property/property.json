@@ -181,7 +181,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn Lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating"
+   "options": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn Lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating\nin renovation"
   },
   {
    "bold": 1,
@@ -277,10 +277,11 @@
  "image_field": "photo",
  "is_tree": 1,
  "links": [],
- "modified": "2021-12-29 14:57:26.678556",
+ "modified": "2025-06-27 16:13:26.914158",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property",
+ "naming_rule": "By fieldname",
  "nsm_parent_field": "parent_property",
  "owner": "Administrator",
  "permissions": [
@@ -360,8 +361,10 @@
    "write": 1
   }
  ],
- "sort_field": "modified",
+ "row_format": "Dynamic",
  "show_name_in_global_search": 1,
+ "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }
