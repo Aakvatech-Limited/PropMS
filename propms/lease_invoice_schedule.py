@@ -31,8 +31,8 @@ def make_lease_invoice_schedule():
         frappe.qb.from_(Lease)
         .select(Lease.name)
         .where(
-            (Lease.start_date <= today_date)
-            # Only check start_date, ignore end_date for inclusion
+            (Lease.start_date <= today_date)# Only check start_date, ignore end_date for inclusion
+            & (Lease.lease_status == "Active")  # Filter for active leases
         )
     )
     lease_names = [row[0] for row in frappe.db.sql(query.get_sql())]
