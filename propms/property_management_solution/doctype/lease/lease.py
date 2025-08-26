@@ -35,30 +35,24 @@ class Lease(Document):
 
     def validate(self):
         try:
-            if (
-                get_datetime(self.start_date)
-                <= get_datetime(now())
-                <= get_datetime(add_months(self.end_date, -3))
-            ):
-                frappe.db.set_value("Property", self.property, "status", "On Lease")
-                frappe.msgprint(_("Property set to On Lease"))
-            if (
-                self.skip_end_date == None
-            ):
-                if (
-                    get_datetime(add_months(self.end_date, -3))
-                    <= get_datetime(now())
-                    <= get_datetime(add_months(self.end_date, 3))
-                ):
-                    frappe.db.set_value(
-                        "Property", self.property, "status", "Off Lease in 3 Months"
-                    )
+                now_dt = get_datetime(now())
+                start_dt = get_datetime(self.start_date)
+                end_dt = get_datetime(self.end_date)
+                three_months_before_end = get_datetime(add_months(self.end_date, -3))
+                three_months_after_end = get_datetime(add_months(self.end_date, 3))
+
+                if start_dt <= now_dt <= three_months_before_end:
+                    frappe.db.set_value("Property", self.property, "status", "On Lease")
+                    frappe.msgprint(_("Property set to On Lease"))
+                elif three_months_before_end < now_dt <= three_months_after_end:
+                    frappe.db.set_value("Property", self.property, "status", "Off Lease in 3 Months")
                     frappe.msgprint(_("Property set to Off Lease in 3 Months"))
-            else:
-                frappe.db.set_value(
-                    "Property", self.property, "status", "On Lease"
-                )
-            frappe.msgprint(_("Property set to On Lease"))
+                elif now_dt > end_dt:
+                    frappe.db.set_value("Property", self.property, "status", "Available")
+                    frappe.msgprint(_("Property set to Available"))
+                else:
+                    frappe.db.set_value("Property", self.property, "status", "On Lease")
+                    frappe.msgprint(_("Property set to On Lease (default)"))
         except Exception as e:
             app_error_log(frappe.session.user, str(e))
 
