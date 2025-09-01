@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-01 10:52:20.680582",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "lease",
+  "propery",
+  "lease_date",
+  "property_owner",
+  "lease_customer"
+ ],
+ "fields": [
+  {
+   "fieldname": "propery",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Propery",
+   "options": "Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "lease_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Lease Date"
+  },
+  {
+   "fieldname": "property_owner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Property Owner",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "lease_customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Lease Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "lease",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Lease",
+   "options": "Lease",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-09-01 11:06:18.926254",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Lease Group Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
