@@ -11,6 +11,11 @@ from frappe import _
 
 
 class Lease(Document):
+    def on_cancel(self):
+        # Prevent cancellation if lease is part of a Lease Group
+        if self.lease_group:
+            frappe.throw("This lease is part of a Lease Group and cannot be cancelled individually. Please cancel from the Lease Group document.")
+        # ...existing code...
     def on_submit(self):
         try:
             checklist_doc = frappe.get_doc("Checklist Checkup Area", "Handover")

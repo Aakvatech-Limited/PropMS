@@ -1,0 +1,91 @@
+{
+ "actions": [],
+ "autoname": "format:LG-{#####}",
+ "creation": "2025-09-01 10:35:28.940452",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "lease_group_name",
+  "column_break_puoz",
+  "customer",
+  "section_break_mdga",
+  "leases",
+  "group_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "lease_group_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Lease Group Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "group_invoice",
+   "fieldtype": "Link",
+   "label": "Group Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_puoz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_mdga",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "leases",
+   "fieldtype": "Table",
+   "label": "Leases",
+   "options": "Lease Group Details"
+  }
+ ],
+ "links": [],
+ "modified": "2025-09-01 11:44:48.612374",
+ "modified_by": "Administrator",
+ "module": "Property Management Solution",
+ "name": "Lease Group",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
