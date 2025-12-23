@@ -27,7 +27,14 @@
   "allow_end_of_the_month",
   "section_break_17",
   "self_consumption_customer",
-  "generate_invoice_schedule_next_month"
+  "generate_invoice_schedule_next_month",
+  "column_break_fwvp",
+  "so_item_duplication_check",
+  "section_break_provider_prioritization",
+  "enable_provider_auto_assignment",
+  "enable_nearby_search",
+  "column_break_provider",
+  "nearby_search_radius_km"
  ],
  "fields": [
   {
@@ -148,12 +155,54 @@
    "fieldname": "make_invoice_schedule_up_to_tomorrow_only",
    "fieldtype": "Check",
    "label": "Make Invoice Schedule up to tomorrow only"
+  },
+  {
+   "fieldname": "section_break_provider_prioritization",
+   "fieldtype": "Section Break",
+   "label": "Provider Prioritization Settings"
+  },
+  {
+   "default": "0",
+   "description": "Automatically assign service providers to Issues based on prioritization rules",
+   "fieldname": "enable_provider_auto_assignment",
+   "fieldtype": "Check",
+   "label": "Enable Provider Auto-Assignment"
+  },
+  {
+   "default": "0",
+   "depends_on": "enable_provider_auto_assignment",
+   "description": "Enable geolocation-based fallback search for nearby providers",
+   "fieldname": "enable_nearby_search",
+   "fieldtype": "Check",
+   "label": "Enable Nearby Search"
+  },
+  {
+   "fieldname": "column_break_provider",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "10",
+   "depends_on": "enable_nearby_search",
+   "description": "Search radius in kilometers for nearby provider search",
+   "fieldname": "nearby_search_radius_km",
+   "fieldtype": "Float",
+   "label": "Nearby Search Radius (km)"
+  },
+  {
+   "fieldname": "column_break_fwvp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "so_item_duplication_check",
+   "fieldtype": "Check",
+   "label": "SO Item duplication check"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-06-26 16:00:42.304877",
+ "modified": "2025-12-23 07:04:05.371373",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Property Management Settings",

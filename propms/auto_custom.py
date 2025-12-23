@@ -212,15 +212,16 @@ def getIssueName(name):
 
 @frappe.whitelist()
 def validateSalesInvoiceItemDuplication(self, method):
-    for item in self.items:
-        for item_child in self.items:
-            if not item.name == item_child.name:
-                if item.item_code == item_child.item_code:
-                    frappe.throw(
-                        _("Duplicate Item Exists - {0}. Duplications are not allowed.").format(
-                            item.item_code
+    if frappe.db.get_single_value("Property Management Settings", "so_item_duplication_check"):
+        for item in self.items:
+            for item_child in self.items:
+                if not item.name == item_child.name:
+                    if item.item_code == item_child.item_code:
+                        frappe.throw(
+                            _("Duplicate Item Exists - {0}. Duplications are not allowed.").format(
+                                item.item_code
+                            )
                         )
-                    )
 
 
 @frappe.whitelist()
