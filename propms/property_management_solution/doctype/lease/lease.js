@@ -1,8 +1,28 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
 cur_frm.add_fetch('property', 'unit_owner', 'property_owner');
+cur_frm.cscript.lease_item_add = function(doc, cdt, cdn) {
+	if (!doc.lease_customer) {
+		return;
+	}
+
+	const row = locals[cdt][cdn];
+	row.paid_by = doc.lease_customer;
+	cur_frm.refresh_field('lease_item');
+};
 
 frappe.ui.form.on('Lease', {
+	lease_customer: function(frm) {
+		if (!frm.doc.lease_customer) {
+			return;
+		}
+
+		(frm.doc.lease_item || []).forEach((row) => {
+			row.paid_by = frm.doc.lease_customer;
+		});
+
+		frm.refresh_field('lease_item');
+	},
 	setup: function(frm) {
 		frm.set_query("lease_item", "lease_item", function() {
 			return {

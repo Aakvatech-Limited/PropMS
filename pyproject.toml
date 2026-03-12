@@ -1,0 +1,40 @@
+[project]
+name = "propms"
+authors = [
+    { name = "Aakvatech", email = "info@aakvatech.com" }
+]
+description = "Property Management Solution"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = []
+
+[project.scripts]
+propms-mcp = "propms.mcp.server:main"
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<16.0.0"
+erpnext = ">=15.0.0,<16.0.0"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "W",
+    "I",
+    "UP",
+    "B",
+]
+ignore = [
+    "E501",
+    "E402",
+    "E741",
+]

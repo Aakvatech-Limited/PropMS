@@ -135,6 +135,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "lease_customer.customer_name",
    "fieldname": "customer",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -328,11 +329,11 @@
   }
  ],
  "links": [],
- "modified": "2025-07-25 09:29:01.856610",
+ "modified": "2026-03-12 11:02:21.264908",
  "modified_by": "Administrator",
  "module": "Property Management Solution",
  "name": "Lease",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
