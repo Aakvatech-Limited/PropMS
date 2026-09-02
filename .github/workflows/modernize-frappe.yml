@@ -1,0 +1,12 @@
+name: Modernize Frappe Packaging
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  modernize:
+    uses: Aakvatech-Limited/frappe-maintenance/.github/workflows/modernize-frappe-reusable.yml@main
