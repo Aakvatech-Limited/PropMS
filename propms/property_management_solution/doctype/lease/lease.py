@@ -267,7 +267,7 @@ def make_lease_invoice_schedule(leasedoc):
 				"invoice_number",
 				"date_to_invoice",
 			],
-			filters={"parent": lease.name, "date_to_invoice": (">", lease.end_date)},
+			filters={"parent": lease.name, "schedule_start_date": (">", lease.end_date)},
 			parent_doctype="Lease",
 		)
 		for lease_invoice_schedule in lease_invoice_schedule_list:
@@ -340,7 +340,7 @@ def make_lease_invoice_schedule(leasedoc):
 						"date_to_invoice",
 					],
 					filters={"parent": lease.name, "lease_item": item.lease_item},
-					order_by="date_to_invoice",
+					order_by="schedule_start_date asc, creation asc",
 				)
 				# frappe.msgprint(str(lease_invoice_schedule_list))
 				# Get the latest item frequency incase lease was changed.
@@ -430,11 +430,8 @@ def make_lease_invoice_schedule(leasedoc):
 						idx += 1
 						invoice_date = add_days(invoice_period_end, 1)
 					# frappe.msgprint(str(lease_invoice_schedule))
-					# If the record already exists and invoice is generated
-					if (
-						lease_invoice_schedule.invoice_number is not None
-						and lease_invoice_schedule.invoice_number != ""
-					):
+					# If the record already exists
+					if True:
 						# frappe.msgprint("Lease Invoice Schedule retained: " + lease_invoice_schedule.name
 						# 	+ " for invoice number: " + str(lease_invoice_schedule.invoice_number)
 						# 	+ " dated " + str(lease_invoice_schedule.date_to_invoice)
@@ -457,10 +454,7 @@ def make_lease_invoice_schedule(leasedoc):
 							idx,
 						)
 						idx += 1
-					# If the invoice is not created
-					else:
-						# frappe.msgprint("Deleting schedule :" + lease_invoice_schedule.name + " dated: " + str(lease_invoice_schedule.date_to_invoice) + " for " + str(lease_invoice_schedule.lease_item))
-						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
+
 				# frappe.msgprint("first invoice_date: " + str(invoice_date), "Lease Invoice Schedule")
 				while end_date >= invoice_date:
 					invoice_period_end = add_days(add_months(invoice_date, frequency_factor), -1)
@@ -488,8 +482,6 @@ def make_lease_invoice_schedule(leasedoc):
 					)
 					idx += 1
 					invoice_date = add_days(invoice_period_end, 1)
-
-		frappe.msgprint("Completed making of invoice schedule.")
 
 	except Exception as e:
 		frappe.msgprint("Exception error! Check app error log.")
