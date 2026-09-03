@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from . import __version__ as app_version
-
 app_name = "propms"
 app_title = "Property Management Solution"
 app_publisher = "Aakvatech"
@@ -25,17 +21,17 @@ app_license = "MIT"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 page_js = {
-    "pos": "property_management_solution/point_of_sale.js",
-    "point-of-sale": "property_management_solution/point_of_sale.js",
+	"pos": "property_management_solution/point_of_sale.js",
+	"point-of-sale": "property_management_solution/point_of_sale.js",
 }
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_js = {
-    "Sales Invoice": "property_management_solution/sales_invoice.js",
-    "Journal Entry Account": "property_management_solution/journal_entry_account.js",
-    "Issue": "property_management_solution/issue.js",
-    "Company": "property_management_solution/company.js",
+	"Sales Invoice": "property_management_solution/sales_invoice.js",
+	"Journal Entry Account": "property_management_solution/journal_entry_account.js",
+	"Issue": "property_management_solution/issue.js",
+	"Company": "property_management_solution/company.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -66,13 +62,13 @@ doctype_js = {
 
 # before_install = "propms.install.before_install"
 after_install = [
-    "propms.utils.create_custom_fields.execute",
-    "propms.utils.create_property_setter.execute",
+	"propms.utils.create_custom_fields.execute",
+	"propms.utils.create_property_setter.execute",
 ]
 
 after_migrate = [
-    "propms.utils.create_custom_fields.execute",
-    "propms.utils.create_property_setter.execute",
+	"propms.utils.create_custom_fields.execute",
+	"propms.utils.create_property_setter.execute",
 ]
 
 # Desk Notifications
@@ -102,41 +98,37 @@ after_migrate = [
 
 
 doc_events = {
-    "Issue": {
-        "validate": [
-            "propms.issue_hook.validate",
-        ],
-    },
-    "Property": {
-        "validate": "propms.property_increment.validate_property_increment_settings",
-    },
-    "Material Request": {
-        "validate": "propms.auto_custom.makeSalesInvoice",
-        "on_update": "propms.auto_custom.makeSalesInvoice",
-        "on_change": "propms.auto_custom.makeSalesInvoice",
-    },
-    "Sales Order": {
-        "validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"
-    },
-    "Key Set Detail": {"on_change": "propms.auto_custom.changeStatusKeyset"},
-    "Meter Reading": {"on_submit": "propms.auto_custom.make_invoice_meter_reading"},
+	"Issue": {
+		"validate": [
+			"propms.issue_hook.validate",
+		],
+	},
+	"Property": {
+		"validate": "propms.property_increment.validate_property_increment_settings",
+	},
+	"Material Request": {
+		"validate": "propms.auto_custom.makeSalesInvoice",
+		"on_update": "propms.auto_custom.makeSalesInvoice",
+		"on_change": "propms.auto_custom.makeSalesInvoice",
+	},
+	"Sales Order": {"validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"},
+	"Key Set Detail": {"on_change": "propms.auto_custom.changeStatusKeyset"},
+	"Meter Reading": {"on_submit": "propms.auto_custom.make_invoice_meter_reading"},
 }
 
 
 scheduler_events = {
-	"daily_long": [
-		"propms.property_management_solution.doctype.lease.lease.update_lease_statuses"
+	"daily_long": ["propms.property_management_solution.doctype.lease.lease.update_lease_statuses"],
+	"daily": [
+		"propms.auto_custom.statusChangeBeforeLeaseExpire",
+		"propms.auto_custom.statusChangeAfterLeaseExpire",
+		"propms.property_increment.run_property_increment_engine",
 	],
-    "daily": [
-        "propms.auto_custom.statusChangeBeforeLeaseExpire",
-        "propms.auto_custom.statusChangeAfterLeaseExpire",
-        "propms.property_increment.run_property_increment_engine",
-    ],
-    "cron": {
-        # "00 12 * * *": ["propms.lease_invoice.leaseInvoiceAutoCreate"],
-        "00 00 * * *": ["propms.lease_invoice_schedule.make_lease_invoice_schedule"],
-        "00 12 * * *": ["propms.lease_invoice.enqueue_lease_invoice_auto_create"],
-    }
+	"cron": {
+		# "00 12 * * *": ["propms.lease_invoice.leaseInvoiceAutoCreate"],
+		"00 00 * * *": ["propms.lease_invoice_schedule.make_lease_invoice_schedule"],
+		"00 12 * * *": ["propms.lease_invoice.enqueue_lease_invoice_auto_create"],
+	},
 }
 
 

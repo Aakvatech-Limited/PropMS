@@ -1,0 +1,81 @@
+exclude: "^(node_modules/|frappe-semgrep-rules/|[.]vscode/|.*/node_modules/)"
+default_stages: [pre-commit]
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.(json|txt|csv|md|svg)$'
+      - id: end-of-file-fixer
+        exclude: '\.(json|csv|svg)$'
+      - id: check-merge-conflict
+      - id: check-ast
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: no-commit-to-branch
+        args:
+          - --branch
+          - main
+          - --branch
+          - master
+          - --branch
+          - production
+          - --branch
+          - version-14
+          - --branch
+          - version-15
+          - --branch
+          - version-16
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.2
+    hooks:
+      - id: ruff
+        name: "Run ruff import sorter"
+        args: ["--select=I", "--fix"]
+        files: '^propms/.*\.py$'
+      - id: ruff
+        name: "Run ruff linter"
+        args: ["--fix"]
+        files: '^propms/.*\.py$'
+      - id: ruff-format
+        name: "Run ruff formatter"
+        files: '^propms/.*\.py$'
+
+  - repo: local
+    hooks:
+      - id: frappe-semgrep-rules
+        name: "Frappe Semgrep Security Rules"
+        entry: bash -c 'if [ ! -d frappe-semgrep-rules/.git ]; then rm -rf frappe-semgrep-rules && GIT_TEMPLATE_DIR="" git clone --depth 1 https://github.com/frappe/semgrep-rules.git frappe-semgrep-rules; fi && semgrep scan --config ./frappe-semgrep-rules/rules --config r/python.lang.security --severity=ERROR --error --quiet "$@"' --
+        language: python
+        additional_dependencies: ["semgrep"]
+        types: [python]
+        files: '^propms/.*\.py$'
+        pass_filenames: true
+        require_serial: true
+
+      - id: full-repository-check
+        name: "Full repository check before push"
+        entry: bash -c 'if command -v pre-commit >/dev/null 2>&1; then exec pre-commit run --all-files --hook-stage pre-commit --show-diff-on-failure --color=always; else exec python3 -m pre_commit run --all-files --hook-stage pre-commit --show-diff-on-failure --color=always; fi'
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+        verbose: true
+
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.22.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ["@commitlint/config-conventional"]
+
+ci:
+  autoupdate_schedule: weekly
+  skip: [frappe-semgrep-rules, full-repository-check]
+  submodules: false

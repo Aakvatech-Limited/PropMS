@@ -1,0 +1,31 @@
+name: Semantic Commits
+
+on:
+  pull_request: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commitcheck-propms-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    name: Check Commit Messages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 200
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          check-latest: true
+
+      - name: Check commit messages
+        run: |
+          npm install @commitlint/cli @commitlint/config-conventional conventional-changelog-conventionalcommits
+          npx commitlint --verbose --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}

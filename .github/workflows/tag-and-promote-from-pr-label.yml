@@ -1,0 +1,178 @@
+name: Tag and promote from PR label
+
+on:
+  pull_request_target:
+    types:
+      - closed
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  tag-and-promote:
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        github.event.action == 'closed' ||
+        (
+          github.event.action == 'labeled' &&
+          startsWith(github.event.label.name, 'promote/')
+        )
+      )
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Determine target branch from PR labels
+        id: target
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(label => label.name);
+
+            const mapping = {
+              "promote/version-15": "version-15",
+              "promote/version-16": "version-16",
+              "promote/production": "production"
+            };
+
+            const matchedLabels = labels.filter(label => mapping[label]);
+
+            if (matchedLabels.length === 0) {
+              core.info(
+                `No promote target label found. Skipping promotion. Add one of: ${Object.keys(mapping).join(", ")}`
+              );
+              core.setOutput("should_promote", "false");
+              return;
+            }
+
+            if (matchedLabels.length > 1) {
+              core.setFailed(
+                `Multiple promote target labels found: ${matchedLabels.join(", ")}. Keep only one.`
+              );
+              return;
+            }
+
+            const matchedLabel = matchedLabels[0];
+
+            core.setOutput("should_promote", "true");
+            core.setOutput("target_branch", mapping[matchedLabel]);
+            core.setOutput("matched_label", matchedLabel);
+
+      - name: Checkout merged commit
+        if: steps.target.outputs.should_promote == 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Read version from propms.__version__
+        if: steps.target.outputs.should_promote == 'true'
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(python - <<'PY'
+          import re
+          from pathlib import Path
+
+          init_file = Path("propms/__init__.py")
+          content = init_file.read_text()
+
+          match = re.search(r'^__version__\s*=\s*["\']([^"\']+)["\']', content, re.M)
+
+          if not match:
+              raise SystemExit("Could not find __version__ in propms/__init__.py")
+
+          print(match.group(1))
+          PY
+          )
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Configure git user
+        if: steps.target.outputs.should_promote == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create and push version tag
+        if: steps.target.outputs.should_promote == 'true'
+        shell: bash
+        run: |
+          git fetch --tags
+
+          TAG="${{ steps.version.outputs.tag }}"
+          CURRENT_COMMIT="$(git rev-parse HEAD)"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            TAG_COMMIT="$(git rev-list -n 1 "$TAG")"
+
+            if [ "$TAG_COMMIT" != "$CURRENT_COMMIT" ]; then
+              echo "Tag $TAG already exists but points to $TAG_COMMIT, not current merged commit $CURRENT_COMMIT."
+              exit 1
+            fi
+
+            echo "Tag $TAG already exists and points to the current merged commit. Skipping tag creation."
+            exit 0
+          fi
+
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub release with generated title and notes
+        if: steps.target.outputs.should_promote == 'true'
+        uses: actions/github-script@v8
+        env:
+          TAG_NAME: ${{ steps.version.outputs.tag }}
+          TARGET_COMMITISH: ${{ github.event.pull_request.merge_commit_sha }}
+        with:
+          script: |
+            const tagName = process.env.TAG_NAME;
+            const targetCommitish = process.env.TARGET_COMMITISH;
+            const { owner, repo } = context.repo;
+
+            try {
+              const existingRelease = await github.rest.repos.getReleaseByTag({
+                owner,
+                repo,
+                tag: tagName
+              });
+
+              core.info(
+                `Release already exists for ${tagName}: ${existingRelease.data.html_url}. Skipping release creation.`
+              );
+              return;
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+            }
+
+            const generatedNotes = await github.rest.repos.generateReleaseNotes({
+              owner,
+              repo,
+              tag_name: tagName,
+              target_commitish: targetCommitish,
+              previous_tag_name: undefined
+            });
+
+            const release = await github.rest.repos.createRelease({
+              owner,
+              repo,
+              tag_name: tagName,
+              target_commitish: targetCommitish,
+              name: generatedNotes.data.name,
+              body: generatedNotes.data.body,
+              draft: false,
+              prerelease: false
+            });
+
+            core.info(`Created release: ${release.data.html_url}`);
+
+      - name: Promote merged commit to target branch
+        if: steps.target.outputs.should_promote == 'true'
+        shell: bash
+        run: |
+          git push origin HEAD:${{ steps.target.outputs.target_branch }}

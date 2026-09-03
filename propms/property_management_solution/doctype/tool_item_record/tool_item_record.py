@@ -6,4 +6,4 @@ from frappe.model.document import Document
 
 
 class ToolItemRecord(Document):
-    pass
+	pass

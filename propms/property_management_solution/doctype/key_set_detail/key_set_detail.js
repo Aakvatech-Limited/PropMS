@@ -26,4 +26,3 @@ cur_frm.set_query("key_set", function() {
         }
     }
 });
-

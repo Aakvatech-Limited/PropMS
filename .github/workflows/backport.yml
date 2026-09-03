@@ -1,0 +1,68 @@
+name: Backport
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  backport:
+    name: Backport PR
+    if: >
+      github.event.pull_request.merged == true
+      && contains(join(github.event.pull_request.labels.*.name, ','), 'backport-to-')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create backport PR(s)
+        uses: korthout/backport-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          label_pattern: "^backport-to-(.+)$"
+          merge_commits: "skip"
+          pull_title: "[Backport ${target_branch}] ${pull_title}"
+          pull_description: |
+            Backport of #${pull_number} to `${target_branch}`.
+
+            ---
+
+            ${pull_description}
+          copy_requested_reviewers: true
+          copy_assignees: true
+          copy_labels_pattern: "^(?!backport-to-)"
+          auto_merge_enabled: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'backport-auto-merge') }}
+
+      - name: Report backport status
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pullNumber = context.payload.pull_request.number;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pullNumber,
+              body: [
+                "⚠️ **Backport failed!**",
+                "",
+                "Automatic backport could not be completed. This is usually caused by cherry-pick conflicts or a missing target branch.",
+                "",
+                "Manual backport example:",
+                "",
+                "```bash",
+                "git checkout <target-branch>",
+                `git cherry-pick -x ${context.payload.pull_request.merge_commit_sha}`,
+                "```",
+              ].join("\\n"),
+            });

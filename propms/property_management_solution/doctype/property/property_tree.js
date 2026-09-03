@@ -5,7 +5,7 @@ frappe.treeview_settings["Property"] = {
 	root_label: "Property",
 	filters: [
 		{
-			fieldname: "company",		
+			fieldname: "company",
 			fieldtype:"Link",
 			options: "Company",
 			label: __("Company"),
