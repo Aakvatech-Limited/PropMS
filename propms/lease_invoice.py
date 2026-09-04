@@ -100,6 +100,8 @@ def makeInvoice(
 			doc.submit()
 
 		return doc
+	except frappe.ValidationError:
+		raise
 	except Exception as e:
 		app_error_log(frappe.session.user, str(e))
 
@@ -146,7 +148,6 @@ def leaseInvoiceAutoCreate():
 				"date_to_invoice",
 				"invoice_number",
 				"sales_order_number",
-				"parent",
 				"parent",
 				"invoice_item_group",
 				"lease_item",
@@ -260,6 +261,8 @@ def leaseInvoiceAutoCreate():
 			prev_currency = invoice_item.currency
 			row_num += 1  # increment by 1
 		# Create the last invoice
+		if not invoice_item:
+			return
 		res = makeInvoice(
 			invoice_item.date_to_invoice,
 			invoice_item.paid_by,
@@ -285,6 +288,7 @@ def leaseInvoiceAutoCreate():
 			frappe.msgprint(_("Lease Invoice generated with number: {0}").format(res.name))
 
 	except Exception as e:
+		frappe.log_error(frappe.get_traceback(), "Lease Invoice Auto Create failed")
 		app_error_log(frappe.session.user, str(e))
 
 

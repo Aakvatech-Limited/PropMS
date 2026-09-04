@@ -14,7 +14,7 @@ frappe.treeview_settings["Property"] = {
 	],
 
 	fields: [
-		{ fieldtype: "Data", fieldname: "property_name", label: __("New Property Name"), reqd: true },
+		{ fieldtype: "Data", fieldname: "name1", label: __("New Property Name"), reqd: true },
 		{
 			fieldtype: "Check",
 			fieldname: "is_group",

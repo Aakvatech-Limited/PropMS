@@ -45,6 +45,7 @@ class Lease(Document):
 			app_error_log(frappe.session.user, str(e))
 
 	def validate(self):
+		self.set_lease_status()
 		self.validate_days_to_invoice_in_advance()
 		try:
 			properties = self.get_all_properties()
@@ -119,7 +120,28 @@ class Lease(Document):
 			raise
 		except Exception as e:
 			app_error_log(frappe.session.user, str(e))
-		self.set_lease_status()
+
+	def validate_days_to_invoice_in_advance(self):
+		"""Prevent changing 'Days to Invoice in Advance' once invoices have been generated."""
+		if not self.is_new() and self.has_value_changed("days_to_invoice_in_advance"):
+			has_generated_invoices = any(
+				row.invoice_number or row.sales_order_number for row in (self.lease_invoice_schedule or [])
+			)
+			if not has_generated_invoices:
+				has_generated_invoices = frappe.db.exists(
+					"Lease Invoice Schedule",
+					{
+						"parent": self.name,
+						"invoice_number": ["is", "set"],
+					},
+				)
+			if has_generated_invoices:
+				frappe.throw(
+					_(
+						"Cannot change 'Days to Invoice in Advance' after invoices have been generated for this Lease."
+					),
+					title=_("Field Read Only"),
+				)
 
 	def validate_days_to_invoice_in_advance(self):
 		"""Prevent changing 'Days to Invoice in Advance' once invoices have been generated."""
@@ -153,7 +175,7 @@ class Lease(Document):
 		All other statuses are considered manual and are not overwritten.
 		"""
 
-		if self.lease_status not in get_system_controlled_statuses():
+		if self.lease_status and self.lease_status not in get_system_controlled_statuses():
 			return
 
 		status = get_status_for_lease(self)

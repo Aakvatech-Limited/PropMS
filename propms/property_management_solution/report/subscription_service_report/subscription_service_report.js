@@ -10,8 +10,8 @@ frappe.query_reports["Subscription Service Report"] = {
 				"fieldtype": "Link",
 				"options": "Item",
 				"default": "Gym services",
-				"reqd": 1
-				get_query: () => {
+				"reqd": 1,
+				"get_query": () => {
 					return {
 						filters: {
 							'item_group': "Services"
