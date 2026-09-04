@@ -163,7 +163,7 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "propms.install.before_tests"
+before_tests = "propms.tests.utils.before_tests"
 
 # Overriding Whitelisted Methods
 # ------------------------------
