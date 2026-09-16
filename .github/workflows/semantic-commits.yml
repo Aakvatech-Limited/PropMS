@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: commitcheck-propms-${{ github.event.number }}
+  group: commitcheck-${{ github.repository }}-${{ github.event.number }}
   cancel-in-progress: true
 
 jobs:

@@ -8,7 +8,12 @@ on:
 
 permissions:
   contents: write
+  issues: write
   pull-requests: read
+
+concurrency:
+  group: tag-and-promote-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
   tag-and-promote:
@@ -24,155 +29,298 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Determine target branch from PR labels
+      - name: Confirm reviewed backport target
         id: target
         uses: actions/github-script@v8
         with:
           script: |
-            const labels = context.payload.pull_request.labels.map(label => label.name);
+            const pullRequest = context.payload.pull_request;
+            const targetBranch = pullRequest.base.ref;
+            const expectedLabel = "promote/" + targetBranch;
+            const labels = pullRequest.labels.map(({ name }) => name);
+            const match = targetBranch.match(/^version-(\d+)(?:-hotfix)?$/);
 
-            const mapping = {
-              "promote/version-15": "version-15",
-              "promote/version-16": "version-16",
-              "promote/production": "production"
-            };
-
-            const matchedLabels = labels.filter(label => mapping[label]);
-
-            if (matchedLabels.length === 0) {
-              core.info(
-                `No promote target label found. Skipping promotion. Add one of: ${Object.keys(mapping).join(", ")}`
-              );
-              core.setOutput("should_promote", "false");
+            if (!match) {
+              core.info("The PR target is not a version maintenance branch. Skipping release.");
+              core.setOutput("should_release", "false");
               return;
             }
 
-            if (matchedLabels.length > 1) {
-              core.setFailed(
-                `Multiple promote target labels found: ${matchedLabels.join(", ")}. Keep only one.`
-              );
+            if (!pullRequest.title.startsWith("[Backport " + targetBranch + "]")) {
+              core.info("The PR was not created by the reviewed backport workflow. Skipping release.");
+              core.setOutput("should_release", "false");
               return;
             }
 
-            const matchedLabel = matchedLabels[0];
+            if (!labels.includes(expectedLabel)) {
+              core.info("Missing " + expectedLabel + ". Skipping release.");
+              core.setOutput("should_release", "false");
+              return;
+            }
 
-            core.setOutput("should_promote", "true");
-            core.setOutput("target_branch", mapping[matchedLabel]);
-            core.setOutput("matched_label", matchedLabel);
+            core.setOutput("should_release", "true");
+            core.setOutput("target_branch", targetBranch);
+            core.setOutput("expected_major", match[1]);
 
-      - name: Checkout merged commit
-        if: steps.target.outputs.should_promote == 'true'
+      - name: Checkout release branch
+        if: steps.target.outputs.should_release == 'true'
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          ref: ${{ steps.target.outputs.target_branch }}
           fetch-depth: 0
 
-      - name: Read version from propms.__version__
-        if: steps.target.outputs.should_promote == 'true'
-        id: version
+      - name: Detect Frappe app package
+        if: steps.target.outputs.should_release == 'true'
+        id: app
         shell: bash
         run: |
-          VERSION=$(python - <<'PY'
+          set -euo pipefail
+          mapfile -t hooks < <(find . -mindepth 2 -maxdepth 3 -type f -name hooks.py -not -path './.git/*' -print)
+          if [ "${#hooks[@]}" -ne 1 ]; then
+            echo "Expected exactly one Frappe hooks.py, found ${#hooks[@]}" >&2
+            printf '%s\n' "${hooks[@]}" >&2
+            exit 1
+          fi
+          app_dir="$(dirname "${hooks[0]}")"
+          init_file="$app_dir/__init__.py"
+          test -f "$init_file" || { echo "Missing $init_file" >&2; exit 1; }
+          echo "init_file=${init_file#./}" >> "$GITHUB_OUTPUT"
+
+      - name: Check for an existing release
+        if: steps.target.outputs.should_release == 'true'
+        id: existing
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          TARGET_BRANCH: ${{ steps.target.outputs.target_branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "$TARGET_BRANCH" --tags --force
+
+          while IFS=$'\t' read -r commit subject trailer; do
+            if [[ "$subject" =~ ^chore\(release\):\ Bumped\ to\ Version\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]] &&
+              [[ "$trailer" == "Promoted-PR: #${PR_NUMBER}" ]]; then
+              tag="v${BASH_REMATCH[1]}"
+              echo "existing=true" >> "$GITHUB_OUTPUT"
+              echo "tag=$tag" >> "$GITHUB_OUTPUT"
+              echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+              echo "commit=$commit" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done < <(git log "origin/$TARGET_BRANCH" --format='%H%x09%s%x09%b' --grep='chore(release):')
+
+          echo "existing=false" >> "$GITHUB_OUTPUT"
+
+      - name: Determine release increment
+        if: >
+          steps.target.outputs.should_release == 'true' &&
+          steps.existing.outputs.existing == 'false'
+        id: increment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const featureCommit = commits.find(({ commit }) =>
+              /^feat(?:\([^)]+\))?!?:/i.test(commit.message.split("\n", 1)[0])
+            );
+            core.setOutput("kind", featureCommit ? "minor" : "patch");
+
+      - name: Calculate release version
+        if: >
+          steps.target.outputs.should_release == 'true' &&
+          steps.existing.outputs.existing == 'false'
+        id: release
+        env:
+          EXPECTED_MAJOR: ${{ steps.target.outputs.expected_major }}
+          INCREMENT: ${{ steps.increment.outputs.kind }}
+          APP_INIT: ${{ steps.app.outputs.init_file }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
+
+          version_pattern = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
+          init_pattern = re.compile(r'(?m)^__version__\s*=\s*["\'](\d+)\.(\d+)\.(\d+)["\']$')
+          init_file = Path(os.environ["APP_INIT"])
+          content = init_file.read_text(encoding="utf-8")
+          match = init_pattern.search(content)
+          if not match:
+              raise SystemExit(f"Could not read a semantic __version__ from {init_file}")
+
+          expected_major = int(os.environ["EXPECTED_MAJOR"])
+          declared_version = tuple(map(int, match.groups()))
+          if declared_version[0] != expected_major:
+              raise SystemExit(
+                  f"Target branch expects major {expected_major}, but declared version is "
+                  f"{'.'.join(map(str, declared_version))}."
+              )
+
+          tags = subprocess.check_output(("git", "tag", "--list", "v*"), text=True).splitlines()
+          versions = []
+          for tag in tags:
+              parsed = version_pattern.fullmatch(tag)
+              if parsed and int(parsed.group(1)) == expected_major:
+                  versions.append(tuple(map(int, parsed.groups())))
+
+          current = max(versions, default=declared_version)
+          if os.environ["INCREMENT"] == "minor":
+              next_version = (current[0], current[1] + 1, 0)
+          else:
+              next_version = (current[0], current[1], current[2] + 1)
+
+          version = ".".join(map(str, next_version))
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as output:
+              output.write(f"version={version}\n")
+              output.write(f"tag=v{version}\n")
+          PY
+
+      - name: Create release commit
+        if: >
+          steps.target.outputs.should_release == 'true' &&
+          steps.existing.outputs.existing == 'false'
+        id: release_commit
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          TARGET_BRANCH: ${{ steps.target.outputs.target_branch }}
+          VERSION: ${{ steps.release.outputs.version }}
+          APP_INIT: ${{ steps.app.outputs.init_file }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$TARGET_BRANCH"
+          git checkout --detach "origin/$TARGET_BRANCH"
+
+          python3 - <<'PY'
+          import os
           import re
           from pathlib import Path
 
-          init_file = Path("propms/__init__.py")
-          content = init_file.read_text()
-
-          match = re.search(r'^__version__\s*=\s*["\']([^"\']+)["\']', content, re.M)
-
-          if not match:
-              raise SystemExit("Could not find __version__ in propms/__init__.py")
-
-          print(match.group(1))
-          PY
+          init_file = Path(os.environ["APP_INIT"])
+          content = init_file.read_text(encoding="utf-8")
+          updated, count = re.subn(
+              r'(?m)^__version__\s*=\s*["\'][^"\'\r\n]+["\']$',
+              f'__version__ = "{os.environ["VERSION"]}"',
+              content,
+              count=1,
           )
+          if count != 1:
+              raise SystemExit("Could not update exactly one __version__ assignment")
+          init_file.write_text(updated, encoding="utf-8")
+          PY
 
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Configure git user
-        if: steps.target.outputs.should_promote == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --check
+          git add "$APP_INIT"
+          git commit -m "chore(release): Bumped to Version $VERSION" -m "Promoted-PR: #$PR_NUMBER"
+          git push origin "HEAD:$TARGET_BRANCH"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Create and push version tag
-        if: steps.target.outputs.should_promote == 'true'
+        if: >
+          steps.target.outputs.should_release == 'true' &&
+          steps.existing.outputs.existing == 'false'
+        env:
+          RELEASE_COMMIT: ${{ steps.release_commit.outputs.commit }}
+          TAG: ${{ steps.release.outputs.tag }}
         shell: bash
         run: |
-          git fetch --tags
-
-          TAG="${{ steps.version.outputs.tag }}"
-          CURRENT_COMMIT="$(git rev-parse HEAD)"
-
+          set -euo pipefail
+          git fetch --tags --force
           if git rev-parse "$TAG" >/dev/null 2>&1; then
-            TAG_COMMIT="$(git rev-list -n 1 "$TAG")"
-
-            if [ "$TAG_COMMIT" != "$CURRENT_COMMIT" ]; then
-              echo "Tag $TAG already exists but points to $TAG_COMMIT, not current merged commit $CURRENT_COMMIT."
-              exit 1
-            fi
-
-            echo "Tag $TAG already exists and points to the current merged commit. Skipping tag creation."
+            tag_commit="$(git rev-list -n 1 "$TAG")"
+            [ "$tag_commit" = "$RELEASE_COMMIT" ] || exit 1
             exit 0
           fi
-
-          git tag -a "$TAG" -m "Release $TAG"
+          git tag -a "$TAG" "$RELEASE_COMMIT" -m "Release $TAG"
           git push origin "$TAG"
 
-      - name: Create GitHub release with generated title and notes
-        if: steps.target.outputs.should_promote == 'true'
+      - name: Create categorized GitHub release notes
+        if: steps.target.outputs.should_release == 'true'
         uses: actions/github-script@v8
         env:
-          TAG_NAME: ${{ steps.version.outputs.tag }}
-          TARGET_COMMITISH: ${{ github.event.pull_request.merge_commit_sha }}
+          TAG_NAME: ${{ steps.existing.outputs.tag || steps.release.outputs.tag }}
         with:
           script: |
-            const tagName = process.env.TAG_NAME;
-            const targetCommitish = process.env.TARGET_COMMITISH;
             const { owner, repo } = context.repo;
+            const tagName = process.env.TAG_NAME;
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner,
+              repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const categories = [
+              ["Breaking Changes", []],
+              ["New Features", []],
+              ["Bug Fixes", []],
+              ["Performance Improvements", []],
+              ["Other Changes", []],
+            ];
+            const excluded = new Set(["build", "chore", "ci", "docs", "refactor", "style", "test"]);
 
-            try {
-              const existingRelease = await github.rest.repos.getReleaseByTag({
-                owner,
-                repo,
-                tag: tagName
-              });
-
-              core.info(
-                `Release already exists for ${tagName}: ${existingRelease.data.html_url}. Skipping release creation.`
-              );
-              return;
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error;
-              }
+            for (const { sha, commit } of commits) {
+              const subject = commit.message.split("\n", 1)[0];
+              const match = subject.match(/^(\w+)(?:\([^)]+\))?(!)?:\s+(.+)$/i);
+              const type = match?.[1]?.toLowerCase();
+              const summary = match?.[3] || subject;
+              const breaking = Boolean(match?.[2]) || /BREAKING CHANGE:/im.test(commit.message);
+              const category = breaking ? 0
+                : type === "feat" ? 1
+                : type === "fix" ? 2
+                : type === "perf" ? 3
+                : excluded.has(type) ? null : 4;
+              if (category !== null) categories[category][1].push("- " + summary + " (" + sha.slice(0, 7) + ")");
             }
 
-            const generatedNotes = await github.rest.repos.generateReleaseNotes({
+            const sections = categories
+              .filter(([, entries]) => entries.length)
+              .map(([title, entries]) => "## " + title + "\n\n" + entries.join("\n"));
+            const body = [
+              "Changes from pull request #" + context.payload.pull_request.number + ".",
+              sections.length ? sections.join("\n\n") : "No user-facing changes.",
+            ].join("\n\n");
+            const releaseData = { name: "Release " + tagName, body, draft: false, prerelease: false };
+
+            try {
+              const { data: release } = await github.rest.repos.getReleaseByTag({ owner, repo, tag: tagName });
+              await github.rest.repos.updateRelease({ owner, repo, release_id: release.id, ...releaseData });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.repos.createRelease({ owner, repo, tag_name: tagName, ...releaseData });
+            }
+
+      - name: Comment on the reviewed backport PR
+        if: >
+          steps.target.outputs.should_release == 'true' &&
+          steps.existing.outputs.existing == 'false'
+        uses: actions/github-script@v8
+        env:
+          TAG_NAME: ${{ steps.release.outputs.tag }}
+          TARGET_BRANCH: ${{ steps.target.outputs.target_branch }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const tagName = process.env.TAG_NAME;
+            await github.rest.issues.createComment({
               owner,
               repo,
-              tag_name: tagName,
-              target_commitish: targetCommitish,
-              previous_tag_name: undefined
+              issue_number: context.payload.pull_request.number,
+              body: [
+                "## Release created",
+                "",
+                "- Tag: " + tagName,
+                "- Target branch: " + process.env.TARGET_BRANCH,
+                "- Release commit: chore(release): Bumped to Version " + tagName.slice(1),
+                "- Release: https://github.com/" + owner + "/" + repo + "/releases/tag/" + tagName,
+              ].join("\n"),
             });
-
-            const release = await github.rest.repos.createRelease({
-              owner,
-              repo,
-              tag_name: tagName,
-              target_commitish: targetCommitish,
-              name: generatedNotes.data.name,
-              body: generatedNotes.data.body,
-              draft: false,
-              prerelease: false
-            });
-
-            core.info(`Created release: ${release.data.html_url}`);
-
-      - name: Promote merged commit to target branch
-        if: steps.target.outputs.should_promote == 'true'
-        shell: bash
-        run: |
-          git push origin HEAD:${{ steps.target.outputs.target_branch }}
