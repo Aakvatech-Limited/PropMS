@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: precommit-propms-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  group: precommit-${{ github.repository }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
