@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: linters-propms-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  group: linters-${{ github.repository }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,26 +26,38 @@ jobs:
           python-version: "3.11"
           cache: pip
 
+      - name: Detect Frappe app package
+        id: app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t hooks < <(find . -mindepth 2 -maxdepth 3 -type f -name hooks.py -not -path './.git/*' -print)
+          if [ "${#hooks[@]}" -ne 1 ]; then
+            echo "Expected exactly one Frappe hooks.py, found ${#hooks[@]}" >&2
+            printf '%s\n' "${hooks[@]}" >&2
+            exit 1
+          fi
+          app_dir="$(dirname "${hooks[0]}")"
+          echo "app_dir=${app_dir#./}" >> "$GITHUB_OUTPUT"
+
       - name: Download Semgrep rules
         run: git clone --depth 1 https://github.com/frappe/semgrep-rules.git frappe-semgrep-rules
 
       - name: Install Semgrep
         run: pip install semgrep
 
-      # Blocking: real bugs and security issues only
       - name: Run Semgrep rules
         run: |
           semgrep scan --config ./frappe-semgrep-rules/rules \
             --config r/python.lang.security \
-            --severity=ERROR --error propms
+            --severity=ERROR --error "${{ steps.app.outputs.app_dir }}"
 
-      # Informational: style and i18n warnings, never fails the build
       - name: Semgrep warnings (non-blocking)
         if: always()
         run: |
           semgrep scan --config ./frappe-semgrep-rules/rules \
             --config r/python.lang.security \
-            --severity=WARNING propms || true
+            --severity=WARNING "${{ steps.app.outputs.app_dir }}" || true
 
   deps-vulnerable-check:
     name: Vulnerable Dependency Check
