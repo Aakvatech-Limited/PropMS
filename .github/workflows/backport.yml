@@ -14,6 +14,13 @@ jobs:
     if: >
       github.event.pull_request.merged == true
       && contains(join(github.event.pull_request.labels.*.name, ','), 'backport-to-')
+      && (
+        github.event.action == 'closed'
+        || (
+          github.event.action == 'labeled'
+          && startsWith(github.event.label.name, 'backport-to-')
+        )
+      )
     runs-on: ubuntu-latest
 
     steps:
