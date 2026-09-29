@@ -77,9 +77,6 @@
   },
   {
    "role": "System Manager"
-  },
-  {
-   "role": "Lease Manager"
   }
  ],
  "timeout": 0
