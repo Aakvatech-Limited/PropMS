@@ -70,6 +70,8 @@ after_migrate = [
 	"propms.utils.create_property_setter.execute",
 ]
 
+after_uninstall = "propms.uninstall.after_uninstall"
+
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
