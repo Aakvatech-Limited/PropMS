@@ -3,10 +3,11 @@ from pathlib import Path
 
 import frappe
 
-
+# Roles introduced by PropMS. "Maintenance Manager" is deliberately absent: ERPNext
+# ships it on Quotation, Maintenance Schedule, Competitor and Quotation Lost Reason,
+# and Frappe grants it on Contact, so it has to outlive PropMS.
 APP_ROLES = (
 	"Property Manager",
-	"Maintenance Manager",
 	"Floor Maintenance Supervisor",
 	"Maintenance Job in-charge",
 )
@@ -86,22 +87,48 @@ def _delete_app_custom_docperms(app_doctypes):
 	frappe.db.delete("Custom DocPerm", {"role": ["in", list(APP_ROLES)]})
 
 
-def _delete_app_roles():
-	# "Has Role" is used by User, Role Profile, Report roles, and similar child tables.
-	frappe.db.delete("Has Role", {"role": ["in", list(APP_ROLES)]})
+def _is_role_still_granted(role):
+	"""True while a DocType, or a report, page or web form, still grants this role.
 
+	Keeps a role another app owns out of reach even if APP_ROLES drifts.
+	"""
+	if frappe.db.count("DocPerm", {"role": role}):
+		return True
+	if frappe.db.count("Custom DocPerm", {"role": role}):
+		return True
+	return bool(frappe.db.count("Has Role", {"role": role, "parenttype": ("!=", "User")}))
+
+
+def _disable_app_roles():
+	"""Disable the PropMS roles that nothing grants any more, rather than deleting them.
+
+	Deleting a Role drops its "Has Role" rows, which silently strips the role from users
+	and from other apps' reports. Any fixture that still grants it then recreates a
+	"Has Role" row pointing at a Role that no longer exists, which is the orphan class
+	this cleanup exists to prevent.
+	"""
 	for role in APP_ROLES:
-		if frappe.db.exists("Role", role):
-			frappe.delete_doc("Role", role, ignore_permissions=True, force=True)
+		if not frappe.db.exists("Role", role):
+			continue
+		if _is_role_still_granted(role):
+			continue
+		frappe.db.set_value("Role", role, "disabled", 1)
 
 
 def after_uninstall():
 	"""Remove PropMS customizations that Frappe leaves behind after uninstall-app."""
 	app_doctypes = _get_app_doctypes()
 
+	remaining = sorted(name for name in app_doctypes if frappe.db.exists("DocType", name))
+	if remaining:
+		# Called outside an uninstall. The custom fields and property setters below are
+		# live configuration while the DocTypes exist, so deleting them would lose data.
+		print(f"propms: {len(remaining)} DocTypes are still present (e.g. {remaining[0]}), skipping cleanup")
+		return
+
 	_delete_app_custom_docperms(app_doctypes)
 	_delete_app_custom_fields(app_doctypes)
 	_delete_app_property_setters(app_doctypes)
-	_delete_app_roles()
+	_disable_app_roles()
 
 	frappe.clear_cache()
