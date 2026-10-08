@@ -41,7 +41,17 @@ jobs:
             const match = targetBranch.match(/^version-(\d+)(?:-hotfix)?$/);
 
             if (!match) {
-              core.info("The PR target is not a version maintenance branch. Skipping release.");
+              const promotionRequested = labels.some(name => name.startsWith("promote/"));
+              if (promotionRequested) {
+                core.setFailed(
+                  "Release promotion blocked: target branch '" + targetBranch +
+                  "' does not identify a Frappe major version. " +
+                  "Use version-N or version-N-hotfix (for example, version-15-hotfix). " +
+                  "No version or tag was changed."
+                );
+                return;
+              }
+              core.info("The PR target is not a version maintenance branch and no promotion was requested. Skipping release.");
               core.setOutput("should_release", "false");
               return;
             }
@@ -111,24 +121,77 @@ jobs:
 
           echo "existing=false" >> "$GITHUB_OUTPUT"
 
-      - name: Determine release increment
-        if: >
-          steps.target.outputs.should_release == 'true' &&
-          steps.existing.outputs.existing == 'false'
-        id: increment
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const commits = await github.paginate(github.rest.pulls.listCommits, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-            const featureCommit = commits.find(({ commit }) =>
-              /^feat(?:\([^)]+\))?!?:/i.test(commit.message.split("\n", 1)[0])
-            );
-            core.setOutput("kind", featureCommit ? "minor" : "patch");
+      - name: Collect unreleased commits
+        if: steps.target.outputs.should_release == 'true'
+        id: changes
+        env:
+          EXPECTED_MAJOR: ${{ steps.target.outputs.expected_major }}
+          RELEASE_HEAD: ${{ steps.existing.outputs.existing == 'true' && format('{0}^', steps.existing.outputs.commit) || format('origin/{0}', steps.target.outputs.target_branch) }}
+          TARGET_BRANCH: ${{ steps.target.outputs.target_branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "$TARGET_BRANCH" --tags --force
+
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
+
+          release_head = os.environ["RELEASE_HEAD"]
+          expected_major = os.environ["EXPECTED_MAJOR"]
+          version_pattern = re.compile(rf"^v{re.escape(expected_major)}\.(\d+)\.(\d+)$")
+
+          tags = subprocess.check_output(
+              ("git", "tag", "--merged", release_head, "--list", f"v{expected_major}.*.*"),
+              text=True,
+          ).splitlines()
+          release_tags = [tag for tag in tags if version_pattern.fullmatch(tag)]
+          base_tag = max(
+              release_tags,
+              key=lambda tag: tuple(map(int, version_pattern.fullmatch(tag).groups())),
+              default=None,
+          )
+          commit_range = f"{base_tag}..{release_head}" if base_tag else release_head
+          raw_commits = subprocess.check_output(
+              ("git", "log", "--no-merges", "--reverse", "--format=%H%x00%s%x00%b%x00", commit_range),
+          ).split(b"\x00")
+
+          commits = []
+          for index in range(0, len(raw_commits) - 1, 3):
+              sha, subject, body = raw_commits[index : index + 3]
+              commits.append(
+                  {
+                      "sha": sha.decode("utf-8"),
+                      "subject": subject.decode("utf-8"),
+                      "body": body.decode("utf-8"),
+                  }
+              )
+
+          if not commits:
+              raise SystemExit(f"No unreleased commits found in {commit_range}")
+
+          feature_commit = next(
+              (
+                  commit
+                  for commit in commits
+                  if re.match(r"^feat(?:\([^)]+\))?!?:", commit["subject"], re.IGNORECASE)
+              ),
+              None,
+          )
+          kind = "minor" if feature_commit else "patch"
+          Path(".release-commits.json").write_text(
+              json.dumps(commits, ensure_ascii=False), encoding="utf-8"
+          )
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as output:
+              output.write(f"base_tag={base_tag or ''}\n")
+              output.write(f"count={len(commits)}\n")
+              output.write(f"kind={kind}\n")
+          print(f"Found {len(commits)} unreleased commits since {base_tag or 'the start of the branch'}.")
+          print(f"Using a {kind} release.")
+          PY
 
       - name: Calculate release version
         if: >
@@ -137,7 +200,7 @@ jobs:
         id: release
         env:
           EXPECTED_MAJOR: ${{ steps.target.outputs.expected_major }}
-          INCREMENT: ${{ steps.increment.outputs.kind }}
+          INCREMENT: ${{ steps.changes.outputs.kind }}
           APP_INIT: ${{ steps.app.outputs.init_file }}
         shell: bash
         run: |
@@ -248,17 +311,42 @@ jobs:
         if: steps.target.outputs.should_release == 'true'
         uses: actions/github-script@v8
         env:
+          BASE_TAG: ${{ steps.changes.outputs.base_tag }}
           TAG_NAME: ${{ steps.existing.outputs.tag || steps.release.outputs.tag }}
+          TARGET_BRANCH: ${{ steps.target.outputs.target_branch }}
         with:
           script: |
             const { owner, repo } = context.repo;
             const tagName = process.env.TAG_NAME;
-            const commits = await github.paginate(github.rest.pulls.listCommits, {
-              owner,
-              repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
+            const commits = require("fs").readFileSync(".release-commits.json", "utf8");
+            const unreleasedCommits = JSON.parse(commits);
+            const pullRequestReference = async (sha) => {
+              const commitUrl = "https://github.com/" + owner + "/" + repo + "/commit/" + sha;
+
+              try {
+                const pullRequests = await github.paginate(
+                  github.rest.repos.listPullRequestsAssociatedWithCommit,
+                  { owner, repo, commit_sha: sha, per_page: 100 }
+                );
+                const pullRequest =
+                  pullRequests.find(
+                    ({ merged_at, base }) =>
+                      merged_at && base.ref !== process.env.TARGET_BRANCH
+                  ) ??
+                  pullRequests.find(({ merged_at }) => merged_at) ??
+                  pullRequests[0];
+
+                if (pullRequest) {
+                  return "([#" + pullRequest.number + "](" + pullRequest.html_url + "))";
+                }
+              } catch (error) {
+                core.warning(
+                  "Could not find a pull request for " + sha.slice(0, 7) + ": " + error.message
+                );
+              }
+
+              return "([" + sha.slice(0, 7) + "](" + commitUrl + "))";
+            };
             const categories = [
               ["Breaking Changes", []],
               ["New Features", []],
@@ -268,25 +356,30 @@ jobs:
             ];
             const excluded = new Set(["build", "chore", "ci", "docs", "refactor", "style", "test"]);
 
-            for (const { sha, commit } of commits) {
-              const subject = commit.message.split("\n", 1)[0];
+            for (const { sha, subject, body } of unreleasedCommits) {
               const match = subject.match(/^(\w+)(?:\([^)]+\))?(!)?:\s+(.+)$/i);
               const type = match?.[1]?.toLowerCase();
               const summary = match?.[3] || subject;
-              const breaking = Boolean(match?.[2]) || /BREAKING CHANGE:/im.test(commit.message);
+              const breaking = Boolean(match?.[2]) || /BREAKING CHANGE:/im.test(body);
               const category = breaking ? 0
                 : type === "feat" ? 1
                 : type === "fix" ? 2
                 : type === "perf" ? 3
                 : excluded.has(type) ? null : 4;
-              if (category !== null) categories[category][1].push("- " + summary + " (" + sha.slice(0, 7) + ")");
+              if (category !== null) {
+                const originalCommit = body.match(
+                  /\(cherry picked from commit ([0-9a-f]{40})\)/i
+                )?.[1];
+                const reference = await pullRequestReference(originalCommit || sha);
+                categories[category][1].push("- " + summary + " " + reference);
+              }
             }
 
             const sections = categories
               .filter(([, entries]) => entries.length)
               .map(([title, entries]) => "## " + title + "\n\n" + entries.join("\n"));
             const body = [
-              "Changes from pull request #" + context.payload.pull_request.number + ".",
+              "Changes since " + (process.env.BASE_TAG || "the start of the branch") + ".",
               sections.length ? sections.join("\n\n") : "No user-facing changes.",
             ].join("\n\n");
             const releaseData = { name: "Release " + tagName, body, draft: false, prerelease: false };
