@@ -1,0 +1,103 @@
+{
+  "doctype": "Workspace",
+  "name": "Property Portfolio Dashboard",
+  "label": "Property Portfolio Dashboard",
+  "title": "Property Portfolio Dashboard",
+  "module": "Property Management Solution",
+  "is_standard": 1,
+  "public": 1,
+  "is_hidden": 0,
+  "icon": "home",
+  "content": "[{\"id\":\"ppd_000\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Property Portfolio</b></span>\",\"col\":12}},{\"id\":\"ppd_001\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Portfolio Properties\",\"col\":3}},{\"id\":\"ppd_002\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Available Properties KPI\",\"col\":3}},{\"id\":\"ppd_003\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Occupied Properties KPI\",\"col\":3}},{\"id\":\"ppd_004\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Vacating Properties KPI\",\"col\":3}},{\"id\":\"ppd_005\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Leases KPI\",\"col\":3}},{\"id\":\"ppd_006\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Upcoming Leases KPI\",\"col\":3}},{\"id\":\"ppd_007\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Lease Renewals KPI\",\"col\":3}},{\"id\":\"ppd_008\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Expired Leases KPI\",\"col\":3}},{\"id\":\"ppd_009\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Occupancy and Lease Lifecycle</b></span>\",\"col\":12}},{\"id\":\"ppd_010\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Property Status Mix\",\"col\":6}},{\"id\":\"ppd_011\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Lease Lifecycle Mix\",\"col\":6}},{\"id\":\"ppd_012\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Lease Movement</b></span>\",\"col\":12}},{\"id\":\"ppd_013\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Lease Starts by Month\",\"col\":6}},{\"id\":\"ppd_014\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Lease Expiries by Month\",\"col\":6}},{\"id\":\"ppd_015\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Property Operations</b></span>\",\"col\":12}},{\"id\":\"ppd_016\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Daily Checklist Trend\",\"col\":6}},{\"id\":\"ppd_017\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Security Attendance Trend\",\"col\":6}},{\"id\":\"ppd_018\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Operational Records</b></span>\",\"col\":12}},{\"id\":\"ppd_019\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Properties\",\"col\":3}},{\"id\":\"ppd_020\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leases\",\"col\":3}},{\"id\":\"ppd_021\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Exits\",\"col\":3}},{\"id\":\"ppd_022\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Checklists\",\"col\":3}}]",
+  "charts": [
+    {
+      "chart_name": "Property Status Mix",
+      "label": "Property Status Mix"
+    },
+    {
+      "chart_name": "Lease Lifecycle Mix",
+      "label": "Lease Lifecycle Mix"
+    },
+    {
+      "chart_name": "Lease Starts by Month",
+      "label": "Lease Starts by Month"
+    },
+    {
+      "chart_name": "Lease Expiries by Month",
+      "label": "Lease Expiries by Month"
+    },
+    {
+      "chart_name": "Daily Checklist Trend",
+      "label": "Daily Checklist Trend"
+    },
+    {
+      "chart_name": "Security Attendance Trend",
+      "label": "Security Attendance Trend"
+    }
+  ],
+  "number_cards": [
+    {
+      "number_card_name": "Portfolio Properties",
+      "label": "Portfolio Properties"
+    },
+    {
+      "number_card_name": "Available Properties KPI",
+      "label": "Available Properties KPI"
+    },
+    {
+      "number_card_name": "Occupied Properties KPI",
+      "label": "Occupied Properties KPI"
+    },
+    {
+      "number_card_name": "Vacating Properties KPI",
+      "label": "Vacating Properties KPI"
+    },
+    {
+      "number_card_name": "Active Leases KPI",
+      "label": "Active Leases KPI"
+    },
+    {
+      "number_card_name": "Upcoming Leases KPI",
+      "label": "Upcoming Leases KPI"
+    },
+    {
+      "number_card_name": "Lease Renewals KPI",
+      "label": "Lease Renewals KPI"
+    },
+    {
+      "number_card_name": "Expired Leases KPI",
+      "label": "Expired Leases KPI"
+    }
+  ],
+  "shortcuts": [
+    {
+      "label": "Properties",
+      "type": "DocType",
+      "link_to": "Property",
+      "doc_view": "List"
+    },
+    {
+      "label": "Leases",
+      "type": "DocType",
+      "link_to": "Lease",
+      "doc_view": "List"
+    },
+    {
+      "label": "Exits",
+      "type": "DocType",
+      "link_to": "Exit",
+      "doc_view": "List"
+    },
+    {
+      "label": "Daily Checklists",
+      "type": "DocType",
+      "link_to": "Daily Checklist",
+      "doc_view": "List"
+    }
+  ],
+  "links": [],
+  "quick_lists": [],
+  "roles": [],
+  "custom_blocks": [],
+  "parent_page": "Real Estate Management"
+}
