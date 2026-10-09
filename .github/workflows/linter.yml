@@ -47,10 +47,19 @@ jobs:
         run: pip install semgrep
 
       - name: Run Semgrep rules
+        env:
+          # Keep existing findings visible in manual full scans, but block PRs on new findings.
+          SEMGREP_BASELINE_REF: ${{ github.event.pull_request.base.sha || '' }}
+        shell: bash
         run: |
+          set -euo pipefail
+          baseline_args=()
+          if [ -n "$SEMGREP_BASELINE_REF" ]; then
+            baseline_args=(--baseline-commit "$SEMGREP_BASELINE_REF")
+          fi
           semgrep scan --config ./frappe-semgrep-rules/rules \
             --config r/python.lang.security \
-            --severity=ERROR --error "${{ steps.app.outputs.app_dir }}"
+            --severity=ERROR --error "${baseline_args[@]}" "${{ steps.app.outputs.app_dir }}"
 
       - name: Semgrep warnings (non-blocking)
         if: always()

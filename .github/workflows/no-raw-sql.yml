@@ -1,0 +1,43 @@
+name: No Raw SQL
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  no-raw-sql:
+    name: Reject raw database SQL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Locate Frappe app package
+        id: app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t hooks < <(find . -mindepth 2 -maxdepth 3 -type f -name hooks.py -not -path './.git/*' -print)
+          if [ "${#hooks[@]}" -ne 1 ]; then
+            echo "Expected exactly one Frappe hooks.py, found ${#hooks[@]}" >&2
+            exit 1
+          fi
+          echo "app_dir=$(dirname "${hooks[0]}")" >> "$GITHUB_OUTPUT"
+
+      - name: Reject raw database SQL calls
+        shell: bash
+        env:
+          APP_DIR: ${{ steps.app.outputs.app_dir }}
+        run: |
+          set -euo pipefail
+          if grep -RInE --include='*.py' \
+            'frappe\.db\.(sql|multisql)\b|(^|[^[:alnum:]_])db\.sql[[:space:]]*\(' \
+            "$APP_DIR"; then
+            echo "::error::Raw database SQL calls are not allowed. Use frappe.qb or higher-level Frappe database APIs."
+            exit 1
+          fi
+          echo "No raw database SQL calls found."
