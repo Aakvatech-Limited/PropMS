@@ -1,0 +1,16 @@
+{
+  "doctype": "Dashboard Chart",
+  "name": "Lease Lifecycle Mix",
+  "chart_name": "Lease Lifecycle Mix",
+  "chart_type": "Group By",
+  "document_type": "Lease",
+  "is_standard": 1,
+  "is_public": 1,
+  "module": "Property Management Solution",
+  "type": "Donut",
+  "timeseries": 0,
+  "filters_json": "{}",
+  "number_of_groups": 0,
+  "group_by_based_on": "lease_status",
+  "group_by_type": "Count"
+}
