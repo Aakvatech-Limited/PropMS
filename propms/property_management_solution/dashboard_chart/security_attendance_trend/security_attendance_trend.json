@@ -9,9 +9,10 @@
   "module": "Property Management Solution",
   "type": "Line",
   "timeseries": 1,
-  "filters_json": "{}",
+  "filters_json": "[]",
   "number_of_groups": 0,
   "based_on": "shift_date",
   "time_interval": "Monthly",
-  "timespan": "Last Year"
+  "timespan": "Last Year",
+  "dynamic_filters_json": "[]"
 }
