@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 
 import frappe
 from erpnext import get_company_currency, get_default_company
+from frappe.query_builder import DocType
+from frappe.query_builder.functions import Date
 from frappe.utils import (
 	add_days,
 	add_months,
@@ -18,6 +20,7 @@ from frappe.utils import (
 	get_last_day,
 	getdate,
 )
+from pypika import Order
 
 
 def execute(filters=None):
@@ -29,11 +32,6 @@ def execute(filters=None):
 def get_data(filters):
 	rows = []
 	_items_grupe = filters.get("type_name")
-	values = {
-		"company": filters["company"],
-		"from_date": filters["from_date"],
-		"to_date": filters["to_date"],
-	}
 	float_precision = cint(frappe.db.get_default("float_precision")) or 2
 	if filters.get("company"):
 		default_currency = get_company_currency(filters["company"])
@@ -41,38 +39,35 @@ def get_data(filters):
 		company = get_default_company()
 		default_currency = get_company_currency(company)
 
-	conditions = ""
-	if not filters.get("extand"):
-		conditions = "AND DATE(posting_date) BETWEEN %(from_date)s AND %(to_date)s"
-
+	invoice_table = DocType("Sales Invoice")
 	query = (
-		"""
-            SELECT
-                name as invoice_id,
-                customer,
-                base_net_total as total,
-                net_total as foreign_total,
-                currency,
-                conversion_rate as exchange_rate,
-                posting_date as date,
-                lease
-            FROM
-                `tabSales Invoice`
-            WHERE
-                docstatus = 1
-                AND company = %(company)s
-                AND lease != ""
-                AND from_date != ""
-                AND to_date != ""
-                AND is_return != 1
-            """
-		+ conditions
-		+ """
-            ORDER BY lease DESC, posting_date DESC
-            """
+		frappe.qb.from_(invoice_table)
+		.select(
+			invoice_table.name.as_("invoice_id"),
+			invoice_table.customer,
+			invoice_table.base_net_total.as_("total"),
+			invoice_table.net_total.as_("foreign_total"),
+			invoice_table.currency,
+			invoice_table.conversion_rate.as_("exchange_rate"),
+			invoice_table.posting_date.as_("date"),
+			invoice_table.lease,
+		)
+		.where(invoice_table.docstatus == 1)
+		.where(invoice_table.company == filters["company"])
+		.where(invoice_table.lease != "")
+		.where(invoice_table.from_date != "")
+		.where(invoice_table.to_date != "")
 	)
-
-	sales_invoices = frappe.db.sql(query, values, as_dict=True)
+	query = query.where(invoice_table.is_return != 1)
+	if not filters.get("extand"):
+		query = query.where(
+			Date(invoice_table.posting_date).between(filters["from_date"], filters["to_date"])
+		)
+	sales_invoices = (
+		query.orderby(invoice_table.lease, order=Order.desc).orderby(
+			invoice_table.posting_date, order=Order.desc
+		)
+	).run(as_dict=True)
 
 	for invoice in sales_invoices:
 		_items_rwos = []
@@ -89,22 +84,21 @@ def get_data(filters):
 		#     for key,value in months_obj.items():
 		#         invoice[key] = value
 
-		query_items = """
-            SELECT
-                item_code,
-                base_net_amount as item_total,
-                net_amount as item_foreign_total,
-                service_start_date as from_date,
-                service_end_date as to_date,
-                qty as quantity,
-                net_rate
-            FROM
-                `tabSales Invoice Item`
-            WHERE
-                parent = %(invoice_id)s
-            """
+		item_table = DocType("Sales Invoice Item")
+		items = (
+			frappe.qb.from_(item_table)
+			.select(
+				item_table.item_code,
+				item_table.base_net_amount.as_("item_total"),
+				item_table.net_amount.as_("item_foreign_total"),
+				item_table.service_start_date.as_("from_date"),
+				item_table.service_end_date.as_("to_date"),
+				item_table.qty.as_("quantity"),
+				item_table.net_rate,
+			)
+			.where(item_table.parent == invoice["invoice_id"])
+		).run(as_dict=True)
 
-		items = frappe.db.sql(query_items, {"invoice_id": invoice["invoice_id"]}, as_dict=True)
 		for item in items:
 			item_group = frappe.db.get_value("Item", item["item_code"], "item_group")
 			item["item_group"] = item_group
