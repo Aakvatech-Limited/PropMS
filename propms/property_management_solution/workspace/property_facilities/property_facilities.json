@@ -1,0 +1,301 @@
+{
+ "doctype": "Workspace",
+ "name": "Property Facilities",
+ "label": "Property Facilities",
+ "title": "Property Facilities",
+ "module": "Property Management Solution",
+ "public": 1,
+ "for_user": "",
+ "parent_page": "Real Estate Management",
+ "sequence_id": 2,
+ "icon": "retail",
+ "indicator_color": "",
+ "is_hidden": 0,
+ "hide_custom": 0,
+ "docstatus": 0,
+ "creation": "2026-10-09 09:42:55.580968",
+ "modified": "2026-10-09 09:42:55.580968",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "charts": [],
+ "number_cards": [],
+ "custom_blocks": [],
+ "roles": [],
+ "links": [
+  {
+   "type": "Card Break",
+   "label": "Operations",
+   "link_count": 6,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Daily Checklist",
+   "link_type": "DocType",
+   "link_to": "Daily Checklist",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Maintenance Job Cards",
+   "link_type": "DocType",
+   "link_to": "Issue",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Material Request",
+   "link_type": "DocType",
+   "link_to": "Material Request",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Meter Reading",
+   "link_type": "DocType",
+   "link_to": "Meter Reading",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Attendance",
+   "link_type": "DocType",
+   "link_to": "Security Attendance",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Attendance",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Attendance",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Custody Transactions",
+   "link_count": 2,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Key Issue & Return",
+   "link_type": "DocType",
+   "link_to": "Key Set Detail",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tool Issue & Return",
+   "link_type": "DocType",
+   "link_to": "Tool Item Record",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Masters",
+   "link_count": 5,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Checklist Checkup Area",
+   "link_type": "DocType",
+   "link_to": "Checklist Checkup Area",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Meter",
+   "link_type": "DocType",
+   "link_to": "Meter",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Guard Shift",
+   "link_type": "DocType",
+   "link_to": "Guard Shift",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Category",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Category",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Shift",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Shift",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Custody Masters",
+   "link_count": 2,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Key Set",
+   "link_type": "DocType",
+   "link_to": "Key Set",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tool Item Set",
+   "link_type": "DocType",
+   "link_to": "Tool Item Set",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Reports & Analytics",
+   "link_count": 3,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Attendance Report",
+   "link_type": "Report",
+   "link_to": "Security Attendance Report",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Security Attendance"
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Attendance Report",
+   "link_type": "Report",
+   "link_to": "Outsourcing Attendance",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Outsourcing Attendance"
+  },
+  {
+   "type": "Link",
+   "label": "Self Consumption in Maintenance Job Card",
+   "link_type": "Report",
+   "link_to": "Self Consumption in Maintenance Job Card",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Issue"
+  }
+ ],
+ "shortcuts": [
+  {
+   "label": "Daily Checklist",
+   "type": "DocType",
+   "link_to": "Daily Checklist",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Meter Reading",
+   "type": "DocType",
+   "link_to": "Meter Reading",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Security Attendance",
+   "type": "DocType",
+   "link_to": "Security Attendance",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Outsourcing Attendance",
+   "type": "DocType",
+   "link_to": "Outsourcing Attendance",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Keys in Possession",
+   "type": "DocType",
+   "link_to": "Key Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Key Set\",\"status\",\"=\",\"In\",false]]"
+  },
+  {
+   "label": "Assigned Keys",
+   "type": "DocType",
+   "link_to": "Key Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Key Set\",\"status\",\"=\",\"Out\",false]]"
+  },
+  {
+   "label": "Lost Keys",
+   "type": "DocType",
+   "link_to": "Key Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Key Set\",\"status\",\"=\",\"Lost\",false]]"
+  },
+  {
+   "label": "Tools in Possession",
+   "type": "DocType",
+   "link_to": "Tool Item Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"In\",false]]"
+  },
+  {
+   "label": "Assigned Tools",
+   "type": "DocType",
+   "link_to": "Tool Item Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"Out\",false]]"
+  },
+  {
+   "label": "Lost Tools",
+   "type": "DocType",
+   "link_to": "Tool Item Set",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"Lost\",false]]"
+  }
+ ],
+ "quick_lists": [],
+ "content": "[{\"id\":\"property_facilities-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Facilities</span>\",\"col\":12}},{\"id\":\"property_facilities-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_facilities-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Checklist\",\"col\":4}},{\"id\":\"property_facilities-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Meter Reading\",\"col\":4}},{\"id\":\"property_facilities-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Security Attendance\",\"col\":4}},{\"id\":\"property_facilities-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outsourcing Attendance\",\"col\":4}},{\"id\":\"property_facilities-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Keys in Possession\",\"col\":4}},{\"id\":\"property_facilities-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Keys\",\"col\":4}},{\"id\":\"property_facilities-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Keys\",\"col\":4}},{\"id\":\"property_facilities-10\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tools in Possession\",\"col\":4}},{\"id\":\"property_facilities-11\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Tools\",\"col\":4}},{\"id\":\"property_facilities-12\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Tools\",\"col\":4}},{\"id\":\"property_facilities-13\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"property_facilities-14\",\"type\":\"card\",\"data\":{\"card_name\":\"Custody Transactions\",\"col\":4}},{\"id\":\"property_facilities-15\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"property_facilities-16\",\"type\":\"card\",\"data\":{\"card_name\":\"Custody Masters\",\"col\":4}},{\"id\":\"property_facilities-17\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports & Analytics\",\"col\":4}}]"
+}

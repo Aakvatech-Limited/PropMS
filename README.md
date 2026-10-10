@@ -218,7 +218,7 @@ No tenant portal implementation was found in this repository. It can be consider
 - Maintenance job card extensions on Issue, including property, customer, materials required, materials billed, Sales Invoice, POS, Stock Entry, and self-consumption behavior.
 - Security and outsourcing attendance workflows with reports and print formats.
 - Key and tool custody tracking.
-- Workspaces for `Property MS` and `Real Estate Management`.
+- Real Estate Management landing workspace with Property Facilities and restricted Property Administration child workspaces; Property MS retained as a compatibility entry.
 - Print formats for attendance, daily checklist, property tax invoice, payment entry voucher, outsourcing attendance, and security attendance.
 - Custom fields and property setters created through install and migrate hooks.
 
@@ -369,8 +369,12 @@ Workspaces:
 
 | Workspace | Purpose |
 |---|---|
-| Property MS | Legacy-style property workspace with masters, documents, settings, and analytics links |
-| Real Estate Management | v15 workspace with property, lease, utility, key/security, outsourcing, monitoring, and report cards |
+| Real Estate Management | Main workspace for properties, leases, billing, collections and tax reports |
+| Property Facilities | Child workspace for checklists, maintenance, meter readings, attendance and key/tool custody |
+| Property Administration | Restricted child workspace for settings and legacy registers |
+| Property MS | Compatibility entry linking to Real Estate Management; hidden by default on new installs |
+
+See [the navigation guide and complete coverage matrix](docs/navigation.md) for routes, permissions, exclusions and migration notes.
 
 Reports included:
 

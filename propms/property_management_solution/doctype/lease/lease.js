@@ -29,10 +29,6 @@ frappe.ui.form.on('Lease', {
 	refresh: function(frm) {
 		frm.trigger("custom_set_intro");
 
-		var has_generated_invoices = (frm.doc.lease_invoice_schedule || []).some(function(row) {
-			return row.invoice_number || row.sales_order_number;
-		});
-		frm.set_df_property("days_to_invoice_in_advance", "read_only", has_generated_invoices ? 1 : 0);
 
 		cur_frm.add_custom_button(__("Make Invoice Schedule"), function() {
 			make_lease_invoice_schedule(cur_frm);
@@ -204,6 +200,10 @@ var make_lease_invoice_schedule = function(frm){
 		args: {leasedoc: doc.name},
 		callback: function(){
 			cur_frm.reload_doc();
+			frappe.show_alert({
+				message: __("Completed making of invoice schedule."),
+				indicator: "green"
+			}, 5);
 		}
 	});
 };

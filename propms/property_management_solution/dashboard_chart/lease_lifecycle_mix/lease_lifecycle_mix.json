@@ -9,9 +9,8 @@
   "module": "Property Management Solution",
   "type": "Donut",
   "timeseries": 0,
-  "filters_json": "[]",
+  "filters_json": "{}",
   "number_of_groups": 0,
   "group_by_based_on": "lease_status",
-  "group_by_type": "Count",
-  "dynamic_filters_json": "[]"
+  "group_by_type": "Count"
 }

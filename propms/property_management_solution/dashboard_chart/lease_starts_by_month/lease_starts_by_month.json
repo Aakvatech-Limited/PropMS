@@ -9,10 +9,9 @@
   "module": "Property Management Solution",
   "type": "Bar",
   "timeseries": 1,
-  "filters_json": "[]",
+  "filters_json": "{}",
   "number_of_groups": 0,
   "based_on": "start_date",
   "time_interval": "Monthly",
-  "timespan": "Last Year",
-  "dynamic_filters_json": "[]"
+  "timespan": "Last Year"
 }
