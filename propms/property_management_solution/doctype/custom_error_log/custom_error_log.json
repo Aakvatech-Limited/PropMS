@@ -13,7 +13,7 @@
  "doctype": "DocType", 
  "document_type": "System", 
  "editable_grid": 0, 
- "engine": "MyISAM", 
+ "engine": "InnoDB", 
  "fields": [
   {
    "allow_bulk_edit": 0, 
@@ -124,7 +124,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-12-18 21:18:01.379834", 
+ "modified": "2026-08-27 12:00:00.000000", 
  "modified_by": "Administrator", 
  "module": "Property Management Solution", 
  "name": "Custom Error Log", 

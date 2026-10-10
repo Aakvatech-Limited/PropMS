@@ -1,0 +1,15 @@
+{
+	"name": "propms",
+	"private": true,
+	"version": "16.0.0",
+	"description": "Property Management Solution client-side test harness",
+	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"devDependencies": {
+		"@vitest/coverage-v8": "^2.1.9",
+		"jsdom": "^25.0.1",
+		"vitest": "^2.1.9"
+	}
+}

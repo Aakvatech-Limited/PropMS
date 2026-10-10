@@ -161,7 +161,7 @@ frappe.ui.form.on('Lease', {
 
                         frm.set_intro(
                             __("This lease is a renewal of {0}, initiated by {1} on {2}.", [
-                                `<a href="/app/lease/${frm.doc.renewed_from}"><b>${frm.doc.renewed_from}</b></a>`,
+                                `<a href="/desk/lease/${frm.doc.renewed_from}"><b>${frm.doc.renewed_from}</b></a>`,
                                 `<b>${d.renewal_initiated_by || __("Unknown")}</b>`,
                                 `<b>${created_on}</b>`,
                             ]),
@@ -182,7 +182,7 @@ frappe.ui.form.on('Lease', {
 
                     frm.set_intro(
                         __("This lease has been renewed: {0} by {1} on {2}.", [
-                            `<a href="/app/lease/${d.name}"><b>${d.name}</b></a>`,
+                            `<a href="/desk/lease/${d.name}"><b>${d.name}</b></a>`,
                             `<b>${d.renewal_initiated_by || ""}</b>`,
                             `<b>${creation_time}</b>`,
                         ]),

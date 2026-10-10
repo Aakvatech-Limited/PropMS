@@ -183,11 +183,13 @@ def months_array():
 
 
 def get_rate(invoice_name, filters):
-	filters_value = " and item_code= '" + filters.get("rental") + "' "
+	item_code = filters.get("rental")
 	if filters.get("maintenance"):
-		filters_value = "and item_code = 'Service Charge - " + filters.get("rental").split()[0] + "'"
-	query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {} {}""".format(
-		"parent = '" + invoice_name + "' ", filters_value
-	)
+		item_code = "Service Charge - " + filters.get("rental").split()[0]
 
-	return frappe.db.sql(query, as_dict=True)[0].rate if len(frappe.db.sql(query, as_dict=True)) > 0 else ""
+	rows = frappe.db.sql(
+		"""SELECT rate FROM `tabSales Invoice Item` WHERE parent = %(parent)s AND item_code = %(item_code)s""",
+		{"parent": invoice_name, "item_code": item_code},
+		as_dict=True,
+	)
+	return rows[0].rate if rows else ""

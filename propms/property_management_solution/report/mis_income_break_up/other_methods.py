@@ -34,6 +34,8 @@ def get_rentals(filters):
 		return_data.append(tax)
 		return_data.append(net_rent)
 		for i in sum_monthly:
+			if i == "income":
+				continue
 			tax[i] = float(sum_monthly[i]) * 0.10
 			net_rent[i] = sum_monthly[i] - tax[i]
 	return return_data

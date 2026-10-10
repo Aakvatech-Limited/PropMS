@@ -34,7 +34,7 @@ def make_transaction(doc, for_self_consumption=False):
 	lease = get_latest_active_lease(doc.property_name)
 
 	def make_stock_entry(items_list=None, pos=None):
-		if not len(items_list) > 0:
+		if not items_list:
 			return
 
 		# Create a stock entry for purpose material issue
@@ -53,13 +53,14 @@ def make_transaction(doc, for_self_consumption=False):
 		if stock_entry_doc:
 			stock_entry_doc.insert(ignore_permissions=True)
 			stock_entry_url = frappe.utils.get_url_to_form(stock_entry_doc.doctype, stock_entry_doc.name)
-			se_msgprint = f"Stock Entry Created <a href='{stock_entry_url}'>{stock_entry_doc.name}</a>"
 			frappe.flags.ignore_account_permission = True
 			if submit_maintenance_stock_entry == 1 and not pos:
 				stock_entry_doc.submit()
 			if pos:
 				frappe.throw(_("POS Stock Entry cannot be created for Self Consumption items"))
-			frappe.msgprint(_(se_msgprint))
+			frappe.msgprint(
+				_("Stock Entry Created {0}").format(f"<a href='{stock_entry_url}'>{stock_entry_doc.name}</a>")
+			)
 			for item_row in doc.materials_billed:
 				if (
 					item_row.item
@@ -77,12 +78,16 @@ def make_transaction(doc, for_self_consumption=False):
 					frappe.db.commit()
 
 	def make_sales_invoice(items_list=None, pos=None, self_customer=None):
-		if not len(items_list) > 0 or not doc.customer:
+		if not items_list or not doc.customer:
 			return
 		default_tax_template = frappe.db.get_value("Company", company, "default_maintenance_tax_template")
 		if not default_tax_template:
 			url = frappe.utils.get_url_to_form("Company", company)
-			frappe.throw(_(f"Please Setup Default Maintenance Tax Template in <a href='{url}'>{company}</a>"))
+			frappe.throw(
+				_("Please Setup Default Maintenance Tax Template in {0}").format(
+					f"<a href='{url}'>{company}</a>"
+				)
+			)
 		if self_customer:
 			invoice_customer = self_consumption_customer
 		else:
@@ -125,14 +130,15 @@ def make_transaction(doc, for_self_consumption=False):
 		invoice_doc.save()
 		if invoice_doc:
 			invoice_url = frappe.utils.get_url_to_form(invoice_doc.doctype, invoice_doc.name)
-			si_msgprint = f"Sales invoice Created <a href='{invoice_url}'>{invoice_doc.name}</a>"
+			invoice_link = f"<a href='{invoice_url}'>{invoice_doc.name}</a>"
 			frappe.flags.ignore_account_permission = True
 			if submit_maintenance_invoice == 1 and not pos:
 				invoice_doc.submit()
 			if pos:
 				make_sales_pos_payment(invoice_doc, user_pos_profile.name)
-				si_msgprint = "POS " + si_msgprint
-			frappe.msgprint(_(si_msgprint))
+				frappe.msgprint(_("POS Sales invoice Created {0}").format(invoice_link))
+			else:
+				frappe.msgprint(_("Sales invoice Created {0}").format(invoice_link))
 			for item_row in doc.materials_billed:
 				if (
 					item_row.item

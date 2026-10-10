@@ -38,7 +38,7 @@ def make_lease_invoice_schedule():
 			# Only check start_date, ignore end_date for inclusion
 		)
 	)
-	lease_names = [row[0] for row in frappe.db.sql(query.get_sql())]
+	lease_names = [row[0] for row in query.run()]
 
 	for lease_name in lease_names:
 		try:
@@ -145,8 +145,8 @@ def make_lease_invoice_schedule():
 					# Move to first day of next period
 					invoice_date = add_days(invoice_period_end, 1)
 
-			frappe.msgprint(_(f"Completed invoice schedule for Lease: {lease.name}"))
+			frappe.msgprint(_("Completed invoice schedule for Lease: {0}").format(lease.name))
 
 		except Exception as e:
-			frappe.msgprint(_(f"Error in {lease_name}. Check app error log."))
+			frappe.msgprint(_("Error in {0}. Check app error log.").format(lease_name))
 			app_error_log(frappe.session.user, f"{lease_name}: {str(e)}")

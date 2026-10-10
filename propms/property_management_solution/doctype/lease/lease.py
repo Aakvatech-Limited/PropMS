@@ -45,6 +45,8 @@ class Lease(Document):
 			app_error_log(frappe.session.user, str(e))
 
 	def validate(self):
+		self.set_lease_status()
+		self.validate_days_to_invoice_in_advance()
 		try:
 			properties = self.get_all_properties()
 			# Lease Status Validation: Prevent multiple active leases per property
@@ -92,8 +94,8 @@ class Lease(Document):
 						frappe.db.set_value("Property", prop, "status", "Off Lease in 3 Months")
 						frappe.msgprint(
 							_(
-								f'Property "{prop}" has now been set <b>Off Lease in 3 Months</b> for Lease "{self.name}"'
-							)
+								'Property "{0}" has now been set <b>Off Lease in 3 Months</b> for Lease "{1}"'
+							).format(prop, self.name)
 						)
 					elif self.lease_status != "Draft" and (
 						get_datetime(self.start_date)
@@ -103,22 +105,65 @@ class Lease(Document):
 						frappe.db.set_value("Property", prop, "status", "On Lease")
 						frappe.msgprint(
 							_(
-								f'Property "{prop}" has now been set <b>On Lease from Active</b> for Lease "{self.name}"'
-							)
+								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
+							).format(prop, self.name)
 						)
 				else:
 					if self.lease_status != "Draft":
 						frappe.db.set_value("Property", prop, "status", "On Lease")
 						frappe.msgprint(
 							_(
-								f'Property "{prop}" has now been set <b>On Lease from Active</b> for Lease "{self.name}"'
-							)
+								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
+							).format(prop, self.name)
 						)
 		except frappe.ValidationError:
 			raise
 		except Exception as e:
 			app_error_log(frappe.session.user, str(e))
-		self.set_lease_status()
+
+	def validate_days_to_invoice_in_advance(self):
+		"""Prevent changing 'Days to Invoice in Advance' once invoices have been generated."""
+		if not self.is_new() and self.has_value_changed("days_to_invoice_in_advance"):
+			has_generated_invoices = any(
+				row.invoice_number or row.sales_order_number for row in (self.lease_invoice_schedule or [])
+			)
+			if not has_generated_invoices:
+				has_generated_invoices = frappe.db.exists(
+					"Lease Invoice Schedule",
+					{
+						"parent": self.name,
+						"invoice_number": ["is", "set"],
+					},
+				)
+			if has_generated_invoices:
+				frappe.throw(
+					_(
+						"Cannot change 'Days to Invoice in Advance' after invoices have been generated for this Lease."
+					),
+					title=_("Field Read Only"),
+				)
+
+	def validate_days_to_invoice_in_advance(self):
+		"""Prevent changing 'Days to Invoice in Advance' once invoices have been generated."""
+		if not self.is_new() and self.has_value_changed("days_to_invoice_in_advance"):
+			has_generated_invoices = any(
+				row.invoice_number or row.sales_order_number for row in (self.lease_invoice_schedule or [])
+			)
+			if not has_generated_invoices:
+				has_generated_invoices = frappe.db.exists(
+					"Lease Invoice Schedule",
+					{
+						"parent": self.name,
+						"invoice_number": ["is", "set"],
+					},
+				)
+			if has_generated_invoices:
+				frappe.throw(
+					_(
+						"Cannot change 'Days to Invoice in Advance' after invoices have been generated for this Lease."
+					),
+					title=_("Field Read Only"),
+				)
 
 	def set_lease_status(self):
 		"""
@@ -130,7 +175,7 @@ class Lease(Document):
 		All other statuses are considered manual and are not overwritten.
 		"""
 
-		if self.lease_status not in get_system_controlled_statuses():
+		if self.lease_status and self.lease_status not in get_system_controlled_statuses():
 			return
 
 		status = get_status_for_lease(self)
@@ -202,7 +247,8 @@ def update_lease_statuses():
 			),
 		)
 
-	frappe.db.commit()
+	# Scheduler entry point, not a document hook: the batch has to be durable.
+	frappe.db.commit()  # nosemgrep
 
 
 def get_status_for_lease(lease, today_date=None):
@@ -414,7 +460,7 @@ def make_lease_invoice_schedule(leasedoc):
 					invoice_date = getdate(add_days(invoice_period_end, 1))
 
 	except Exception as e:
-		frappe.msgprint("Exception error! Check app error log.")
+		frappe.msgprint(_("Exception error! Check app error log."))
 		app_error_log(frappe.session.user, str(e))
 
 
@@ -479,7 +525,7 @@ def initiate_lease_renewal(source_lease_name):
 
 	# Post a message/comment to the old lease with initiator and link details
 	comment_text = _(
-		"Lease renewal draft <a href='/app/Form/Lease/{0}'><b>{0}</b></a> has been initiated by <b>{1}</b> on <b>{2}</b>."
+		"Lease renewal draft <a href='/desk/lease/{0}'><b>{0}</b></a> has been initiated by <b>{1}</b> on <b>{2}</b>."
 	).format(new_lease.name, frappe.session.user, frappe.utils.formatdate(today()))
 	source_doc.add_comment(text=comment_text)
 

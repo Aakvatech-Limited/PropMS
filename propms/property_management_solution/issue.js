@@ -23,7 +23,7 @@ frappe.ui.form.on('Issue', {
             });
             if (item.material_status === "Bill" || item.material_status === "Self Consumption" && frm.doc.status === "Closed") {
                 if (sle_qty < item.quantity) {
-                    frappe.throw(__(`Existing stock quantity of item ${item.item} is ${sle_qty} not enough`))
+                    frappe.throw(__("Existing stock quantity of item {0} is {1}, which is not enough", [item.item, sle_qty]))
                     return
                 }
                 let child = frm.add_child("materials_billed");

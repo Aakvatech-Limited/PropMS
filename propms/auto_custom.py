@@ -428,7 +428,7 @@ def makeInvoiceSchedule(
 				doctype="Lease Invoice Schedule",
 				parent=name,
 				parentfield="lease_invoice_schedule",
-				parenttype="lease",
+				parenttype="Lease",
 				date_to_invoice=date_to_invoice,
 				schedule_start_date=date,
 				lease_item=item,

@@ -71,13 +71,19 @@ def add_node():
 
 @frappe.whitelist()
 def get_children(doctype, parent=None, company=None, is_root=False):
+	"""Tree view children. v16 rejects raw SQL expressions in filters."""
 	if is_root:
 		parent = ""
 
-	fields = ["name as value", "is_group as expandable"]
-	filters = [
-		["ifnull(`parent_property`, '')", "=", parent],
-		["company", "in", (company, None, "")],
-	]
+	filters = [["company", "in", (company, None, "")]]
+	if parent:
+		filters.append(["parent_property", "=", parent])
+	else:
+		filters.append(["parent_property", "is", "not set"])
 
-	return frappe.get_list(doctype, fields=fields, filters=filters, order_by="name")
+	return frappe.get_list(
+		doctype,
+		fields=["name as value", "is_group as expandable"],
+		filters=filters,
+		order_by="name",
+	)

@@ -28,10 +28,12 @@ def execute(filters=None):
 
 def get_data(filters):
 	rows = []
-	_from_date = "'{from_date}'".format(from_date=filters["from_date"])
-	_to_date = "'{to_date}'".format(to_date=filters["to_date"])
-	_company = "'{company}'".format(company=filters["company"])
 	_items_grupe = filters.get("type_name")
+	values = {
+		"company": filters["company"],
+		"from_date": filters["from_date"],
+		"to_date": filters["to_date"],
+	}
 	float_precision = cint(frappe.db.get_default("float_precision")) or 2
 	if filters.get("company"):
 		default_currency = get_company_currency(filters["company"])
@@ -41,9 +43,10 @@ def get_data(filters):
 
 	conditions = ""
 	if not filters.get("extand"):
-		conditions = f"AND DATE(posting_date) BETWEEN {_from_date} AND {_to_date}"
+		conditions = "AND DATE(posting_date) BETWEEN %(from_date)s AND %(to_date)s"
 
-	query = f"""
+	query = (
+		"""
             SELECT
                 name as invoice_id,
                 customer,
@@ -57,16 +60,19 @@ def get_data(filters):
                 `tabSales Invoice`
             WHERE
                 docstatus = 1
-                AND company = {_company}
+                AND company = %(company)s
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
                 AND is_return != 1
-                {conditions}
+            """
+		+ conditions
+		+ """
             ORDER BY lease DESC, posting_date DESC
             """
+	)
 
-	sales_invoices = frappe.db.sql(query, as_dict=True)
+	sales_invoices = frappe.db.sql(query, values, as_dict=True)
 
 	for invoice in sales_invoices:
 		_items_rwos = []
@@ -83,9 +89,7 @@ def get_data(filters):
 		#     for key,value in months_obj.items():
 		#         invoice[key] = value
 
-		invoice_id = "'{invoice_id}'".format(invoice_id=invoice["invoice_id"])
-
-		query_items = f"""
+		query_items = """
             SELECT
                 item_code,
                 base_net_amount as item_total,
@@ -97,10 +101,10 @@ def get_data(filters):
             FROM
                 `tabSales Invoice Item`
             WHERE
-                parent = {invoice_id}
+                parent = %(invoice_id)s
             """
 
-		items = frappe.db.sql(query_items, as_dict=True)
+		items = frappe.db.sql(query_items, {"invoice_id": invoice["invoice_id"]}, as_dict=True)
 		for item in items:
 			item_group = frappe.db.get_value("Item", item["item_code"], "item_group")
 			item["item_group"] = item_group
