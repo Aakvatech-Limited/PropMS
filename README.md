@@ -80,6 +80,20 @@ Our Property Management Solution is designed to streamline operations, enhance t
 Our solution provides a unified platform that simplifies complex property management processes, ultimately driving profitability and growth for property owners and managers.
 Property Management Solution is powered by [ERPNext](https://github.com/frappe/erpnext), the world's best 100% open source ERP and a comprehensive one system solution that includes accounting, inventory, asset management, HR & Payroll and much more.
 
+### Application Navigation
+
+| Workspace | Purpose |
+|---|---|
+| Real Estate Management | Main workspace for property masters, leases, billing, collections and tax reports |
+| Property Facilities | Maintenance, meter readings, attendance and key/tool custody |
+| Property Administration | Settings and legacy registers, restricted to Property Manager and System Manager |
+| Property Portfolio Dashboard | Existing portfolio KPI cards and charts |
+| Property MS | Compatibility entry linking to Real Estate Management |
+
+Facilities, Administration and the Portfolio Dashboard appear beneath Real Estate Management in the Frappe v15 workspace sidebar. Existing document and report permissions control access.
+
+See [the navigation guide and coverage matrix](docs/navigation.md) for usage, permissions, exclusions and migration notes.
+
 ### Install
 >Step 1: run the following commands to install PropMS app.
 
