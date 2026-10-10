@@ -3,6 +3,8 @@ from datetime import date, timedelta
 
 import frappe
 from frappe import _
+from frappe.query_builder import DocType
+from pypika import Order
 
 
 def get_residential_columns(year):
@@ -57,12 +59,17 @@ def get_residential_columns(year):
 
 def get_utility_sales_invoice(data, from_other=None, months=None):
 	total = {}
-	lease_item = "'Utility Charges' "
-	query = f""" SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {lease_item} and SIT.parent = SI.name )
-                and SI.docstatus=%s
-                ORDER by SI.customer,SI.from_date ASC""" % (1)
-
-	sales_invoices = frappe.db.sql(query, as_dict=True)
+	lease_item = "Utility Charges"
+	invoice = DocType("Sales Invoice")
+	item = DocType("Sales Invoice Item")
+	matching_invoices = frappe.qb.from_(item).select(item.parent).where(item.item_code == lease_item)
+	sales_invoices = (
+		frappe.qb.from_(invoice)
+		.select(invoice.star)
+		.where(invoice.name.isin(matching_invoices))
+		.where(invoice.docstatus == 1)
+		.orderby(invoice.customer, invoice.from_date, order=Order.asc)
+	).run(as_dict=True)
 	previuos_customer = ""
 	for i in sales_invoices:
 		lease = frappe.get_value("Lease", i.lease, "property")
@@ -177,9 +184,9 @@ def months_array():
 
 
 def get_rate(invoice_name):
-	rows = frappe.db.sql(
-		"""SELECT rate FROM `tabSales Invoice Item` WHERE parent = %(parent)s AND item_code = 'Utility Charges'""",
-		{"parent": invoice_name},
-		as_dict=True,
+	rows = frappe.get_all(
+		"Sales Invoice Item",
+		filters={"parent": invoice_name, "item_code": "Utility Charges"},
+		fields=["rate"],
 	)
 	return rows[0].rate if rows else ""
