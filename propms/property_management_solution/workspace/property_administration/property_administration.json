@@ -14,7 +14,7 @@
  "hide_custom": 0,
  "docstatus": 0,
  "creation": "2026-10-09 09:42:55.580968",
- "modified": "2026-10-09 09:42:55.580968",
+ "modified": "2026-10-10 21:32:31.848331",
  "modified_by": "Administrator",
  "owner": "Administrator",
  "charts": [],
@@ -79,5 +79,7 @@
   }
  ],
  "quick_lists": [],
- "content": "[{\"id\":\"property_administration-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Administration</span>\",\"col\":12}},{\"id\":\"property_administration-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_administration-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property Management Settings\",\"col\":4}},{\"id\":\"property_administration-4\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}},{\"id\":\"property_administration-5\",\"type\":\"card\",\"data\":{\"card_name\":\"Legacy Registers\",\"col\":4}}]"
+ "content": "[{\"id\":\"property_administration-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Administration</span>\",\"col\":12}},{\"id\":\"property_administration-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_administration-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property Management Settings\",\"col\":4}},{\"id\":\"property_administration-4\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}},{\"id\":\"property_administration-5\",\"type\":\"card\",\"data\":{\"card_name\":\"Legacy Registers\",\"col\":4}}]",
+ "standard": 1,
+ "type": "Workspace"
 }
