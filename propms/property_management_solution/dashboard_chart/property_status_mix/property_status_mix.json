@@ -9,8 +9,9 @@
   "module": "Property Management Solution",
   "type": "Donut",
   "timeseries": 0,
-  "filters_json": "{\"is_group\":0}",
+  "filters_json": "[[\"Property\",\"is_group\",\"=\",0]]",
   "number_of_groups": 0,
   "group_by_based_on": "status",
-  "group_by_type": "Count"
+  "group_by_type": "Count",
+  "dynamic_filters_json": "[]"
 }
