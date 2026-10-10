@@ -7,6 +7,18 @@ app_color = "grey"
 app_email = "info@aakvatech.com"
 app_license = "MIT"
 
+app_logo_url = "/assets/propms/images/propms.svg"
+app_home = "/desk/real-estate-management"
+add_to_apps_screen = [
+	{
+		"name": app_name,
+		"title": app_title,
+		"logo": app_logo_url,
+		"route": app_home,
+		"has_permission": "propms.navigation.has_app_permission",
+	}
+]
+
 # Includes in <head>
 # ------------------
 
