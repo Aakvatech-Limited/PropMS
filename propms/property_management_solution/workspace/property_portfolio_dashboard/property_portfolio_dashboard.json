@@ -4,7 +4,6 @@
   "label": "Property Portfolio Dashboard",
   "title": "Property Portfolio Dashboard",
   "module": "Property Management Solution",
-  "is_standard": 1,
   "public": 1,
   "is_hidden": 0,
   "icon": "home",
@@ -99,5 +98,8 @@
   "quick_lists": [],
   "roles": [],
   "custom_blocks": [],
-  "parent_page": "Real Estate Management"
+  "parent_page": "Real Estate Management",
+  "standard": 1,
+  "type": "Workspace",
+  "modified": "2026-10-10 21:32:31.848331"
 }

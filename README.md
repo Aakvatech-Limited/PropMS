@@ -372,7 +372,10 @@ Workspaces:
 | Real Estate Management | Main workspace for properties, leases, billing, collections and tax reports |
 | Property Facilities | Child workspace for checklists, maintenance, meter readings, attendance and key/tool custody |
 | Property Administration | Restricted child workspace for settings and legacy registers |
+| Property Portfolio Dashboard | Portfolio KPI cards and charts, linked from the Dock and Sidebar |
 | Property MS | Compatibility entry linking to Real Estate Management; hidden by default on new installs |
+
+On Frappe v16.50+, open **Apps → Property Management Solution** to see the app Dock: Property Management, Facilities, Portfolio Dashboard and role-restricted Administration. The module has a curated Sidebar and all workspaces are standard exports.
 
 See [the navigation guide and complete coverage matrix](docs/navigation.md) for routes, permissions, exclusions and migration notes.
 
