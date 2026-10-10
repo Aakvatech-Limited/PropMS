@@ -1,0 +1,321 @@
+{
+ "doctype": "Sidebar",
+ "name": "Property Management Solution",
+ "title": "Property Management Solution",
+ "module": "Property Management Solution",
+ "app": "propms",
+ "header_icon": "house",
+ "standard": 1,
+ "items": [
+  {
+   "type": "Link",
+   "label": "Home",
+   "link_type": "Workspace",
+   "link_to": "Real Estate Management",
+   "child": 0,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Facilities Operations",
+   "link_type": "Workspace",
+   "link_to": "Property Facilities",
+   "child": 0,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Leasing & Billing",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Lease",
+   "link_type": "DocType",
+   "link_to": "Lease",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease Exits",
+   "link_type": "DocType",
+   "link_to": "Exit",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Sales Order",
+   "link_type": "DocType",
+   "link_to": "Sales Order",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Sales Invoice",
+   "link_type": "DocType",
+   "link_to": "Sales Invoice",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Payment Entry",
+   "link_type": "DocType",
+   "link_to": "Payment Entry",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Facilities Transactions",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Daily Checklist",
+   "link_type": "DocType",
+   "link_to": "Daily Checklist",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Maintenance Job Cards",
+   "link_type": "DocType",
+   "link_to": "Issue",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Material Request",
+   "link_type": "DocType",
+   "link_to": "Material Request",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Meter Reading",
+   "link_type": "DocType",
+   "link_to": "Meter Reading",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Attendance",
+   "link_type": "DocType",
+   "link_to": "Security Attendance",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Attendance",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Attendance",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Key Issue & Return",
+   "link_type": "DocType",
+   "link_to": "Key Set Detail",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tool Issue & Return",
+   "link_type": "DocType",
+   "link_to": "Tool Item Record",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Masters",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Properties & Units",
+   "link_type": "DocType",
+   "link_to": "Property",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Unit Type",
+   "link_type": "DocType",
+   "link_to": "Unit Type",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tenants & Owners",
+   "link_type": "DocType",
+   "link_to": "Customer",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Contact",
+   "link_type": "DocType",
+   "link_to": "Contact",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Billing Items",
+   "link_type": "DocType",
+   "link_to": "Item",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Meter",
+   "link_type": "DocType",
+   "link_to": "Meter",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Key Set",
+   "link_type": "DocType",
+   "link_to": "Key Set",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tool Item Set",
+   "link_type": "DocType",
+   "link_to": "Tool Item Set",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Reports",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Lease Information",
+   "link_type": "Report",
+   "link_to": "Lease Information",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status",
+   "link_type": "Report",
+   "link_to": "Property Status",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Pending Signed Agreement",
+   "link_type": "Report",
+   "link_to": "Pending Signed Agreement",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Rent Invoices Details",
+   "link_type": "Report",
+   "link_to": "Rent Invoices Details",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Debtors Report",
+   "link_type": "Report",
+   "link_to": "Debtors Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Deposit",
+   "link_type": "Report",
+   "link_to": "Security Deposit",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Attendance Report",
+   "link_type": "Report",
+   "link_to": "Security Attendance Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Attendance Report",
+   "link_type": "Report",
+   "link_to": "Outsourcing Attendance",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Dashboards",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Property Portfolio Dashboard",
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Administration",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Property Administration",
+   "link_type": "Workspace",
+   "link_to": "Property Administration",
+   "child": 1,
+   "hidden": 0
+  }
+ ],
+ "creation": "2026-10-10 21:32:31.848331",
+ "modified": "2026-10-10 21:32:31.848331",
+ "owner": "Administrator",
+ "modified_by": "Administrator"
+}

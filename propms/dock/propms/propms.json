@@ -1,0 +1,46 @@
+{
+ "doctype": "Dock",
+ "name": "propms",
+ "app": "propms",
+ "user": "",
+ "standard": 1,
+ "mount_on": "",
+ "creation": "2026-10-10 21:32:31.848331",
+ "modified": "2026-10-10 21:32:31.848331",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "items": [
+  {
+   "link_type": "Sidebar",
+   "link_to": "Property Management Solution",
+   "title": "Property Management",
+   "icon": "house",
+   "hidden": 0,
+   "added": 0
+  },
+  {
+   "link_type": "Workspace",
+   "link_to": "Property Facilities",
+   "title": "Facilities",
+   "icon": "wrench",
+   "hidden": 0,
+   "added": 0
+  },
+  {
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
+   "title": "Portfolio Dashboard",
+   "icon": "layout-dashboard",
+   "hidden": 0,
+   "added": 0
+  },
+  {
+   "link_type": "Workspace",
+   "link_to": "Property Administration",
+   "title": "Administration",
+   "icon": "settings",
+   "hidden": 0,
+   "added": 0
+  }
+ ]
+}
