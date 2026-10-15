@@ -30,9 +30,7 @@ def execute(filters=None):
 
 def get_data(filters):
 	rows = []
-	_from_date = "'{from_date}'".format(from_date=filters["from_date"])
-	_to_date = "'{to_date}'".format(to_date=filters["to_date"])
-	_company = "'{company}'".format(company=filters["company"])
+	params = {"company": filters["company"], "from_date": filters["from_date"], "to_date": filters["to_date"]}
 	_items_grupe = filters.get("type_name")
 	float_precision = cint(frappe.db.get_default("float_precision")) or 2
 	if filters.get("company"):
@@ -43,7 +41,7 @@ def get_data(filters):
 
 	conditions = ""
 	if not filters.get("extand"):
-		conditions = f"AND DATE(posting_date) BETWEEN {_from_date} AND {_to_date}"
+		conditions = "AND DATE(posting_date) BETWEEN %(from_date)s AND %(to_date)s"
 
 	query = f"""
             SELECT
@@ -59,7 +57,7 @@ def get_data(filters):
                 `tabSales Invoice`
             WHERE
                 docstatus = 1
-                AND company = {_company}
+                AND company = %(company)s
                 AND lease != ""
                 AND from_date != ""
                 AND to_date != ""
@@ -67,7 +65,7 @@ def get_data(filters):
             ORDER BY lease DESC, posting_date ASC
             """
 
-	sales_invoices = frappe.db.sql(query, as_dict=True)
+	sales_invoices = frappe.db.sql(query, params, as_dict=True)
 
 	for invoice in sales_invoices:
 		_items_rwos = []
@@ -78,7 +76,6 @@ def get_data(filters):
 			invoice.exchange_rate = get_exchange_rate("USD", default_currency, invoice.posting_date)
 			invoice.foreign_total = invoice.total / invoice.exchange_rate
 
-		invoice_id = "'{invoice_id}'".format(invoice_id=invoice["invoice_id"])
 
 		query_items = f"""
             SELECT
@@ -92,10 +89,10 @@ def get_data(filters):
             FROM
                 `tabSales Invoice Item`
             WHERE
-                parent = {invoice_id}
+                parent = %(invoice_id)s
             """
 
-		items = frappe.db.sql(query_items, as_dict=True)
+		items = frappe.db.sql(query_items, {"invoice_id": invoice["invoice_id"]}, as_dict=True)
 		for item in items:
 			item_group = frappe.db.get_value("Item", item["item_code"], "item_group")
 			item["item_group"] = item_group
