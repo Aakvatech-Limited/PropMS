@@ -1,9 +1,9 @@
 import frappe
-from frappe.query_builder.functions import Sum
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from erpnext.stock.get_item_details import get_pos_profile
 from erpnext.utilities.product import get_price
 from frappe import _
+from frappe.query_builder.functions import Sum
 from frappe.utils import today
 
 from propms.auto_custom import get_latest_active_lease
