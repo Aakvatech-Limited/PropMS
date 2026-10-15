@@ -60,9 +60,11 @@ def get_data(filters):
 	if not filters.get("extand"):
 		query = query.where(sales_invoice.posting_date.between(filters["from_date"], filters["to_date"]))
 
-	sales_invoices = query.orderby(sales_invoice.lease, order=Order.desc).orderby(
-		sales_invoice.posting_date, order=Order.desc
-	).run(as_dict=True)
+	sales_invoices = (
+		query.orderby(sales_invoice.lease, order=Order.desc)
+		.orderby(sales_invoice.posting_date, order=Order.desc)
+		.run(as_dict=True)
+	)
 
 	for invoice in sales_invoices:
 		_items_rwos = []
