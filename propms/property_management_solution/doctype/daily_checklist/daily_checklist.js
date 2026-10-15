@@ -23,12 +23,10 @@ frappe.ui.form.on('Daily Checklist', 'area', function(frm, cdt, cdn) {
         })
     }
 })
-cur_frm.fields_dict['daily_checklist_detail'].grid.get_field('job_card').get_query = function(doc, cdt, cdn) {
-    var child = locals[cdt][cdn]
-    return {
-        filters: [
-            ['Issue', 'docstatus', '=', '0'],
-            ['Issue', 'docstatus', '=', '1']
-        ]
+frappe.ui.form.on("Daily Checklist", {
+    setup(frm) {
+        frm.set_query("job_card", "daily_checklist_detail", () => ({
+            filters: [["Issue", "docstatus", "in", [0, 1]]]
+        }));
     }
-};
+});
