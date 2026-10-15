@@ -270,7 +270,10 @@ def make_lease_invoice_schedule(leasedoc):
 			parent_doctype="Lease",
 		)
 		for lease_invoice_schedule in lease_invoice_schedule_list:
-			if not (lease_invoice_schedule.get("invoice_number") or lease_invoice_schedule.get("sales_order_number")):
+			if not (
+				lease_invoice_schedule.get("invoice_number")
+				or lease_invoice_schedule.get("sales_order_number")
+			):
 				frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 		# Only process lease that items and is current
 		if len(lease.lease_item) >= 1 and lease.end_date >= getdate(today()):
@@ -291,7 +294,10 @@ def make_lease_invoice_schedule(leasedoc):
 					parent_doctype="Lease",
 				)
 				for lease_invoice_schedule in lease_invoice_schedule_list:
-					if not (lease_invoice_schedule.get("invoice_number") or lease_invoice_schedule.get("sales_order_number")):
+					if not (
+				lease_invoice_schedule.get("invoice_number")
+				or lease_invoice_schedule.get("sales_order_number")
+			):
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			# Records of lease_items that no longer existing in lease.lease_item
 			lease_invoice_schedule_list = frappe.get_list(
@@ -317,7 +323,10 @@ def make_lease_invoice_schedule(leasedoc):
 			lease_item_name_list = [lease_item["lease_item"] for lease_item in lease_items_list]
 			for lease_invoice_schedule in lease_invoice_schedule_list:
 				if lease_invoice_schedule.lease_item not in lease_item_name_list:
-					if not (lease_invoice_schedule.get("invoice_number") or lease_invoice_schedule.get("sales_order_number")):
+					if not (
+				lease_invoice_schedule.get("invoice_number")
+				or lease_invoice_schedule.get("sales_order_number")
+			):
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			item_invoice_frequency = {
 				"Monthly": 1.00,  # .00 to make it float type
@@ -379,11 +388,15 @@ def make_lease_invoice_schedule(leasedoc):
 						add_months_value = round(last_invoiced.qty, 0) + 1
 					else:
 						add_months_value = last_invoiced.qty
-					invoice_date = getdate(add_months(getdate(last_invoiced.schedule_start_date), add_months_value))
+					invoice_date = getdate(
+						add_months(getdate(last_invoiced.schedule_start_date), add_months_value)
+					)
 				else:
 					invoice_date = getdate(lease.start_date)
 					# Advance to first invoice date on or after invoice_start_date
-					while invoice_start_date and end_date >= invoice_date and invoice_date < invoice_start_date:
+					while (
+						invoice_start_date and end_date >= invoice_date and invoice_date < invoice_start_date
+					):
 						invoice_period_end = getdate(add_days(add_months(invoice_date, frequency_factor), -1))
 						invoice_date = getdate(add_days(invoice_period_end, 1))
 
