@@ -57,12 +57,11 @@ def get_residential_columns(year):
 
 def get_utility_sales_invoice(data, from_other=None, months=None):
 	total = {}
-	lease_item = "'Utility Charges' "
-	query = f""" SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {lease_item} and SIT.parent = SI.name )
+	query = """ SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = %s and SIT.parent = SI.name )
                 and SI.docstatus=%s
-                ORDER by SI.customer,SI.from_date ASC""" % (1)
+                ORDER by SI.customer,SI.from_date ASC"""
 
-	sales_invoices = frappe.db.sql(query, as_dict=True)
+	sales_invoices = frappe.db.sql(query, ("Utility Charges", 1), as_dict=True)
 	previuos_customer = ""
 	for i in sales_invoices:
 		lease = frappe.get_value("Lease", i.lease, "property")
@@ -177,10 +176,9 @@ def months_array():
 
 
 def get_rate(invoice_name):
-	filters_value = "and item_code = 'Utility Charges'"
-	query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {} {}""".format(
-		"parent = '" + invoice_name + "' ", filters_value
+	rows = frappe.db.sql(
+		"SELECT rate FROM `tabSales Invoice Item` WHERE parent = %s AND item_code = %s",
+		(invoice_name, "Utility Charges"),
+		as_dict=True,
 	)
-	print(query)
-
-	return frappe.db.sql(query, as_dict=True)[0].rate if len(frappe.db.sql(query, as_dict=True)) > 0 else ""
+	return rows[0].rate if rows else ""
