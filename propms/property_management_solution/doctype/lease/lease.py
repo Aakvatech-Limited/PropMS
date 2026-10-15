@@ -202,8 +202,6 @@ def update_lease_statuses():
 			),
 		)
 
-	frappe.db.commit()
-
 
 def get_status_for_lease(lease, today_date=None):
 	"""
