@@ -3,6 +3,7 @@ from datetime import date, timedelta
 
 import frappe
 from frappe import _
+from frappe.query_builder import Order
 
 
 def get_residential_columns(year):
@@ -57,12 +58,22 @@ def get_residential_columns(year):
 
 def get_utility_sales_invoice(data, from_other=None, months=None):
 	total = {}
-	lease_item = "'Utility Charges' "
-	query = f""" SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {lease_item} and SIT.parent = SI.name )
-                and SI.docstatus=%s
-                ORDER by SI.customer,SI.from_date ASC""" % (1)
+	sales_invoice = frappe.qb.DocType("Sales Invoice")
+	sales_invoice_item = frappe.qb.DocType("Sales Invoice Item")
+	matching_invoices = (
+		frappe.qb.from_(sales_invoice_item)
+		.select(sales_invoice_item.parent)
+		.where(sales_invoice_item.item_code == "Utility Charges")
+	)
+	sales_invoices = (
+		frappe.qb.from_(sales_invoice)
+		.select(sales_invoice.star)
+		.where(sales_invoice.name.isin(matching_invoices))
+		.where(sales_invoice.docstatus == 1)
+		.orderby(sales_invoice.customer)
+		.orderby(sales_invoice.from_date, order=Order.asc)
+	).run(as_dict=True)
 
-	sales_invoices = frappe.db.sql(query, as_dict=True)
 	previuos_customer = ""
 	for i in sales_invoices:
 		lease = frappe.get_value("Lease", i.lease, "property")
@@ -177,10 +188,11 @@ def months_array():
 
 
 def get_rate(invoice_name):
-	filters_value = "and item_code = 'Utility Charges'"
-	query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {} {}""".format(
-		"parent = '" + invoice_name + "' ", filters_value
-	)
-	print(query)
-
-	return frappe.db.sql(query, as_dict=True)[0].rate if len(frappe.db.sql(query, as_dict=True)) > 0 else ""
+	invoice_item = frappe.qb.DocType("Sales Invoice Item")
+	rows = (
+		frappe.qb.from_(invoice_item)
+		.select(invoice_item.rate)
+		.where(invoice_item.parent == invoice_name)
+		.where(invoice_item.item_code == "Utility Charges")
+	).run(as_dict=True)
+	return rows[0].rate if rows else ""

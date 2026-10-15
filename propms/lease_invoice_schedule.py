@@ -38,7 +38,7 @@ def make_lease_invoice_schedule():
 			# Only check start_date, ignore end_date for inclusion
 		)
 	)
-	lease_names = [row[0] for row in frappe.db.sql(query.get_sql())]
+	lease_names = [row[0] for row in query.run()]
 
 	for lease_name in lease_names:
 		try:

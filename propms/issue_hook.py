@@ -3,6 +3,7 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from erpnext.stock.get_item_details import get_pos_profile
 from erpnext.utilities.product import get_price
 from frappe import _
+from frappe.query_builder.functions import Sum
 from frappe.utils import today
 
 from propms.auto_custom import get_latest_active_lease
@@ -312,14 +313,13 @@ def get_stock_availability(item_code, company, is_pos):
 		warehouse = user_pos_profile.warehouse
 	if not warehouse:
 		warehouse = frappe.db.get_single_value("Stock Settings", "default_warehouse")
-	latest_sle = frappe.db.sql(
-		"""select sum(actual_qty) as  actual_qty
-        from `tabStock Ledger Entry`
-        where item_code = %s and warehouse = %s
-        limit 1""",
-		(item_code, warehouse),
-		as_dict=1,
-	)
+	sle = frappe.qb.DocType("Stock Ledger Entry")
+	latest_sle = (
+		frappe.qb.from_(sle)
+		.select(Sum(sle.actual_qty).as_("actual_qty"))
+		.where(sle.item_code == item_code)
+		.where(sle.warehouse == warehouse)
+	).run(as_dict=True)
 
 	sle_qty = latest_sle[0].actual_qty or 0 if latest_sle else 0
 	return sle_qty
