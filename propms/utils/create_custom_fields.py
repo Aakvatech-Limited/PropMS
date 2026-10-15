@@ -4,7 +4,9 @@ from pathlib import Path
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
-JSON_DIRECTORY = (Path(__file__).resolve().parent.parent / "patches" / "custom_fields/custom_fields_json").resolve()
+JSON_DIRECTORY = (
+	Path(__file__).resolve().parent.parent / "patches" / "custom_fields/custom_fields_json"
+).resolve()
 
 
 def load_json(file):
@@ -50,7 +52,9 @@ def create_fields_from_json(custom_fields_obj):
 
 def execute():
 	# read names of only json files in this folder and put it into files list
-	files = sorted(path.name for path in JSON_DIRECTORY.iterdir() if path.is_file() and path.suffix == ".json")
+	files = sorted(
+		path.name for path in JSON_DIRECTORY.iterdir() if path.is_file() and path.suffix == ".json"
+	)
 	for file in files:
 		data = load_json(file)
 		create_fields_from_json(data)
