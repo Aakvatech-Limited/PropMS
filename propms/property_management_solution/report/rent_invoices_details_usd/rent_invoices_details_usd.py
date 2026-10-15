@@ -76,7 +76,6 @@ def get_data(filters):
 			invoice.exchange_rate = get_exchange_rate("USD", default_currency, invoice.posting_date)
 			invoice.foreign_total = invoice.total / invoice.exchange_rate
 
-
 		invoice_item = frappe.qb.DocType("Sales Invoice Item")
 		items = (
 			frappe.qb.from_(invoice_item)
