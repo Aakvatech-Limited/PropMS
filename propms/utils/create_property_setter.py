@@ -4,7 +4,9 @@ from pathlib import Path
 import frappe
 from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
-JSON_DIRECTORY = (Path(__file__).resolve().parent.parent / "patches" / "property_setter/property_setter_json").resolve()
+JSON_DIRECTORY = (
+	Path(__file__).resolve().parent.parent / "patches" / "property_setter/property_setter_json"
+).resolve()
 
 
 def load_json(file):
@@ -92,7 +94,9 @@ def create_property_setter_from_json(property_setters_obj):
 
 def execute():
 	# read names of only json files in this folder and put it into files list
-	files = sorted(path.name for path in JSON_DIRECTORY.iterdir() if path.is_file() and path.suffix == ".json")
+	files = sorted(
+		path.name for path in JSON_DIRECTORY.iterdir() if path.is_file() and path.suffix == ".json"
+	)
 	for file in files:
 		data = load_json(file)
 		create_property_setter_from_json(data)
