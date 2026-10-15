@@ -81,7 +81,6 @@ def get_data(filters):
 		#     for key,value in months_obj.items():
 		#         invoice[key] = value
 
-
 		invoice_item = frappe.qb.DocType("Sales Invoice Item")
 		items = (
 			frappe.qb.from_(invoice_item)
