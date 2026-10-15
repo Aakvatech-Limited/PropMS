@@ -30,7 +30,6 @@ def execute(filters=None):
 
 def get_data(filters):
 	rows = []
-	params = {"company": filters["company"], "from_date": filters["from_date"], "to_date": filters["to_date"]}
 	_items_grupe = filters.get("type_name")
 	float_precision = cint(frappe.db.get_default("float_precision")) or 2
 	if filters.get("company"):
@@ -39,33 +38,31 @@ def get_data(filters):
 		company = get_default_company()
 		default_currency = get_company_currency(company)
 
-	conditions = ""
+	sales_invoice = frappe.qb.DocType("Sales Invoice")
+	query = (
+		frappe.qb.from_(sales_invoice)
+		.select(
+			sales_invoice.name.as_("invoice_id"),
+			sales_invoice.customer,
+			sales_invoice.base_net_total.as_("total"),
+			sales_invoice.net_total.as_("foreign_total"),
+			sales_invoice.currency,
+			sales_invoice.conversion_rate.as_("exchange_rate"),
+			sales_invoice.posting_date.as_("date"),
+			sales_invoice.lease,
+		)
+		.where(sales_invoice.docstatus == 1)
+		.where(sales_invoice.company == filters["company"])
+		.where(sales_invoice.lease != "")
+		.where(sales_invoice.from_date != "")
+		.where(sales_invoice.to_date != "")
+	)
 	if not filters.get("extand"):
-		conditions = "AND DATE(posting_date) BETWEEN %(from_date)s AND %(to_date)s"
+		query = query.where(sales_invoice.posting_date.between(filters["from_date"], filters["to_date"]))
 
-	query = f"""
-            SELECT
-                name as invoice_id,
-                customer,
-                base_net_total as total,
-                net_total as foreign_total,
-                currency,
-                conversion_rate as exchange_rate,
-                posting_date as date,
-                lease
-            FROM
-                `tabSales Invoice`
-            WHERE
-                docstatus = 1
-                AND company = %(company)s
-                AND lease != ""
-                AND from_date != ""
-                AND to_date != ""
-                {conditions}
-            ORDER BY lease DESC, posting_date ASC
-            """
-
-	sales_invoices = frappe.db.sql(query, params, as_dict=True)
+	sales_invoices = query.orderby(sales_invoice.lease, order=frappe.qb.desc).orderby(
+		sales_invoice.posting_date, order=frappe.qb.asc
+	).run(as_dict=True)
 
 	for invoice in sales_invoices:
 		_items_rwos = []
@@ -77,22 +74,21 @@ def get_data(filters):
 			invoice.foreign_total = invoice.total / invoice.exchange_rate
 
 
-		query_items = f"""
-            SELECT
-                item_code,
-                base_net_amount as item_total,
-                net_amount as item_foreign_total,
-                service_start_date as from_date,
-                service_end_date as to_date,
-                qty as quantity,
-                net_rate
-            FROM
-                `tabSales Invoice Item`
-            WHERE
-                parent = %(invoice_id)s
-            """
+		invoice_item = frappe.qb.DocType("Sales Invoice Item")
+		items = (
+			frappe.qb.from_(invoice_item)
+			.select(
+				invoice_item.item_code,
+				invoice_item.base_net_amount.as_("item_total"),
+				invoice_item.net_amount.as_("item_foreign_total"),
+				invoice_item.service_start_date.as_("from_date"),
+				invoice_item.service_end_date.as_("to_date"),
+				invoice_item.qty.as_("quantity"),
+				invoice_item.net_rate,
+			)
+			.where(invoice_item.parent == invoice["invoice_id"])
+		).run(as_dict=True)
 
-		items = frappe.db.sql(query_items, {"invoice_id": invoice["invoice_id"]}, as_dict=True)
 		for item in items:
 			item_group = frappe.db.get_value("Item", item["item_code"], "item_group")
 			item["item_group"] = item_group
