@@ -6,8 +6,8 @@ from collections import OrderedDict
 from datetime import datetime, timedelta
 
 import frappe
-from frappe.query_builder import Order
 from erpnext import get_company_currency, get_default_company
+from frappe.query_builder import Order
 from frappe.utils import (
 	add_days,
 	add_months,
