@@ -7,8 +7,9 @@ import frappe.permissions
 import frappe.share
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
+from frappe.query_builder import Order
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import add_days, add_months, date_diff, getdate, today
+from frappe.utils import add_days, add_months, date_diff, getdate, now_datetime, today
 
 from propms.lease_invoice import getDueDate
 
@@ -124,10 +125,13 @@ def getTax(sales_invoice):
 
 
 def checkIssue(name):
-	data = frappe.db.sql(
-		"""select parent from `tabIssue Materials Detail` where material_request=%s""",
-		name,
-	)
+	issue_material = frappe.qb.DocType("Issue Materials Detail")
+	data = (
+		frappe.qb.from_(issue_material)
+		.select(issue_material.parent)
+		.where(issue_material.material_request == name)
+	).run()
+
 	if data:
 		if data[0][0] is not None:
 			return data[0][0]
@@ -138,10 +142,12 @@ def checkIssue(name):
 
 
 def assignInvoiceNameInMR(invoice, pr):
-	frappe.db.sql(
-		"""update `tabMaterial Request` set sales_invoice=%s where name=%s""",
-		(invoice, pr),
-	)
+	material_request = frappe.qb.DocType("Material Request")
+	(
+		frappe.qb.update(material_request)
+		.set(material_request.sales_invoice, invoice)
+		.where(material_request.name == pr)
+	).run()
 
 
 @frappe.whitelist()
@@ -163,7 +169,8 @@ def changeStatusKeyset(self, method):
 
 
 def getKeysetName(name):
-	data = frappe.db.sql("""select name from `tabKey Set` where name=%s""", name)
+	key_set = frappe.qb.DocType("Key Set")
+	data = frappe.qb.from_(key_set).select(key_set.name).where(key_set.name == name).run()
 	if data:
 		if data[0][0] is not None:
 			return data[0][0]
@@ -187,10 +194,12 @@ def changeStatusIssue(name, status):
 
 
 def getIssueName(name):
-	data = frappe.db.sql(
-		"""select name from `tabIssue Materials Detail` where material_request=%s""",
-		name,
-	)
+	issue_material = frappe.qb.DocType("Issue Materials Detail")
+	data = (
+		frappe.qb.from_(issue_material)
+		.select(issue_material.name)
+		.where(issue_material.material_request == name)
+	).run()
 	if data:
 		if data[0][0] is not None:
 			return data[0][0]
@@ -219,24 +228,26 @@ def statusChangeBeforeLeaseExpire():
 		#    Only when lease *has* an end_date
 		#    and ends within next 3 months.
 		# ---------------------------------------------
-		upcoming_expiry = frappe.db.sql(
-			"""
-            SELECT l.name, l.property, l.end_date
-            FROM `tabLease` l
-            INNER JOIN `tabProperty` p ON l.property = p.name
-            WHERE l.end_date IS NOT NULL
-              AND l.name = (
-                    SELECT ml.name
-                    FROM `tabLease` ml
-                    WHERE ml.property = l.property
-                    ORDER BY ml.end_date DESC
-                    LIMIT 1
-                )
-              AND l.end_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 MONTH)
-              AND p.status = 'On Lease'
-            """,
-			as_dict=1,
+		lease = frappe.qb.DocType("Lease")
+		property_doc = frappe.qb.DocType("Property")
+		latest_lease = frappe.qb.DocType("Lease").as_("latest_lease")
+		latest_lease_name = (
+			frappe.qb.from_(latest_lease)
+			.select(latest_lease.name)
+			.where(latest_lease.property == lease.property)
+			.orderby(latest_lease.end_date, order=Order.desc)
+			.limit(1)
 		)
+		current_time = now_datetime()
+		upcoming_expiry = (
+			frappe.qb.from_(lease)
+			.inner_join(property_doc).on(lease.property == property_doc.name)
+			.select(lease.name, lease.property, lease.end_date)
+			.where(lease.end_date.notnull())
+			.where(lease.name == latest_lease_name)
+			.where(lease.end_date.between(current_time, add_months(current_time, 3)))
+			.where(property_doc.status == "On Lease")
+		).run(as_dict=True)
 
 		for lease in upcoming_expiry:
 			frappe.db.set_value("Property", lease.property, "status", "Off Lease in 3 Months")
@@ -289,17 +300,18 @@ def statusChangeAfterLeaseExpire():
 @frappe.whitelist()
 def update_property_status():
 	try:
-		active_lease_properties = frappe.db.sql(
-			"""
-            SELECT DISTINCT p.name
-            FROM `tabProperty` p
-            INNER JOIN `tabLease` l ON l.property = p.name
-            WHERE p.status = 'Available'
-              AND l.start_date <= NOW()
-              AND l.lease_status = 'Active'
-            """,
-			as_dict=1,
-		)
+		property_doc = frappe.qb.DocType("Property")
+		lease = frappe.qb.DocType("Lease")
+		active_lease_properties = (
+			frappe.qb.from_(property_doc)
+			.inner_join(lease).on(lease.property == property_doc.name)
+			.select(property_doc.name)
+			.distinct()
+			.where(property_doc.status == "Available")
+			.where(lease.start_date <= now_datetime())
+			.where(lease.lease_status == "Active")
+		).run(as_dict=True)
+
 		# frappe.throw(str(active_lease_properties))
 
 		for row in active_lease_properties:
@@ -488,15 +500,15 @@ def getDateMonthDiff(start_date, end_date, month_factor):
 @frappe.whitelist()
 def get_active_meter_from_property(property_id, meter_type):
 	"""Get Active Meter Number"""
-	meter_data = frappe.db.sql(
-		"""SELECT meter_number
-		FROM `tabProperty Meter Reading`
-		WHERE parent=%s
-		AND meter_type=%s
-		AND status='Active'""",
-		(property_id, meter_type),
-		as_dict=True,
-	)
+	meter = frappe.qb.DocType("Property Meter Reading")
+	meter_data = (
+		frappe.qb.from_(meter)
+		.select(meter.meter_number)
+		.where(meter.parent == property_id)
+		.where(meter.meter_type == meter_type)
+		.where(meter.status == "Active")
+	).run(as_dict=True)
+
 	if meter_data:
 		return meter_data[0].meter_number
 	else:
@@ -507,15 +519,15 @@ def get_active_meter_from_property(property_id, meter_type):
 def get_active_meter_customer_from_property(property_id, meter_type):
 	# Unused as per conversation with Vimal on 2019-08-11
 	"""Get Active Meter Customer Name"""
-	meter_data = frappe.db.sql(
-		"""SELECT invoice_customer
-		FROM `tabProperty Meter Reading`
-		WHERE parent=%s
-		AND meter_type=%s
-		AND status='Active'""",
-		(property_id, meter_type),
-		as_dict=True,
-	)
+	meter = frappe.qb.DocType("Property Meter Reading")
+	meter_data = (
+		frappe.qb.from_(meter)
+		.select(meter.invoice_customer)
+		.where(meter.parent == property_id)
+		.where(meter.meter_type == meter_type)
+		.where(meter.status == "Active")
+	).run(as_dict=True)
+
 	if meter_data:
 		return meter_data[0].invoice_customer
 	else:
@@ -525,32 +537,38 @@ def get_active_meter_customer_from_property(property_id, meter_type):
 @frappe.whitelist()
 def get_previous_meter_reading(meter_number, property_id, meter_type):
 	"""Get Previous Meter Reading"""
-	previous_reading_details = frappe.db.sql(
-		"""SELECT md.current_meter_reading as 'previous_reading',
-		m.reading_date as 'reading_date'
-		FROM `tabMeter Reading Detail` AS md
-		INNER JOIN `tabMeter Reading` AS m ON md.parent=m.name
-		WHERE md.meter_number=%s
-		AND m.docstatus=1
-		ORDER BY m.reading_date DESC limit 1""",
-		meter_number,
-		as_dict=True,
-	)
+	meter_detail = frappe.qb.DocType("Meter Reading Detail")
+	meter_reading = frappe.qb.DocType("Meter Reading")
+	previous_reading_details = (
+		frappe.qb.from_(meter_detail)
+		.inner_join(meter_reading).on(meter_detail.parent == meter_reading.name)
+		.select(
+			meter_detail.current_meter_reading.as_("previous_reading"),
+			meter_reading.reading_date.as_("reading_date"),
+		)
+		.where(meter_detail.meter_number == meter_number)
+		.where(meter_reading.docstatus == 1)
+		.orderby(meter_reading.reading_date, order=Order.desc)
+		.limit(1)
+	).run(as_dict=True)
+
 	if len(previous_reading_details) >= 1:
 		# print previous_reading_details[0].previous_reading
 		return previous_reading_details[0]
 	else:
-		initial_reading_details = frappe.db.sql(
-			"""SELECT initial_meter_reading as 'previous_reading',
-			installation_date as 'reading_date'
-			FROM `tabProperty Meter Reading`
-			WHERE parent=%s
-			AND meter_type=%s
-			AND meter_number=%s
-			AND status='Active'""",
-			(property_id, meter_type, meter_number),
-			as_dict=True,
-		)
+		meter = frappe.qb.DocType("Property Meter Reading")
+		initial_reading_details = (
+			frappe.qb.from_(meter)
+			.select(
+				meter.initial_meter_reading.as_("previous_reading"),
+				meter.installation_date.as_("reading_date"),
+			)
+			.where(meter.parent == property_id)
+			.where(meter.meter_type == meter_type)
+			.where(meter.meter_number == meter_number)
+			.where(meter.status == "Active")
+		).run(as_dict=True)
+
 		if len(initial_reading_details) >= 1:
 			return initial_reading_details[0]
 		else:
