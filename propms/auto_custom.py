@@ -241,7 +241,8 @@ def statusChangeBeforeLeaseExpire():
 		current_time = now_datetime()
 		upcoming_expiry = (
 			frappe.qb.from_(lease)
-			.inner_join(property_doc).on(lease.property == property_doc.name)
+			.inner_join(property_doc)
+			.on(lease.property == property_doc.name)
 			.select(lease.name, lease.property, lease.end_date)
 			.where(lease.end_date.notnull())
 			.where(lease.name == latest_lease_name)
@@ -304,7 +305,8 @@ def update_property_status():
 		lease = frappe.qb.DocType("Lease")
 		active_lease_properties = (
 			frappe.qb.from_(property_doc)
-			.inner_join(lease).on(lease.property == property_doc.name)
+			.inner_join(lease)
+			.on(lease.property == property_doc.name)
 			.select(property_doc.name)
 			.distinct()
 			.where(property_doc.status == "Available")
@@ -541,7 +543,8 @@ def get_previous_meter_reading(meter_number, property_id, meter_type):
 	meter_reading = frappe.qb.DocType("Meter Reading")
 	previous_reading_details = (
 		frappe.qb.from_(meter_detail)
-		.inner_join(meter_reading).on(meter_detail.parent == meter_reading.name)
+		.inner_join(meter_reading)
+		.on(meter_detail.parent == meter_reading.name)
 		.select(
 			meter_detail.current_meter_reading.as_("previous_reading"),
 			meter_reading.reading_date.as_("reading_date"),
