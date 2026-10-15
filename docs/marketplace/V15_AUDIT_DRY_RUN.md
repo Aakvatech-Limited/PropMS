@@ -2,9 +2,9 @@
 
 ## Change order
 
-1. Review and merge PR #120 (Query Builder conversions) into `version-15-hotfix`.
-2. Retarget stacked PR #121 to `version-15-hotfix`, review its standalone diff, and merge **only after** all tests pass.
-3. Re-run the Frappe Cloud Marketplace security/correctness scan against the resulting hotfix SHA.
+1. PR #120 (Query Builder conversions) and replacement PR #122 (remaining code-audit corrections) are merged into `version-15-hotfix`. PR #121 was automatically closed after its former base branch was removed.
+2. Verify PR #123 (USD invoice date alias) and PR #124 (lease date boundary and meter history) are merged and record the final hotfix SHA.
+3. Run an isolated staging dry-run before any production deployment, then rerun the Frappe Cloud Marketplace security/correctness scan on the final code.
 4. Separately update the publisher-managed Marketplace metadata, links and genuine screenshots in the Frappe Cloud listing editor.
 
 ## Dry-run safety
