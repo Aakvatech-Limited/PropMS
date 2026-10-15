@@ -2,8 +2,8 @@ import calendar
 from datetime import date, timedelta
 
 import frappe
-from frappe.query_builder import Order
 from frappe import _
+from frappe.query_builder import Order
 
 
 def get_residential_columns(year):
