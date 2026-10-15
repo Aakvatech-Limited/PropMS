@@ -6,6 +6,7 @@ from collections import OrderedDict
 from datetime import datetime, timedelta
 
 import frappe
+from frappe.query_builder import Order
 from erpnext import get_company_currency, get_default_company
 from erpnext.setup.utils import get_exchange_rate
 from frappe.utils import (
@@ -60,8 +61,8 @@ def get_data(filters):
 	if not filters.get("extand"):
 		query = query.where(sales_invoice.posting_date.between(filters["from_date"], filters["to_date"]))
 
-	sales_invoices = query.orderby(sales_invoice.lease, order=frappe.qb.desc).orderby(
-		sales_invoice.posting_date, order=frappe.qb.asc
+	sales_invoices = query.orderby(sales_invoice.lease, order=Order.desc).orderby(
+		sales_invoice.posting_date, order=Order.asc
 	).run(as_dict=True)
 
 	for invoice in sales_invoices:
