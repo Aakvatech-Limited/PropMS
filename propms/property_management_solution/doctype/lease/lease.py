@@ -295,9 +295,9 @@ def make_lease_invoice_schedule(leasedoc):
 				)
 				for lease_invoice_schedule in lease_invoice_schedule_list:
 					if not (
-				lease_invoice_schedule.get("invoice_number")
-				or lease_invoice_schedule.get("sales_order_number")
-			):
+						lease_invoice_schedule.get("invoice_number")
+						or lease_invoice_schedule.get("sales_order_number")
+					):
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			# Records of lease_items that no longer existing in lease.lease_item
 			lease_invoice_schedule_list = frappe.get_list(
@@ -324,9 +324,9 @@ def make_lease_invoice_schedule(leasedoc):
 			for lease_invoice_schedule in lease_invoice_schedule_list:
 				if lease_invoice_schedule.lease_item not in lease_item_name_list:
 					if not (
-				lease_invoice_schedule.get("invoice_number")
-				or lease_invoice_schedule.get("sales_order_number")
-			):
+						lease_invoice_schedule.get("invoice_number")
+						or lease_invoice_schedule.get("sales_order_number")
+					):
 						frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
 			item_invoice_frequency = {
 				"Monthly": 1.00,  # .00 to make it float type
