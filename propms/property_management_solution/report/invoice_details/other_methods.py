@@ -2,6 +2,7 @@ import calendar
 from datetime import date, timedelta
 
 import frappe
+from frappe.query_builder import Order
 from frappe import _
 
 
@@ -74,7 +75,7 @@ def get_sales_invoice(filters, data, from_other=None, months=None):
 		.where(sales_invoice.name.isin(matching_invoices))
 		.where(sales_invoice.docstatus == 1)
 		.orderby(sales_invoice.customer)
-		.orderby(sales_invoice.from_date, order=frappe.qb.asc)
+		.orderby(sales_invoice.from_date, order=Order.asc)
 	).run(as_dict=True)
 
 	previuos_customer = ""
