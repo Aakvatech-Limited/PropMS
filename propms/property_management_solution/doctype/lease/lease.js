@@ -1,9 +1,9 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
-cur_frm.add_fetch('property', 'unit_owner', 'property_owner');
 
 frappe.ui.form.on('Lease', {
 	setup: function(frm) {
+		frm.add_fetch('property', 'unit_owner', 'property_owner');
 		frm.set_query("lease_item", "lease_item", function() {
 			return {
 				"filters": [
@@ -30,14 +30,14 @@ frappe.ui.form.on('Lease', {
 		frm.trigger("custom_set_intro");
 
 
-		cur_frm.add_custom_button(__("Make Invoice Schedule"), function() {
-			make_lease_invoice_schedule(cur_frm);
+		frm.add_custom_button(__("Make Invoice Schedule"), function() {
+			make_lease_invoice_schedule(frm);
 		}, __("Actions"));
-		cur_frm.add_custom_button(__("Generate Pending Invoice"), function() {
-			generate_pending_invoice();
+		frm.add_custom_button(__("Generate Pending Invoice"), function() {
+			generate_pending_invoice(frm);
 		}, __("Actions"));
-		cur_frm.add_custom_button(__("Make Invoice Schedule for all Lease"), function() {
-			getAllLease(cur_frm);
+		frm.add_custom_button(__("Make Invoice Schedule for all Lease"), function() {
+			getAllLease(frm);
 		}, __("Actions"));
 
         // Add custom buttons for Accounts Receivable and Accounting Ledger
@@ -113,7 +113,7 @@ frappe.ui.form.on('Lease', {
 				frm.reload_doc();
 			}
 			if (data.progress) {
-				let progress_bar = $(cur_frm.dashboard.progress_area).find(".progress-bar");
+				let progress_bar = $(frm.dashboard.progress_area).find(".progress-bar");
 				if (progress_bar) {
 					$(progress_bar).removeClass("progress-bar-danger").addClass("progress-bar-success progress-bar-striped");
 					$(progress_bar).css("width", data.progress+"%");
@@ -199,7 +199,7 @@ var make_lease_invoice_schedule = function(frm){
 		method: 		"propms.property_management_solution.doctype.lease.lease.make_lease_invoice_schedule",
 		args: {leasedoc: doc.name},
 		callback: function(){
-			cur_frm.reload_doc();
+			frm.reload_doc();
 			frappe.show_alert({
 				message: __("Completed making of invoice schedule."),
 				indicator: "green"
@@ -208,17 +208,17 @@ var make_lease_invoice_schedule = function(frm){
 	});
 };
 
-var generate_pending_invoice = function(){
+var generate_pending_invoice = function(frm){
 	frappe.call({
 		method: "propms.lease_invoice.leaseInvoiceAutoCreate",
 		args: {},
 		callback: function(){
-			cur_frm.reload_doc();
+			frm.reload_doc();
 		}
 	});
 };
 
-var getAllLease = function(){
+var getAllLease = function(frm){
 	frappe.confirm(
 		'Are you sure to initiate this long process?',
 		function(){
@@ -226,7 +226,7 @@ var getAllLease = function(){
 				method: "propms.property_management_solution.doctype.lease.lease.getAllLease",
 				args: {},
 				callback: function(){
-					cur_frm.reload_doc();
+					frm.reload_doc();
 				}
 			});
 		},
