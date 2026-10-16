@@ -1,7 +1,14 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
 
-cur_frm.add_fetch('guard_empid', 'employee_name', 'guard_name');
+frappe.ui.form.on('Security Attendance', {
+    setup(frm) {
+        frm.add_fetch('guard_empid', 'employee_name', 'guard_name');
+        frm.set_query('guard_empid', 'attendance_details', () => ({
+            filters: [['Employee', 'department', 'like', 'Security -%']]
+        }));
+    }
+});
 frappe.ui.form.on('Security Attendance', 'shift_name', function(frm, cdt, cdn) {
     var doc = locals[cdt][cdn];
     if (doc.shift_name) {
@@ -24,11 +31,3 @@ frappe.ui.form.on('Security Attendance', 'shift_name', function(frm, cdt, cdn) {
         })
     }
 })
-cur_frm.fields_dict['attendance_details'].grid.get_field('guard_empid').get_query = function(doc, cdt, cdn) {
-    var child = locals[cdt][cdn]
-    return {
-        filters: [
-            ['Employee', 'department', 'like', 'Security -%']
-        ]
-    }
-};
