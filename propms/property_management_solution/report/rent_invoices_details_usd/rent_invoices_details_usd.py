@@ -76,7 +76,7 @@ def get_data(filters):
 		property_name = frappe.db.get_value("Lease", invoice["lease"], "property")
 		invoice["property_name"] = property_name
 		if invoice.total == invoice.foreign_total:
-			invoice.exchange_rate = get_exchange_rate("USD", default_currency, invoice.posting_date)
+			invoice.exchange_rate = get_exchange_rate("USD", default_currency, invoice.date)
 			invoice.foreign_total = invoice.total / invoice.exchange_rate
 
 		item_table = DocType("Sales Invoice Item")
