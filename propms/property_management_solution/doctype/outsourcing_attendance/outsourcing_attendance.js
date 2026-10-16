@@ -1,7 +1,17 @@
 // Copyright (c) 2018, Aakvatech and contributors
 // For license information, please see license.txt
 
-cur_frm.add_fetch('shift_name', 'outsourcing_category', 'outsourcing_category_name');
+frappe.ui.form.on('Outsourcing Attendance', {
+    setup(frm) {
+        frm.add_fetch('shift_name', 'outsourcing_category', 'outsourcing_category_name');
+        frm.set_query('person_name', 'attendance_details', () => ({
+            filters: [
+                ['Outsource Contact', 'parent', '=', frm.doc.outsourcing_category_name],
+                ['Outsource Contact', 'status', '=', 'Active']
+            ]
+        }));
+    }
+});
 
 frappe.ui.form.on('Outsourcing Attendance', 'shift_name', function(frm, cdt, cdn) {
     var doc = locals[cdt][cdn];
@@ -26,15 +36,6 @@ frappe.ui.form.on('Outsourcing Attendance', 'shift_name', function(frm, cdt, cdn
     }
 });
 
-cur_frm.fields_dict['attendance_details'].grid.get_field('person_name').get_query = function(doc, cdt, cdn) {
-    var child = locals[cdt][cdn];
-    return {
-        filters: [
-            ['Outsource Contact', 'parent', '=', cur_frm.doc.outsourcing_category_name ],
-            ['Outsource Contact', 'status', '=', 'Active' ]
-        ]
-    }
-};
 
 frappe.ui.form.on('Outsourcing Attendance Details', {
 	person_name:function(frm,cdt,cdn){
