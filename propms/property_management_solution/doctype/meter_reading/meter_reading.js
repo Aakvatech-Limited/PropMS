@@ -13,13 +13,13 @@ frappe.ui.form.on('Meter Reading Detail', {
 	property: function(frm, cdt, cdn) {
 		var doc = locals[cdt][cdn]
 		console.log(doc.property)
-		console.log(cur_frm.doc.meter_type)
-		if (doc.property && cur_frm.doc.meter_type) {
+		console.log(frm.doc.meter_type)
+		if (doc.property && frm.doc.meter_type) {
 			frappe.call({
 				method: "propms.auto_custom.get_active_meter_from_property",
 				args: {
 					'property_id': doc.property,
-					'meter_type': cur_frm.doc.meter_type
+					'meter_type': frm.doc.meter_type
 				},
 				callback: function(r) {
 					if (r.message) {
@@ -36,13 +36,13 @@ frappe.ui.form.on('Meter Reading Detail', {
 	},
 	meter_number: function(frm, cdt, cdn) {
 		var doc = locals[cdt][cdn]
-		if (doc.meter_number && doc.property && cur_frm.doc.meter_type) {
+		if (doc.meter_number && doc.property && frm.doc.meter_type) {
 			frappe.call({
 				method: "propms.auto_custom.get_previous_meter_reading",
 				args: {
 					'meter_number': doc.meter_number,
 					'property_id': doc.property,
-					'meter_type': cur_frm.doc.meter_type
+					'meter_type': frm.doc.meter_type
 				},
 				callback: function(r) {
 					if (r.message) {
@@ -72,11 +72,10 @@ frappe.ui.form.on('Meter Reading Detail', {
 	}
 })
 
-cur_frm.fields_dict['meter_reading_detail'].grid.get_field('property').get_query = function(doc, cdt, cdn) {
-	return {
-		filters:[
-			['Property Meter Reading', 'meter_type', '=', cur_frm.doc.meter_type]
-
-		]
-	}
-}
+frappe.ui.form.on("Meter Reading", {
+    setup(frm) {
+        frm.set_query("property", "meter_reading_detail", () => ({
+            filters: [["Property Meter Reading", "meter_type", "=", frm.doc.meter_type]]
+        }));
+    }
+});
