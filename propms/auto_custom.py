@@ -219,7 +219,7 @@ def statusChangeBeforeLeaseExpire():
 		lease = DocType("Lease")
 		latest = DocType("Lease").as_("latest")
 		property_table = DocType("Property")
-		current_time = now_datetime()
+		current_date = getdate(today())
 		latest_lease = (
 			frappe.qb.from_(latest)
 			.select(latest.name)
@@ -234,7 +234,7 @@ def statusChangeBeforeLeaseExpire():
 			.select(lease.name, lease.property, lease.end_date)
 			.where(lease.end_date.isnotnull())
 			.where(lease.name == latest_lease)
-			.where(lease.end_date.between(current_time, add_months(current_time, 3)))
+			.where(lease.end_date.between(current_date, add_months(current_date, 3)))
 			.where(property_table.status == "On Lease")
 		).run(as_dict=True)
 
@@ -524,6 +524,7 @@ def get_previous_meter_reading(meter_number, property_id, meter_type):
 		.on(detail.parent == reading.name)
 		.select(detail.current_meter_reading.as_("previous_reading"), reading.reading_date)
 		.where(detail.meter_number == meter_number)
+		.where(detail.property == property_id)
 		.where(reading.docstatus == 1)
 		.orderby(reading.reading_date, order=Order.desc)
 		.limit(1)

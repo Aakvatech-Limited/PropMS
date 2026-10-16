@@ -98,7 +98,7 @@ frappe.ui.form.on('Property', {
 
 frappe.ui.form.on('Property Meter Reading', {
     meter_number: function(frm,cdt,cdn) {
-		var property_doc = locals[cur_frm.doc.doctype][cur_frm.doc.name];
+		var property_doc = frm.doc;
 		var meter_doc = locals[cdt][cdn];
 		if (meter_doc.meter_number != "") {
 			$.each(property_doc.property_meter_reading, function(i, d) {
@@ -111,7 +111,7 @@ frappe.ui.form.on('Property Meter Reading', {
 		}
 	},
 	status: function(frm,cdt,cdn) {
-		var property_doc = locals[cur_frm.doc.doctype][cur_frm.doc.name];
+		var property_doc = frm.doc;
 		var meter_doc = locals[cdt][cdn];
 		if (meter_doc.meter_number != "") {
 			$.each(property_doc.property_meter_reading, function(i, d) {

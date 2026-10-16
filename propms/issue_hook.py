@@ -77,7 +77,6 @@ def make_transaction(doc, for_self_consumption=False):
 						"stock_entry",
 						stock_entry_doc.name,
 					)
-					frappe.db.commit()
 
 	def make_sales_invoice(items_list=None, pos=None, self_customer=None):
 		if not items_list or not doc.customer:
@@ -155,7 +154,6 @@ def make_transaction(doc, for_self_consumption=False):
 						"sales_invoice",
 						invoice_doc.name,
 					)
-					frappe.db.commit()
 
 	def getTax(sales_invoice):
 		taxes = get_taxes_and_charges("Sales Taxes and Charges Template", sales_invoice.taxes_and_charges)
