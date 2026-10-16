@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup, find_packages
+import ast
+import re
+from pathlib import Path
 
-# from pip.req import parse_requirements
-import re, ast
+from setuptools import find_packages, setup
 
-# get version from __version__ variable in propms/__init__.py
-_version_re = re.compile(r"__version__\s+=\s+(.*)")
-
-with open("propms/__init__.py", "rb") as f:
-    version = str(
-        ast.literal_eval(_version_re.search(f.read().decode("utf-8")).group(1))
-    )
-
-with open("requirements.txt") as f:
-    install_requires = f.read().strip().split("\n")
-
+# Fixed, repository-relative build inputs; no user-supplied paths are accepted.
+PACKAGE_ROOT = Path(__file__).resolve().parent
+_version_re = re.compile(r"__version__\\s+=\\s+(.*)")
+version_source = (PACKAGE_ROOT / "propms" / "__init__.py").read_text(encoding="utf-8")
+version = str(ast.literal_eval(_version_re.search(version_source).group(1)))
+install_requires = (PACKAGE_ROOT / "requirements.txt").read_text(encoding="utf-8").strip().split("\n")
 
 setup(
     name="propms",
