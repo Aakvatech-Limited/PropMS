@@ -59,22 +59,17 @@ class Lease(Document):
 						)
 						or 1
 					)
-					# Query for other non-draft leases for the same property
 					conflicting_leases = frappe.db.get_all(
 						"Lease",
 						filters={
 							"property": prop,
-							"lease_status": ["!=", "Draft"],
+							"lease_status": ["in", LIVE_LEASE_STATUSES],
 							"name": ["!=", self.name],
 							"docstatus": ["<", 2],  # Exclude cancelled
 						},
-						fields=["name", "end_date", "lease_status"],
+						fields=["name", "start_date", "end_date", "skip_end_date"],
 					)
-					active_conflicts = [
-						l
-						for l in conflicting_leases
-						if not l["end_date"] or getdate(l["end_date"]) >= getdate(self.start_date)
-					]
+					active_conflicts = [l for l in conflicting_leases if is_lease_period_overlapping(self, l)]
 					if len(active_conflicts) >= max_allowed:
 						msg = _(
 							"Cannot activate lease <b>{0}</b> for property <b>{1}</b>.<br><br>"
@@ -182,6 +177,22 @@ class Lease(Document):
 
 		if status:
 			self.lease_status = status
+
+
+LIVE_LEASE_STATUSES = ["Active", "Upcoming", "Vacating"]
+
+
+def is_lease_period_overlapping(lease, other):
+	"""Missing start counts as open towards the past, missing or skipped end as open-ended."""
+	lease_end = None if lease.skip_end_date or not lease.end_date else getdate(lease.end_date)
+	other_end = None if other.skip_end_date or not other.end_date else getdate(other.end_date)
+	other_starts_before_lease_ends = (
+		not lease_end or not other.start_date or getdate(other.start_date) <= lease_end
+	)
+	other_ends_after_lease_starts = (
+		not other_end or not lease.start_date or other_end >= getdate(lease.start_date)
+	)
+	return other_starts_before_lease_ends and other_ends_after_lease_starts
 
 
 def get_system_controlled_statuses():
