@@ -11,7 +11,7 @@ def get_aligned_invoice_date(date):
 	return get_first_day(date)
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def make_lease_invoice_schedule():
 	# First check if make_invoice_schedule_up_to_tomorrow_only is enabled
 	settings = frappe.get_single("Property Management Settings")
