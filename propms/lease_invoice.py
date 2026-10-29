@@ -130,7 +130,7 @@ def getCostCenter(name):
 	return frappe.db.get_value("Property", property_name, "cost_center")
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def leaseInvoiceAutoCreate():
 	"""Prepare data to create sales invoice from lease invoice schedule. This is called from form button as well as daily schedule"""
 	try:
@@ -292,7 +292,7 @@ def leaseInvoiceAutoCreate():
 		app_error_log(frappe.session.user, str(e))
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def enqueue_lease_invoice_auto_create():
 	"""Enqueue leaseInvoiceAutoCreate as a background job on the 'long' queue."""
 	frappe.enqueue("propms.lease_invoice.leaseInvoiceAutoCreate", queue="long", now=False)
