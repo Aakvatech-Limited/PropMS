@@ -1,6 +1,6 @@
 # Property Management Solution (PropMS)
 
-PropMS is a Frappe and ERPNext v15 app for managing real estate and property operations from inside ERPNext. It adds property records, lease records, lease billing schedules, meter readings, maintenance material billing, security and outsourcing attendance, daily checklists, key and tool custody, print formats, and reports.
+PropMS is a Frappe and ERPNext v16 app for managing real estate and property operations from inside ERPNext. It adds property records, lease records, lease billing schedules, meter readings, maintenance material billing, security and outsourcing attendance, daily checklists, key and tool custody, print formats, and reports.
 
 The app is published by Aakvatech and is designed for organizations that want property operations to connect directly with ERPNext customers, items, invoices, sales orders, stock, accounts, cost centers, employees, and reports.
 
@@ -28,7 +28,7 @@ The repository shows a strong ERPNext dependency. PropMS uses ERPNext accounting
 - Property owners, real estate operators, apartment managers, facility managers, and service providers using ERPNext.
 - Finance teams that need lease billing, security deposit references, utility invoices, and maintenance charges inside ERPNext.
 - Operations teams that need daily property checklists, maintenance material tracking, key/tool custody, and attendance records.
-- Implementers building an ERPNext v15 property management rollout.
+- Implementers building an ERPNext v16 property management rollout.
 
 ## Who This App Is Not For
 
@@ -102,7 +102,7 @@ PropMS adds property management workflows on top of ERPNext. Repository evidence
 
 ## Stand-alone Value
 
-PropMS is not positioned as a standalone Frappe-only app in this repository. `pyproject.toml` declares both Frappe and ERPNext v15 dependencies, and the code imports ERPNext controllers and references many ERPNext DocTypes. A Frappe-only deployment should be treated as unsupported unless the maintainers confirm otherwise.
+PropMS is not positioned as a standalone Frappe-only app in this repository. `pyproject.toml` declares both Frappe and ERPNext v16 dependencies, and the code imports ERPNext controllers and references many ERPNext DocTypes. A Frappe-only deployment should be treated as unsupported unless the maintainers confirm otherwise.
 
 ## Decision Guide
 
@@ -151,7 +151,7 @@ Suggested screenshots:
 
 | Area | Effort | Notes |
 |---|---:|---|
-| App installation on ERPNext v15 | Medium | Requires a working Frappe/ERPNext bench and correct branch/tag |
+| App installation on ERPNext v16 | Medium | Requires a working Frappe/ERPNext bench and correct branch/tag |
 | Master data setup | Medium | Company, customers, contacts, items, item groups, cost centers, warehouses, tax templates, accounts, employees |
 | Lease and billing configuration | Medium | Requires Property Management Settings and lease item frequencies |
 | Data migration | Depends | Existing property, lease, customer, and meter data may need mapping |
@@ -161,7 +161,7 @@ Suggested screenshots:
 
 ## What Needs to Be Ready Before Implementation
 
-- ERPNext v15 site with required company and accounting setup.
+- ERPNext v16 site with required company and accounting setup.
 - Customers, contacts, items, item groups, cost centers, tax templates, warehouses, employees, suppliers, and modes of payment.
 - Clear property hierarchy and unit naming rules.
 - Lease billing rules, frequencies, currencies, security deposit handling, withholding tax expectations, and invoice schedule policy.
@@ -171,19 +171,19 @@ Suggested screenshots:
 
 ## Risks and Considerations
 
-- The app is tightly coupled to ERPNext v15. Confirm compatibility before installing on other major versions.
+- The app is tightly coupled to ERPNext v16. Confirm compatibility before installing on other major versions.
 - The repository has a license mismatch: `LICENSE` says GPL, while `hooks.py` declares MIT.
 - `setup.py` references `requirements.txt`, but no `requirements.txt` file was found in this checkout. `pyproject.toml` declares dependencies differently.
 - Some workflows create or submit financial and stock documents. Test in a staging site before production use.
 - Several notifications exist but are disabled in their JSON definitions.
-- Existing README mentions creating a `Property Management Solution` domain. Confirm whether this is still required for current v15 deployments.
+- Existing README mentions creating a `Property Management Solution` domain. Confirm whether this is still required for current v16 deployments.
 - Tenant portal, payment gateway integration, and third-party integrations are not evidenced in the repository and should not be promised without additional work.
 
 ## Frequently Asked Business Questions
 
 ### Do we need ERPNext?
 
-Yes. The repository declares ERPNext v15 as a dependency and integrates with ERPNext DocTypes and controllers.
+Yes. The repository declares ERPNext v16 as a dependency and integrates with ERPNext DocTypes and controllers.
 
 ### Will this replace ERPNext?
 
@@ -226,10 +226,10 @@ No tenant portal implementation was found in this repository. It can be consider
 
 | Component | Evidence |
 |---|---|
-| Frappe | `>=15.0.0,<16.0.0` in `pyproject.toml` |
-| ERPNext | `>=15.0.0,<16.0.0` in `pyproject.toml` |
+| Frappe | `>=16.0.0,<17.0.0` in `pyproject.toml` |
+| ERPNext | `>=16.0.0,<17.0.0` in `pyproject.toml` |
 | Python | `>=3.10` in `pyproject.toml` |
-| App version | `15.2.1` in `propms/__init__.py` |
+| App version | `16.1.0` in `propms/__init__.py` |
 | Package name | `propms` |
 | App title | `Property Management Solution` |
 
@@ -241,10 +241,10 @@ This conclusion is based on `pyproject.toml`, ERPNext imports, and the app's use
 
 ## Installation
 
-Install this app on a Frappe/ERPNext v15 bench site.
+Install this app on a Frappe/ERPNext v16 bench site.
 
 ```bash
-bench get-app https://github.com/aakvatech/PropMS.git --branch <v15-branch-or-tag>
+bench get-app https://github.com/Aakvatech-Limited/PropMS.git --branch version-16-hotfix
 bench --site your-site.local install-app propms
 bench --site your-site.local migrate
 ```
@@ -254,12 +254,12 @@ For a local development bench:
 ```bash
 bench new-site propms.local
 bench --site propms.local install-app erpnext
-bench get-app https://github.com/aakvatech/PropMS.git --branch <v15-branch-or-tag>
+bench get-app https://github.com/Aakvatech-Limited/PropMS.git --branch version-16-hotfix
 bench --site propms.local install-app propms
 bench --site propms.local migrate
 ```
 
-Replace `<v15-branch-or-tag>` with the maintained branch or tag for this repository. This checkout appears to be a v15 hotfix version, but the exact public branch name should be confirmed before publishing.
+Use `version-16-hotfix` for Frappe/ERPNext v16. v15 sites stay on the v15 branches, which keep the older workspace-based navigation.
 
 ## Configuration
 
@@ -464,7 +464,7 @@ Scheduled events:
 ## Developer Setup
 
 ```bash
-bench get-app https://github.com/aakvatech/PropMS.git --branch <v15-branch-or-tag>
+bench get-app https://github.com/Aakvatech-Limited/PropMS.git --branch version-16-hotfix
 bench --site your-site.local install-app propms
 bench --site your-site.local migrate
 ```
@@ -542,7 +542,7 @@ Custom fields, property setters, financial documents, stock documents, and prope
 | Meter invoices are not created | Confirm Meter Reading is submitted, `Do not create invoice` is not checked, and the property has an active lease/customer |
 | Maintenance invoices fail | Confirm company maintenance tax template, item rates, customer, cost center, warehouse, and POS profile settings |
 | Property status looks incorrect | Review active leases, lease dates, skip end date, scheduled jobs, and manual statuses |
-| Install fails through `setup.py` | This checkout lacks `requirements.txt`; prefer v15 bench/pyproject installation and confirm packaging with maintainers |
+| Install fails through `setup.py` | This checkout lacks `requirements.txt`; prefer bench/pyproject installation and confirm packaging with maintainers |
 
 ## Security
 
@@ -556,9 +556,9 @@ Custom fields, property setters, financial documents, stock documents, and prope
 
 | File or Area | Evidence Found |
 |---|---|
-| `pyproject.toml` | App name, Python requirement, Frappe and ERPNext v15 dependencies |
+| `pyproject.toml` | App name, Python requirement, Frappe and ERPNext v16 dependencies |
 | `setup.py` | Package metadata and Aakvatech author details; references missing `requirements.txt` |
-| `propms/__init__.py` | App version `15.2.1` |
+| `propms/__init__.py` | App version `16.1.0` |
 | `propms/hooks.py` | App metadata, install hooks, document events, scheduler events, client scripts |
 | `propms/modules.txt` | Module name `Property Management Solution` |
 | `propms/config/property_management_solution.py` | Desk module links for documents, masters, settings, and analytics |
@@ -578,7 +578,6 @@ Custom fields, property setters, financial documents, stock documents, and prope
 
 ## To Confirm Before Publishing
 
-- Exact public branch or tag name for ERPNext v15 installation.
 - Correct license: `LICENSE` says GPL, while `hooks.py` says MIT.
 - Whether a `Property Management Solution` ERPNext domain still needs to be created manually.
 - Whether `setup.py` should still reference `requirements.txt`.
@@ -608,9 +607,9 @@ Use the standard Frappe development workflow:
 
 ## Versioning
 
-Current repository version: `15.2.1`
+Current repository version: `16.1.0`
 
-Use a branch or tag that matches the deployed ERPNext major version. This repository targets Frappe and ERPNext v15.
+Use a branch or tag that matches the deployed ERPNext major version. This branch targets Frappe and ERPNext v16.
 
 ## License
 
