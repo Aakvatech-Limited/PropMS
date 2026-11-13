@@ -1,18 +1,22 @@
 import json
-import os
+from pathlib import Path
 
 import frappe
 from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
-folder = "../patches/property_setter/property_setter_json"
+JSON_DIRECTORY = (
+	Path(__file__).resolve().parent.parent / "patches" / "property_setter/property_setter_json"
+).resolve()
 
 
 def load_json(file):
-	CURR_DIR = os.path.abspath(os.path.dirname(__file__))
-	json_file_path = os.path.join(CURR_DIR, folder, file)
-	with open(json_file_path) as file:
-		data = json.load(file)
-	return data
+	"""Load only JSON filenames directly inside the packaged patch directory."""
+	if not isinstance(file, str) or Path(file).name != file or not file.endswith(".json"):
+		raise ValueError("Invalid patch JSON filename")
+	json_path = (JSON_DIRECTORY / file).resolve()
+	if json_path.parent != JSON_DIRECTORY:
+		raise ValueError("Patch JSON must be inside the configured directory")
+	return json.loads(json_path.read_text(encoding="utf-8"))
 
 
 def create_property_setter_from_json(property_setters_obj):
@@ -90,11 +94,8 @@ def create_property_setter_from_json(property_setters_obj):
 
 def execute():
 	# read names of only json files in this folder and put it into files list
-	files = list(
-		filter(
-			lambda x: x.endswith(".json"),
-			os.listdir(os.path.join(os.path.abspath(os.path.dirname(__file__)), folder)),
-		)
+	files = sorted(
+		path.name for path in JSON_DIRECTORY.iterdir() if path.is_file() and path.suffix == ".json"
 	)
 	for file in files:
 		data = load_json(file)
