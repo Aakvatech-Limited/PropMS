@@ -1,4 +1,6 @@
 import json
+from unittest import TestCase
+from unittest.mock import patch
 
 import frappe
 from frappe.tests import IntegrationTestCase
@@ -7,6 +9,7 @@ from frappe.utils import add_months, get_first_day, nowdate
 from propms.lease_invoice import (
 	getCostCenter,
 	getDueDate,
+	getTax,
 	leaseInvoiceAutoCreate,
 	makeInvoice,
 )
@@ -14,6 +17,30 @@ from propms.property_management_solution.doctype.lease.lease import (
 	make_lease_invoice_schedule as build_schedule_for_lease,
 )
 from propms.tests.utils import create_customer, create_item, create_lease, set_settings
+
+
+class TestLeaseInvoiceTaxes(TestCase):
+	def test_template_reload_does_not_duplicate_taxes(self):
+		invoice = frappe.get_doc({"doctype": "Sales Invoice", "taxes_and_charges": "Standard"})
+		tax = {"charge_type": "On Net Total", "account_head": "Output VAT", "rate": 18}
+		invoice.append("taxes", tax.copy())
+		with patch("propms.lease_invoice.get_taxes_and_charges", return_value=[tax]):
+			getTax(invoice)
+			getTax(invoice)
+		self.assertEqual(len(invoice.taxes), 1)
+		self.assertEqual(invoice.taxes[0].rate, 18)
+
+	def test_template_reload_replaces_stale_taxes_and_preserves_template_rows(self):
+		invoice = frappe.get_doc({"doctype": "Sales Invoice", "taxes_and_charges": "Replacement"})
+		invoice.append("taxes", {"account_head": "Old VAT", "rate": 0})
+		taxes = [
+			{"charge_type": "On Net Total", "account_head": "Output VAT", "rate": 18},
+			{"charge_type": "On Net Total", "account_head": "Levy", "rate": 1},
+		]
+		with patch("propms.lease_invoice.get_taxes_and_charges", return_value=taxes):
+			getTax(invoice)
+		self.assertEqual([row.account_head for row in invoice.taxes], ["Output VAT", "Levy"])
+		self.assertEqual([row.idx for row in invoice.taxes], [1, 2])
 
 
 class TestLeaseInvoice(IntegrationTestCase):
