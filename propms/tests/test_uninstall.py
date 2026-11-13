@@ -1,5 +1,5 @@
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 from propms import uninstall
 
@@ -7,7 +7,7 @@ PROBE_ROLE = "Propms Uninstall Probe Role"
 SHARED_ROLE = "Maintenance Manager"
 
 
-class TestUninstallCleanup(FrappeTestCase):
+class TestUninstallCleanup(IntegrationTestCase):
 	"""Cover the cleanup that runs once uninstall-app has deleted the PropMS DocTypes."""
 
 	def tearDown(self):

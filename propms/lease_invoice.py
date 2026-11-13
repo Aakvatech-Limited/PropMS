@@ -183,7 +183,7 @@ def getCostCenter(name):
 	return frappe.db.get_value("Property", property_name, "cost_center")
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def leaseInvoiceAutoCreate():
 	"""Generate each due group independently; a failed tenant never blocks the rest."""
 	invoice_start_date = frappe.db.get_single_value("Property Management Settings", "invoice_start_date")
@@ -279,7 +279,7 @@ def _create_schedule_group(lease_name, schedule_names):
 	return invoice
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def enqueue_lease_invoice_auto_create():
 	"""Enqueue leaseInvoiceAutoCreate as a background job on the 'long' queue."""
 	frappe.enqueue("propms.lease_invoice.leaseInvoiceAutoCreate", queue="long", now=False)
