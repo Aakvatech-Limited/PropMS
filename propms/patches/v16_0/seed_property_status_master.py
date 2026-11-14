@@ -4,13 +4,13 @@ import frappe
 
 
 CATEGORIES = {
-	"Available": 0,
-	"Reserved": 0,
-	"Occupied": 1,
-	"Excluded": 0,
-	"Sales": 0,
-	"Maintenance": 0,
-	"Inactive": 0,
+	"Available": (0, 1),
+	"Reserved": (0, 0),
+	"Occupied": (1, 0),
+	"Excluded": (0, 0),
+	"Sales": (0, 0),
+	"Maintenance": (0, 0),
+	"Inactive": (0, 0),
 }
 
 # (category, system controlled, blocks new leases, terminal)
@@ -37,12 +37,21 @@ def execute():
 		frappe.delete_doc("Property Setter", "Property-status-options", ignore_permissions=True)
 	frappe.clear_cache(doctype="Property")
 
-	for name, occupied in CATEGORIES.items():
+	for name, (occupied, available) in CATEGORIES.items():
 		if not frappe.db.exists("Property Status Category", name):
 			frappe.get_doc({"doctype": "Property Status Category", "category_name": name,
-				"counts_as_occupied": occupied}).insert(ignore_permissions=True)
+				"counts_as_occupied": occupied, "counts_as_available": available}).insert(ignore_permissions=True)
 	for name, (category, system, blocks, terminal) in STATUSES.items():
 		if not frappe.db.exists("Property Status", name):
 			frappe.get_doc({"doctype": "Property Status", "status_name": name,
 				"status_category": category, "is_system_controlled": system,
 				"blocks_new_leases": blocks, "is_terminal": terminal}).insert(ignore_permissions=True)
+
+	# Retain custom legacy statuses rather than orphaning historical Property links.
+	for row in frappe.get_all("Property", fields=["status"], distinct=True):
+		name = row.status
+		if name and not frappe.db.exists("Property Status", name):
+			if not frappe.db.exists("Property Status Category", "Other"):
+				frappe.get_doc({"doctype": "Property Status Category", "category_name": "Other"}).insert(ignore_permissions=True)
+			frappe.get_doc({"doctype": "Property Status", "status_name": name,
+				"status_category": "Other", "is_system_controlled": 0}).insert(ignore_permissions=True)
