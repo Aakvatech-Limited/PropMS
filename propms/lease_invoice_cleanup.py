@@ -3,6 +3,8 @@
 import frappe
 from frappe import _
 
+from propms.withholding_journal_cleanup import delete_withholding_journals_for_invoice
+
 
 @frappe.whitelist()
 def delete_selected_schedule_invoices(lease_name, schedule_rows):
@@ -70,6 +72,10 @@ def delete_selected_schedule_invoices(lease_name, schedule_rows):
             invoice.check_permission("delete")
             if invoice.docstatus == 1:
                 invoice.check_permission("cancel")
+            # Remove the invoice's csf_tz withholding-tax Journal Entries FIRST.
+            # A failure rolls back all deletions and link changes for this invoice.
+            deleted_journals = delete_withholding_journals_for_invoice(invoice)
+
             # Never use force, ignore_links, ignore_permissions, or direct SQL
             # deletion. ERPNext must enforce payment and accounting dependencies.
             for row in linked_rows:
@@ -84,12 +90,13 @@ def delete_selected_schedule_invoices(lease_name, schedule_rows):
 
             lease.add_comment(
                 "Info",
-                _("Deleted Sales Invoice {0} from Lease Invoice Schedule rows: {1}").format(
+                _("Deleted Sales Invoice {0}, withholding journals [{1}], from Lease Invoice Schedule rows: {2}").format(
                     frappe.utils.escape_html(invoice_name),
+                    ", ".join(frappe.utils.escape_html(name) for name in deleted_journals),
                     ", ".join(frappe.utils.escape_html(r.name) for r in linked_rows),
                 ),
             )
-            results.append({"invoice": invoice_name, "status": "deleted", "rows": row_names})
+            results.append({"invoice": invoice_name, "status": "deleted", "rows": row_names, "deleted_journals": deleted_journals})
         except Exception as exc:
             frappe.db.rollback(save_point="lease_invoice_cleanup")
             results.append({
