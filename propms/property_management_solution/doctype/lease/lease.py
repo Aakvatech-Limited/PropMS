@@ -5,7 +5,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import add_days, add_months, cint, get_datetime, getdate, now, nowdate, today
+from frappe.utils import add_days, add_months, cint, getdate, now, nowdate, today
 
 from propms.auto_custom import app_error_log, getDateMonthDiff, makeInvoiceSchedule
 from propms.lease_status_utils import get_overlap_blocking_statuses, is_active_lease_status
