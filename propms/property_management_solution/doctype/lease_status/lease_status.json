@@ -1,0 +1,59 @@
+{
+ "doctype": "DocType",
+ "name": "Lease Status",
+ "module": "Property Management Solution",
+ "autoname": "field:status_name",
+ "title_field": "status_name",
+ "sort_field": "status_name",
+ "sort_order": "ASC",
+ "engine": "InnoDB",
+ "editable_grid": 1,
+ "field_order": [
+  "status_name",
+  "is_active_lease",
+  "blocks_overlapping_leases"
+ ],
+ "fields": [
+  {
+   "fieldname": "status_name",
+   "fieldtype": "Data",
+   "label": "Status Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_active_lease",
+   "fieldtype": "Check",
+   "label": "Is Active Lease",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "blocks_overlapping_leases",
+   "fieldtype": "Check",
+   "label": "Blocks Overlapping Leases",
+   "default": "0",
+   "in_list_view": 1,
+   "description": "Reserves occupancy for overlap validation, including upcoming leases."
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Property Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "index_web_pages_for_search": 0
+}

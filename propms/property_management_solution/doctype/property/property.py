@@ -6,6 +6,8 @@ import frappe
 from frappe import _
 from frappe.utils.nestedset import NestedSet
 
+from propms.lease_status_utils import get_active_leases_for_property
+
 
 class Property(NestedSet):
 	nsm_parent_field = "parent_property"
@@ -32,23 +34,8 @@ class Property(NestedSet):
 			)
 
 	def get_active_leases(self):
-		"""Get active leases for this property"""
-		if not self.name:
-			return []
-
-		from frappe.query_builder import DocType
-
-		Lease = DocType("Lease")
-
-		active_leases = (
-			frappe.qb.from_(Lease)
-			.select(Lease.name, Lease.start_date, Lease.end_date, Lease.skip_end_date)
-			.where(Lease.property == self.name)
-			.where(Lease.start_date <= frappe.utils.now())
-			.where((Lease.end_date >= frappe.utils.now()) | (Lease.skip_end_date == 1))
-		).run(as_dict=True)
-
-		return active_leases
+		"""Get current effective active leases for this property."""
+		return get_active_leases_for_property(self.name)
 
 	def on_trash(self, allow_root_deletion=True):
 		super().on_trash(allow_root_deletion)

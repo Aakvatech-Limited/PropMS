@@ -332,11 +332,10 @@
   },
   {
    "label": "Active Leases",
-   "type": "DocType",
-   "link_to": "Lease",
-   "doc_view": "List",
+   "type": "Report",
+   "link_to": "Active Leases",
    "color": "Grey",
-   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Active\",false]]"
+   "is_query_report": 1
   },
   {
    "label": "Upcoming Leases",
