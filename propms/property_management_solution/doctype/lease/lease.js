@@ -39,6 +39,55 @@ frappe.ui.form.on('Lease', {
 		frm.add_custom_button(__("Make Invoice Schedule for all Lease"), function() {
 			getAllLease(frm);
 		}, __("Actions"));
+        if (!frm.is_new() && (frm.doc.lease_invoice_schedule || []).some(row => row.invoice_number)) {
+            frm.add_custom_button(__("Delete Selected Schedule Invoices"), function() {
+                const grid = frm.fields_dict.lease_invoice_schedule.grid;
+                const selected = grid.get_selected_children();
+                if (!selected.length) {
+                    frappe.msgprint(__("Select the schedule rows using the checkboxes in the Lease Invoice Schedule grid."));
+                    return;
+                }
+                const invoices = [...new Set(selected.map(row => row.invoice_number).filter(Boolean))];
+                if (!invoices.length) {
+                    frappe.msgprint(__("The selected rows have no Sales Invoices."));
+                    return;
+                }
+                if (frm.is_dirty()) {
+                    frappe.msgprint(__("Save or discard unsaved Lease changes before deleting invoices."));
+                    return;
+                }
+                frappe.confirm(
+                    __("Permanently delete {0} Sales Invoice(s) linked to {1} selected schedule row(s)? Submitted invoices will first be cancelled. This cannot be undone.", [invoices.length, selected.length]),
+                    function() {
+                        frappe.call({
+                            method: "propms.lease_invoice_cleanup.delete_selected_schedule_invoices",
+                            args: {lease_name: frm.doc.name, schedule_rows: selected.map(row => row.name)},
+                            freeze: true,
+                            freeze_message: __("Cancelling and deleting selected Sales Invoices..."),
+                            callback: function(r) {
+                                if (!r.message) return;
+                                const deleted = (r.message.results || []).filter(row => row.status === "deleted");
+                                const failed = (r.message.results || []).filter(row => row.status === "failed");
+                                const skipped = r.message.skipped || [];
+                                const summary = [
+                                    __("Deleted: {0}", [deleted.length]),
+                                    __("Failed: {0}", [failed.length]),
+                                    __("Rows without invoice: {0}", [skipped.length])
+                                ];
+                                const failures = failed.map(row => frappe.utils.escape_html(row.invoice + ": " + row.reason));
+                                frappe.msgprint({
+                                    title: __("Lease Invoice Deletion Results"),
+                                    indicator: failed.length ? "orange" : "green",
+                                    message: summary.join("<br>") + (failures.length ? "<hr>" + failures.join("<br>") : "")
+                                });
+                                frm.reload_doc();
+                            }
+                        });
+                    }
+                );
+            }, __("Actions"));
+        }
+
 
         // Add custom buttons for Accounts Receivable and Accounting Ledger
         if (!frm.doc.__islocal) {
