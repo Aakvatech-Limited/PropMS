@@ -9,6 +9,7 @@ from frappe.utils import add_days, add_months, cint, get_datetime, getdate, now,
 
 from propms.auto_custom import app_error_log, getDateMonthDiff, makeInvoiceSchedule
 from propms.lease_status_utils import get_overlap_blocking_statuses, is_active_lease_status
+from propms.property_status_utils import reconcile_property_status
 
 
 class Lease(Document):
@@ -20,6 +21,18 @@ class Lease(Document):
 			if item.property_unit:
 				properties.add(item.property_unit)
 		return list(properties)
+
+	def on_update(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
+
+	def on_update_after_submit(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
+
+	def on_cancel(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
 
 	def on_submit(self):
 		try:
