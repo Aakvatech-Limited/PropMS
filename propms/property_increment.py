@@ -1,5 +1,5 @@
-from propms.lease_status_utils import get_active_lease_statuses
 import math
+from propms.lease_status_utils import get_active_lease_statuses
 
 import frappe
 from frappe import _
