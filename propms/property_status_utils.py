@@ -28,6 +28,13 @@ def get_statuses_for_category(category):
 	return frappe.get_all("Property Status", filters={"status_category": category}, pluck="name")
 
 
+def get_available_property_statuses():
+	categories = frappe.get_all("Property Status Category", filters={"counts_as_available": 1}, pluck="name")
+	if not categories:
+		return []
+	return frappe.get_all("Property Status", filters={"status_category": ["in", categories], "blocks_new_leases": 0, "is_terminal": 0}, pluck="name")
+
+
 def category_counts_as_occupied(category):
 	return bool(category and frappe.db.get_value("Property Status Category", category, "counts_as_occupied"))
 
@@ -45,7 +52,7 @@ def is_property_available_for_lease(property_name):
 		return False
 	meta = status_info(prop.status)
 	return (
-		meta.get("status_category") == "Available"
+		bool(meta.get("status_category") and frappe.db.get_value("Property Status Category", meta["status_category"], "counts_as_available"))
 		and not meta.get("blocks_new_leases")
 		and not meta.get("is_terminal")
 		and not get_active_leases_for_property(property_name)
@@ -112,7 +119,7 @@ def get_current_property_lease(property_name):
 @frappe.whitelist()
 def available_properties_kpi():
 	Property = frappe.qb.DocType("Property")
-	statuses = get_statuses_for_category("Available")
+	statuses = get_available_property_statuses()
 	if not statuses:
 		return {"value": 0, "fieldtype": "Int"}
 	rows = (
