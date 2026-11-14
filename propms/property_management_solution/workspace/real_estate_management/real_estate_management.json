@@ -379,11 +379,10 @@
   },
   {
    "label": "Available Properties",
-   "type": "DocType",
-   "link_to": "Property",
-   "doc_view": "List",
+   "type": "Report",
+   "link_to": "Available Properties",
    "color": "Grey",
-   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Available\",false]]"
+   "is_query_report": 1
   },
   {
    "label": "Booked Properties",
