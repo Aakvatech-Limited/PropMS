@@ -1,40 +1,15 @@
 frappe.ui.form.on('Sales Invoice', {
-    property_name: function(frm, cdt, cdn) {
-        frappe.model.set_value(cdt, cdn, "customer", "");
-	if (frm.doc.cost_center) {
-            frappe.call({
-                method: "frappe.client.get_value",
-                args: {
-                    doctype: "Property",
-                    fieldname: "status",
-                    filters: {
-                        name: frm.doc.cost_center
-                    },
-                },
-                callback: function(r, rt) {
-                    if (r.message) {
-                        if (r.message.status == "On Lease") {
-                            frappe.call({
-                                method: "frappe.client.get_value",
-                                args: {
-                                    doctype: "Lease",
-                                    fieldname: "customer",
-                                    filters: {
-                                        property: frm.doc.cost_center
-                                    },
-                                },
-                                callback: function(r, rt) {
-                                    if (r.message) {
-                                        frappe.model.set_value(cdt, cdn, "customer", r.message.customer);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-        } else {
-            frappe.model.set_value(cdt, cdn, "customer", "");
-        }
-    }
-})
+	property_name: function(frm, cdt, cdn) {
+		if (!frm.doc.property_name || !frm.doc.cost_center) return;
+		frappe.call({
+			method: "propms.property_status_utils.get_current_property_lease",
+			args: {property_name: frm.doc.property_name},
+			callback: function(r) {
+				// Never auto-assign tenants for facility-management-only properties.
+				if (r.message && r.message.customer) {
+					frappe.model.set_value(cdt, cdn, "customer", r.message.customer);
+				}
+			}
+		});
+	}
+});

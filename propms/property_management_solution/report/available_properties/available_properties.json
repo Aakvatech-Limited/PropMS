@@ -1,0 +1,19 @@
+{
+ "doctype": "Report",
+ "name": "Available Properties",
+ "report_name": "Available Properties",
+ "report_type": "Script Report",
+ "ref_doctype": "Property",
+ "is_standard": "Yes",
+ "module": "Property Management Solution",
+ "disabled": 0,
+ "prepared_report": 0,
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Property Manager"
+  }
+ ]
+}

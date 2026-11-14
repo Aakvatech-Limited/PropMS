@@ -25,7 +25,7 @@
   {
    "type": "Card Break",
    "label": "Masters",
-   "link_count": 5,
+   "link_count": 7,
    "hidden": 0
   },
   {
@@ -69,6 +69,24 @@
    "label": "Billing Items",
    "link_type": "DocType",
    "link_to": "Item",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Master",
+   "link_type": "DocType",
+   "link_to": "Property Status",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Categories",
+   "link_type": "DocType",
+   "link_to": "Property Status Category",
    "hidden": 0,
    "onboard": 0,
    "is_query_report": 0
@@ -136,7 +154,7 @@
   {
    "type": "Card Break",
    "label": "Lease & Occupancy Reports",
-   "link_count": 6,
+   "link_count": 7,
    "hidden": 0
   },
   {
@@ -198,6 +216,16 @@
    "onboard": 0,
    "is_query_report": 0,
    "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Link",
+   "label": "Available Properties Report",
+   "link_type": "Report",
+   "link_to": "Available Properties",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Property"
   },
   {
    "type": "Card Break",
@@ -379,11 +407,10 @@
   },
   {
    "label": "Available Properties",
-   "type": "DocType",
-   "link_to": "Property",
-   "doc_view": "List",
+   "type": "Report",
+   "link_to": "Available Properties",
    "color": "Grey",
-   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Available\",false]]"
+   "is_query_report": 1
   },
   {
    "label": "Booked Properties",
