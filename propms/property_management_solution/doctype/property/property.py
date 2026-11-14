@@ -7,6 +7,7 @@ from frappe import _
 from frappe.utils.nestedset import NestedSet
 
 from propms.lease_status_utils import get_active_leases_for_property
+from propms.property_status_utils import status_info
 
 
 class Property(NestedSet):
@@ -25,13 +26,11 @@ class Property(NestedSet):
 		if old_doc and old_doc.status == self.status:
 			return  # Status not changing
 
-		# If property has active leases, prevent status change
-		active_leases = self.get_active_leases()
-		if active_leases:
-			lease_names = [lease.name for lease in active_leases]
-			frappe.throw(
-				_("Cannot change property status. Active leases exist: {0}").format(", ".join(lease_names))
-			)
+		# Only prevent a transition to operationally Available when a tenant remains.
+		# A leased property may legitimately be Vacating, On Sale or In Renovation.
+		info = status_info(self.status)
+		if info.get("status_category") == "Available" and self.get_active_leases():
+			frappe.throw(_("A property with active leases cannot be marked Available."))
 
 	def get_active_leases(self):
 		"""Get current effective active leases for this property."""
