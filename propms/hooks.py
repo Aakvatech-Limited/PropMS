@@ -74,12 +74,12 @@ doctype_js = {
 # before_install = "propms.install.before_install"
 after_install = [
 	"propms.utils.create_custom_fields.execute",
-	"propms.utils.create_property_setter.execute",
 ]
+
+before_migrate = "propms.patches.v16_0.validate_status_property_setters.execute"
 
 after_migrate = [
 	"propms.utils.create_custom_fields.execute",
-	"propms.utils.create_property_setter.execute",
 ]
 
 after_uninstall = "propms.uninstall.after_uninstall"
@@ -106,8 +106,8 @@ after_uninstall = "propms.uninstall.after_uninstall"
 # ---------------
 # Hook on document methods and events
 
-# Fixtures removed - Custom Fields and Property Setters are now managed through
-# JSON files in patches/ directory and created via utility functions in after_install/after_migrate hooks
+# App-managed Custom Fields are installed by hooks. Property Setter fixtures are not applied.
+# Status-field overrides are rejected in the pre-model-sync migration patch.
 
 
 doc_events = {

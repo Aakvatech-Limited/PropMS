@@ -1,6 +1,8 @@
 [pre_model_sync]
+propms.patches.v16_0.validate_status_property_setters
 
 [post_model_sync]
 propms.patches.v15_2.reload_property_status_report
 
 propms.patches.v16_0.seed_lease_status_master
+propms.patches.v16_0.seed_property_status_master

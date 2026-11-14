@@ -5,11 +5,10 @@
   "is_standard": 1,
   "is_public": 1,
   "module": "Property Management Solution",
-  "type": "Document Type",
-  "document_type": "Property",
-  "function": "Count",
-  "filters_json": "[[\"Property\",\"status\",\"=\",\"Available\"],[\"Property\",\"is_group\",\"=\",0]]",
+  "type": "Custom",
+  "filters_json": "[]",
   "dynamic_filters_json": "[]",
   "show_percentage_stats": 0,
-  "show_full_number": 0
+  "show_full_number": 0,
+  "method": "propms.property_status_utils.available_properties_kpi"
 }

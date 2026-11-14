@@ -5,10 +5,11 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import add_days, add_months, cint, get_datetime, getdate, now, nowdate, today
+from frappe.utils import add_days, add_months, cint, getdate, now, nowdate, today
 
 from propms.auto_custom import app_error_log, getDateMonthDiff, makeInvoiceSchedule
 from propms.lease_status_utils import get_overlap_blocking_statuses, is_active_lease_status
+from propms.property_status_utils import reconcile_property_status
 
 
 class Lease(Document):
@@ -20,6 +21,18 @@ class Lease(Document):
 			if item.property_unit:
 				properties.add(item.property_unit)
 		return list(properties)
+
+	def on_update(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
+
+	def on_update_after_submit(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
+
+	def on_cancel(self):
+		for prop in self.get_all_properties():
+			reconcile_property_status(prop)
 
 	def on_submit(self):
 		try:
@@ -80,38 +93,9 @@ class Lease(Document):
 						).format(self.name, prop, max_allowed, len(active_conflicts))
 						frappe.throw(msg, title=_("Active Lease Limit Exceeded"))
 
-			for prop in properties:
-				if self.skip_end_date is None:
-					if (
-						get_datetime(add_months(self.end_date, -3))
-						<= get_datetime(now())
-						<= get_datetime(add_months(self.end_date, 3))
-					):
-						frappe.db.set_value("Property", prop, "status", "Off Lease in 3 Months")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>Off Lease in 3 Months</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
-					elif is_active_lease_status(self.lease_status) and (
-						get_datetime(self.start_date)
-						<= get_datetime(now())
-						<= get_datetime(add_months(self.end_date, -3))
-					):
-						frappe.db.set_value("Property", prop, "status", "On Lease")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
-				else:
-					if is_active_lease_status(self.lease_status):
-						frappe.db.set_value("Property", prop, "status", "On Lease")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
+			# Property status reconciliation runs after lease persistence; validation
+			# must not overwrite manual facility-management or maintenance statuses.
+
 		except frappe.ValidationError:
 			raise
 		except Exception as e:

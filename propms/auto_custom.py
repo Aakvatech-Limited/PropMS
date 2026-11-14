@@ -9,15 +9,12 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from frappe.query_builder import DocType
-from frappe.utils import add_days, add_months, date_diff, getdate, now_datetime, today
+from frappe.utils import add_days, add_months, date_diff, getdate, today
 from pypika import Order
 
 from propms.lease_invoice import getDueDate
-from propms.lease_status_utils import (
-	get_active_lease_statuses,
-	get_active_leases_for_property,
-	get_latest_active_lease as _get_latest_active_lease,
-)
+from propms.property_status_utils import reconcile_property_status
+from propms.lease_status_utils import get_latest_active_lease as _get_latest_active_lease
 
 
 @frappe.whitelist()
@@ -215,103 +212,23 @@ def validateSalesInvoiceItemDuplication(self, method):
 
 @frappe.whitelist()
 def statusChangeBeforeLeaseExpire():
-	try:
-		# ---------------------------------------------
-		# Mark properties as "Off Lease in 3 Months"
-		#    Only when lease *has* an end_date
-		#    and ends within next 3 months.
-		# ---------------------------------------------
-		lease = DocType("Lease")
-		latest = DocType("Lease").as_("latest")
-		property_table = DocType("Property")
-		current_date = getdate(today())
-		latest_lease = (
-			frappe.qb.from_(latest)
-			.select(latest.name)
-			.where(latest.property == lease.property)
-			.where(latest.lease_status.isin(get_active_lease_statuses() or [""]))
-			.where(latest.docstatus < 2)
-			.orderby(latest.end_date, order=Order.desc)
-			.limit(1)
-		)
-		upcoming_expiry = (
-			frappe.qb.from_(lease)
-			.inner_join(property_table)
-			.on(lease.property == property_table.name)
-			.select(lease.name, lease.property, lease.end_date)
-			.where(lease.end_date.isnotnull())
-			.where(lease.skip_end_date != 1)
-			.where(lease.lease_status.isin(get_active_lease_statuses() or [""]))
-			.where(lease.docstatus < 2)
-			.where(lease.name == latest_lease)
-			.where(lease.end_date.between(current_date, add_months(current_date, 3)))
-			.where(property_table.status == "On Lease")
-		).run(as_dict=True)
-
-		for lease in upcoming_expiry:
-			frappe.db.set_value("Property", lease.property, "status", "Off Lease in 3 Months")
-
-	except Exception as e:
-		app_error_log(frappe.session.user, str(e))
+	"""Reconcile automatic property states with effective leases and expiry dates."""
+	for name in frappe.get_all("Property", pluck="name"):
+		reconcile_property_status(name)
 
 
 @frappe.whitelist()
 def statusChangeAfterLeaseExpire():
-	try:
-		Property = DocType("Property")
-		Lease = DocType("Lease")
-
-		# Get properties that might need status change
-		properties = (
-			frappe.qb.from_(Property)
-			.select(Property.name)
-			.where(Property.status.isin(["On Lease", "Off Lease in 3 Months"]))
-		).run(as_dict=True)
-
-		properties_to_update = []
-
-		for prop in properties:
-			# Check if property has any active leases
-			active_leases = get_active_leases_for_property(prop.name)
-
-			# If no active leases, add to update list
-			if not active_leases:
-				properties_to_update.append(prop.name)
-
-		# Bulk update properties to Available
-		if properties_to_update:
-			frappe.qb.update(Property).set(Property.status, "Available").where(
-				Property.name.isin(properties_to_update)
-			).run()
-
-	except Exception as e:
-		app_error_log(frappe.session.user, str(e))
+	"""Availability only follows lease expiry for system-controlled properties."""
+	for name in frappe.get_all("Property", pluck="name"):
+		reconcile_property_status(name)
 
 
 @frappe.whitelist()
 def update_property_status():
-	try:
-		property_table = DocType("Property")
-		lease = DocType("Lease")
-		active_lease_properties = (
-			frappe.qb.from_(property_table)
-			.inner_join(lease)
-			.on(lease.property == property_table.name)
-			.select(property_table.name)
-			.distinct()
-			.where(property_table.status == "Available")
-			.where(lease.start_date <= now_datetime())
-			.where((lease.end_date >= now_datetime()) | lease.end_date.isnull() | (lease.skip_end_date == 1))
-			.where(lease.docstatus < 2)
-			.where(lease.lease_status.isin(get_active_lease_statuses() or [""]))
-		).run(as_dict=True)
-		# frappe.throw(str(active_lease_properties))
-
-		for row in active_lease_properties:
-			frappe.db.set_value("Property", row.name, "status", "On Lease")
-
-	except Exception as e:
-		app_error_log(frappe.session.user, str(e))
+	"""Keep operational status aligned with lease occupancy without overwriting manual statuses."""
+	for name in frappe.get_all("Property", pluck="name"):
+		reconcile_property_status(name)
 
 
 @frappe.whitelist()
