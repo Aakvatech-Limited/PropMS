@@ -8,6 +8,7 @@ from frappe.model.document import Document
 from frappe.utils import add_days, add_months, cint, get_datetime, getdate, now, nowdate, today
 
 from propms.auto_custom import app_error_log, getDateMonthDiff, makeInvoiceSchedule
+from propms.lease_status_utils import get_active_lease_statuses, get_overlap_blocking_statuses, is_active_lease_status
 
 
 class Lease(Document):
@@ -50,7 +51,7 @@ class Lease(Document):
 		try:
 			properties = self.get_all_properties()
 			# Lease Status Validation: Prevent multiple active leases per property
-			if self.lease_status == "Active":
+			if is_active_lease_status(self.lease_status):
 				for prop in properties:
 					max_allowed = (
 						cint(frappe.db.get_value("Property", prop, "max_active_leases"))
@@ -63,7 +64,7 @@ class Lease(Document):
 						"Lease",
 						filters={
 							"property": prop,
-							"lease_status": ["in", LIVE_LEASE_STATUSES],
+							"lease_status": ["in", get_overlap_blocking_statuses() or [""]],
 							"name": ["!=", self.name],
 							"docstatus": ["<", 2],  # Exclude cancelled
 						},
@@ -92,7 +93,7 @@ class Lease(Document):
 								'Property "{0}" has now been set <b>Off Lease in 3 Months</b> for Lease "{1}"'
 							).format(prop, self.name)
 						)
-					elif self.lease_status != "Draft" and (
+					elif is_active_lease_status(self.lease_status) and (
 						get_datetime(self.start_date)
 						<= get_datetime(now())
 						<= get_datetime(add_months(self.end_date, -3))
@@ -104,7 +105,7 @@ class Lease(Document):
 							).format(prop, self.name)
 						)
 				else:
-					if self.lease_status != "Draft":
+					if is_active_lease_status(self.lease_status):
 						frappe.db.set_value("Property", prop, "status", "On Lease")
 						frappe.msgprint(
 							_(
@@ -155,9 +156,6 @@ class Lease(Document):
 
 		if status:
 			self.lease_status = status
-
-
-LIVE_LEASE_STATUSES = ["Active", "Upcoming", "Vacating"]
 
 
 def is_lease_period_overlapping(lease, other):
