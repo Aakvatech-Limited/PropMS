@@ -8,6 +8,7 @@ from erpnext.accounts.party import get_due_date
 from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
 from frappe.utils import add_days, add_months, flt, getdate, today
+from propms.management_invoice_tax import clear_management_invoice_taxes, is_management_lease, validate_management_invoice_taxes
 
 
 def _item_signature(items):
@@ -157,7 +158,10 @@ def makeInvoice(
 		if not customer:
 			frappe.throw(_("Please select a Customer in Lease {0}").format(lease))
 		company = frappe.get_value("Lease", lease, "company")
-		default_tax_template = frappe.get_value("Company", company, "default_tax_template")
+		default_tax_template = (
+			None if doctype == "Sales Invoice" and is_management_lease(lease)
+			else frappe.get_value("Company", company, "default_tax_template")
+		)
 		if qty != int(qty):
 			# it means the last invoice for the lease that may have fraction of months
 			subs_end_date = frappe.get_value("Lease", lease, "end_date")
@@ -200,9 +204,13 @@ def makeInvoice(
 			if not doc.due_date or getdate(doc.due_date) < getdate(sales_order_date):
 				doc.due_date = sales_order_date
 		doc.set_missing_values()
+		if doctype == "Sales Invoice":
+			clear_management_invoice_taxes(doc)
 		if doc.taxes_and_charges:
 			getTax(doc)
 		doc.calculate_taxes_and_totals()
+		if doctype == "Sales Invoice" and is_management_lease(lease):
+			validate_management_invoice_taxes(doc)
 		doc.insert()
 
 		if doctype == "Sales Order" and frappe.db.get_single_value(
