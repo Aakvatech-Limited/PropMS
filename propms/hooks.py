@@ -125,6 +125,10 @@ doc_events = {
 		"on_change": "propms.auto_custom.makeSalesInvoice",
 	},
 	"Sales Order": {"validate": "propms.auto_custom.validateSalesInvoiceItemDuplication"},
+	"Sales Invoice": {
+		"validate": "propms.management_invoice_tax.validate_management_invoice_taxes",
+		"before_submit": "propms.management_invoice_tax.validate_management_invoice_taxes",
+	},
 	"Key Set Detail": {"on_change": "propms.auto_custom.changeStatusKeyset"},
 	"Meter Reading": {"on_submit": "propms.auto_custom.make_invoice_meter_reading"},
 }
