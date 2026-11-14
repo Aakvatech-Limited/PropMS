@@ -80,38 +80,9 @@ class Lease(Document):
 						).format(self.name, prop, max_allowed, len(active_conflicts))
 						frappe.throw(msg, title=_("Active Lease Limit Exceeded"))
 
-			for prop in properties:
-				if self.skip_end_date is None:
-					if (
-						get_datetime(add_months(self.end_date, -3))
-						<= get_datetime(now())
-						<= get_datetime(add_months(self.end_date, 3))
-					):
-						frappe.db.set_value("Property", prop, "status", "Off Lease in 3 Months")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>Off Lease in 3 Months</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
-					elif is_active_lease_status(self.lease_status) and (
-						get_datetime(self.start_date)
-						<= get_datetime(now())
-						<= get_datetime(add_months(self.end_date, -3))
-					):
-						frappe.db.set_value("Property", prop, "status", "On Lease")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
-				else:
-					if is_active_lease_status(self.lease_status):
-						frappe.db.set_value("Property", prop, "status", "On Lease")
-						frappe.msgprint(
-							_(
-								'Property "{0}" has now been set <b>On Lease from Active</b> for Lease "{1}"'
-							).format(prop, self.name)
-						)
+			# Property status reconciliation runs after lease persistence; validation
+			# must not overwrite manual facility-management or maintenance statuses.
+
 		except frappe.ValidationError:
 			raise
 		except Exception as e:
