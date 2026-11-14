@@ -31,6 +31,12 @@ STATUSES = {
 
 
 def execute():
+	# Older sites may retain a Property Setter that forces Select options.
+	# Remove only this obsolete setting; keep unrelated customizations intact.
+	if frappe.db.exists("Property Setter", "Property-status-options"):
+		frappe.delete_doc("Property Setter", "Property-status-options", ignore_permissions=True)
+	frappe.clear_cache(doctype="Property")
+
 	for name, occupied in CATEGORIES.items():
 		if not frappe.db.exists("Property Status Category", name):
 			frappe.get_doc({"doctype": "Property Status Category", "category_name": name,
