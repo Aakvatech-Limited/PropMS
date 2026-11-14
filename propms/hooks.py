@@ -76,6 +76,8 @@ after_install = [
 	"propms.utils.create_custom_fields.execute",
 ]
 
+before_migrate = "propms.patches.v16_0.validate_status_property_setters.execute"
+
 after_migrate = [
 	"propms.utils.create_custom_fields.execute",
 ]
