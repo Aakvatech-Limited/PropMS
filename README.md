@@ -347,7 +347,7 @@ Custom fields are stored as JSON under `propms/patches/custom_fields/custom_fiel
 | Quotation | Cost Center |
 | Property | Territory |
 
-Property setters are stored under `propms/patches/property_setter/property_setter_json` and are applied by `propms.utils.create_property_setter.execute`. They adjust list views, filters, field options, field requirements, default print formats, and quick-entry behavior for ERPNext and PropMS DocTypes.
+Property Setter fixtures are no longer installed by PropMS. Existing site Property Setters affecting `Lease.lease_status` or `Property.status` block the v16 migration until manually reviewed and removed.
 
 The repository does not use `fixtures` in `hooks.py`; the hook comments state that custom fields and property setters are now managed through JSON files and utility functions.
 
