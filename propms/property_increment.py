@@ -1,3 +1,4 @@
+from propms.lease_status_utils import get_active_lease_statuses
 import math
 
 import frappe
@@ -111,7 +112,7 @@ def _process_property(property_name):
 
 	leases = frappe.get_all(
 		"Lease",
-		filters={"property": property_doc.name, "lease_status": "Active", "docstatus": ["<", 2]},
+		filters={"property": property_doc.name, "lease_status": ["in", get_active_lease_statuses() or [""]], "docstatus": ["<", 2]},
 		fields=["name", "start_date", "end_date"],
 	)
 
