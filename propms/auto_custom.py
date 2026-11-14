@@ -13,6 +13,11 @@ from frappe.utils import add_days, add_months, date_diff, getdate, now_datetime,
 from pypika import Order
 
 from propms.lease_invoice import getDueDate
+from propms.lease_status_utils import (
+	get_active_lease_statuses,
+	get_active_leases_for_property,
+	get_latest_active_lease as _get_latest_active_lease,
+)
 
 
 @frappe.whitelist()
@@ -224,6 +229,8 @@ def statusChangeBeforeLeaseExpire():
 			frappe.qb.from_(latest)
 			.select(latest.name)
 			.where(latest.property == lease.property)
+			.where(latest.lease_status.isin(get_active_lease_statuses() or [""]))
+			.where(latest.docstatus < 2)
 			.orderby(latest.end_date, order=Order.desc)
 			.limit(1)
 		)
@@ -233,6 +240,9 @@ def statusChangeBeforeLeaseExpire():
 			.on(lease.property == property_table.name)
 			.select(lease.name, lease.property, lease.end_date)
 			.where(lease.end_date.isnotnull())
+			.where(lease.skip_end_date != 1)
+			.where(lease.lease_status.isin(get_active_lease_statuses() or [""]))
+			.where(lease.docstatus < 2)
 			.where(lease.name == latest_lease)
 			.where(lease.end_date.between(current_date, add_months(current_date, 3)))
 			.where(property_table.status == "On Lease")
@@ -262,13 +272,7 @@ def statusChangeAfterLeaseExpire():
 
 		for prop in properties:
 			# Check if property has any active leases
-			active_leases = (
-				frappe.qb.from_(Lease)
-				.select(Lease.name)
-				.where(Lease.property == prop.name)
-				.where(Lease.start_date <= frappe.utils.now())
-				.where((Lease.end_date >= frappe.utils.now()) | (Lease.end_date.isnull()))
-			).run()
+			active_leases = get_active_leases_for_property(prop.name)
 
 			# If no active leases, add to update list
 			if not active_leases:
@@ -297,7 +301,9 @@ def update_property_status():
 			.distinct()
 			.where(property_table.status == "Available")
 			.where(lease.start_date <= now_datetime())
-			.where(lease.lease_status == "Active")
+			.where((lease.end_date >= now_datetime()) | lease.end_date.isnull() | (lease.skip_end_date == 1))
+			.where(lease.docstatus < 2)
+			.where(lease.lease_status.isin(get_active_lease_statuses() or [""]))
 		).run(as_dict=True)
 		# frappe.throw(str(active_lease_properties))
 
@@ -634,14 +640,4 @@ def get_item_details(item, qty, service_start_date, service_end_date):
 
 @frappe.whitelist()
 def get_latest_active_lease(property_id):
-	lease_details = frappe.get_all(
-		"Lease",
-		filters={"property": property_id},
-		fields=["name"],
-		order_by="lease_date desc",
-		limit=1,
-	)
-	if len(lease_details) >= 1:
-		return lease_details[0].name
-	else:
-		return ""
+	return _get_latest_active_lease(property_id) or ""

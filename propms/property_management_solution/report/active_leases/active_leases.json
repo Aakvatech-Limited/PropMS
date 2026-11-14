@@ -1,0 +1,20 @@
+{
+ "doctype": "Report",
+ "name": "Active Leases",
+ "report_name": "Active Leases",
+ "report_type": "Script Report",
+ "ref_doctype": "Lease",
+ "is_standard": "Yes",
+ "module": "Property Management Solution",
+ "disabled": 0,
+ "prepared_report": 0,
+ "add_total_row": 0,
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Property Manager"
+  }
+ ]
+}

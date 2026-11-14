@@ -320,9 +320,9 @@
   },
   {
    "fieldname": "lease_status",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Lease Status",
-   "options": "\nDraft\nUpcoming\nActive\nExpired\nClosed\nNot Materialized\nRenewal to Previous Lease\nAdendum to Previous Lease\nVacating\nTerminated"
+   "options": "Lease Status"
   },
   {
    "default": "0",
