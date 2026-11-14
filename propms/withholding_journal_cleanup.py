@@ -36,7 +36,6 @@ def delete_withholding_journals_for_invoice(invoice):
             "parenttype": "Journal Entry",
         },
         fields=["parent"],
-        distinct=True,
         limit_page_length=0,
     )
     for row in je_accounts:
