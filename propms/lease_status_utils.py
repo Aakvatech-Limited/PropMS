@@ -39,3 +39,22 @@ def get_latest_active_lease(property_name, as_on=None):
 	if not leases:
 		return None
 	return max(leases, key=lambda lease: str(lease.start_date or "")).name
+
+
+@frappe.whitelist()
+def active_leases_kpi():
+	"""Count effective active leases according to configurable master statuses."""
+	statuses = get_active_lease_statuses()
+	if not statuses:
+		return {"value": 0, "fieldtype": "Int"}
+	Lease = frappe.qb.DocType("Lease")
+	as_on = getdate(nowdate())
+	result = (
+		frappe.qb.from_(Lease)
+		.select(frappe.qb.functions.Count(Lease.name).as_("value"))
+		.where(Lease.lease_status.isin(statuses))
+		.where(Lease.docstatus < 2)
+		.where((Lease.start_date <= as_on) | Lease.start_date.isnull())
+		.where((Lease.end_date >= as_on) | Lease.end_date.isnull() | (Lease.skip_end_date == 1))
+	).run(as_dict=True)
+	return {"value": result[0].value if result else 0, "fieldtype": "Int"}
