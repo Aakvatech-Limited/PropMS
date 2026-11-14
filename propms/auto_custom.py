@@ -1,3 +1,4 @@
+from propms.lease_status_utils import get_active_lease_statuses, get_active_leases_for_property, get_latest_active_lease as _get_latest_active_lease
 import calendar
 import traceback
 from datetime import datetime
@@ -262,13 +263,7 @@ def statusChangeAfterLeaseExpire():
 
 		for prop in properties:
 			# Check if property has any active leases
-			active_leases = (
-				frappe.qb.from_(Lease)
-				.select(Lease.name)
-				.where(Lease.property == prop.name)
-				.where(Lease.start_date <= frappe.utils.now())
-				.where((Lease.end_date >= frappe.utils.now()) | (Lease.end_date.isnull()))
-			).run()
+			active_leases = get_active_leases_for_property(prop.name)
 
 			# If no active leases, add to update list
 			if not active_leases:
@@ -297,7 +292,7 @@ def update_property_status():
 			.distinct()
 			.where(property_table.status == "Available")
 			.where(lease.start_date <= now_datetime())
-			.where(lease.lease_status == "Active")
+			.where(lease.lease_status.isin(get_active_lease_statuses() or [""]))
 		).run(as_dict=True)
 		# frappe.throw(str(active_lease_properties))
 
@@ -634,14 +629,4 @@ def get_item_details(item, qty, service_start_date, service_end_date):
 
 @frappe.whitelist()
 def get_latest_active_lease(property_id):
-	lease_details = frappe.get_all(
-		"Lease",
-		filters={"property": property_id},
-		fields=["name"],
-		order_by="lease_date desc",
-		limit=1,
-	)
-	if len(lease_details) >= 1:
-		return lease_details[0].name
-	else:
-		return ""
+	return _get_latest_active_lease(property_id) or ""
