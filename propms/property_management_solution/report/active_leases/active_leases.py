@@ -2,6 +2,7 @@
 
 import frappe
 from frappe.utils import getdate, nowdate
+from pypika import Order
 
 from propms.lease_status_utils import get_active_lease_statuses
 
@@ -30,4 +31,4 @@ def execute(filters=None):
 	)
 	if filters.get("property"):
 		query = query.where(Lease.property == filters.property)
-	return columns, query.orderby(Lease.start_date, order=frappe.qb.desc).run(as_dict=True)
+	return columns, query.orderby(Lease.start_date, order=Order.desc).run(as_dict=True)
