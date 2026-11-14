@@ -1,3 +1,4 @@
+from propms.lease_status_utils import get_active_lease_statuses
 import frappe
 from frappe import _
 from frappe.query_builder import DocType
@@ -34,7 +35,7 @@ def make_lease_invoice_schedule():
 		.select(Lease.name)
 		.where(
 			(Lease.start_date <= today_date)
-			& (Lease.lease_status.isin(["Active", "Renewal to Previous Lease"]))
+			& (Lease.lease_status.isin(get_active_lease_statuses() or [""]))
 		)
 	)
 	lease_names = [row[0] for row in query.run()]
