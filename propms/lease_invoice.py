@@ -45,6 +45,72 @@ def _existing_invoice(doctype, lease, customer, currency, start_date, end_date, 
 			return existing
 
 
+def _assert_no_period_overlap(doctype, lease_name, customer, start_date, end_date, items):
+	"""Reject another bill for the same property, component, item and overlapping period.
+
+	This also catches invoices issued under a closed predecessor lease. Exact
+	idempotent retries are handled first by _existing_invoice().
+	"""
+	if doctype != "Sales Invoice":
+		return
+	property_name = frappe.db.get_value("Lease", lease_name, "property")
+	component = frappe.db.get_value("Lease", lease_name, "custom_department")
+	item_codes = {row.get("item_code") for row in items}
+	candidates = frappe.get_all(
+		"Sales Invoice",
+		filters={
+			"customer": customer,
+			"from_date": ["<=", end_date],
+			"to_date": [">=", start_date],
+			"docstatus": ["<", 2],
+		},
+		fields=["name", "lease", "from_date", "to_date"],
+	)
+	for row in candidates:
+		if not row.lease:
+			continue
+		if frappe.db.get_value("Lease", row.lease, "property") != property_name:
+			continue
+		other_component = frappe.db.get_value("Lease", row.lease, "custom_department")
+		if component and other_component and component != other_component:
+			continue
+		existing_items = frappe.get_all(
+			"Sales Invoice Item", filters={"parent": row.name}, pluck="item_code"
+		)
+		if item_codes.intersection(existing_items):
+			frappe.throw(
+				_("Invoice {0} already bills an overlapping period for property {1}; "
+				  "review the earlier invoice and lease before generating another.").format(
+					row.name, property_name
+				)
+			)
+
+
+def _assert_schedule_rates_current(lease_doc, schedules):
+	"""Fail visibly rather than invoice stale schedule rates after a lease amendment."""
+	use_effective = frappe.db.get_single_value(
+		"Property Management Settings", "use_valid_from_date"
+	)
+	for schedule in schedules:
+		start = getdate(schedule.schedule_start_date or schedule.date_to_invoice)
+		matches = [row for row in lease_doc.lease_item if row.lease_item == schedule.lease_item]
+		if not matches:
+			frappe.throw(_("Schedule {0} refers to a removed Lease Item").format(schedule.name))
+		if use_effective:
+			matches = [row for row in matches if not row.valid_from or getdate(row.valid_from) <= start]
+			if not matches:
+				frappe.throw(_("No effective Lease Item for schedule {0}").format(schedule.name))
+			matches.sort(key=lambda row: str(row.valid_from or ""), reverse=True)
+		current = matches[0]
+		if abs(flt(schedule.rate, 6) - flt(current.amount, 6)) > 0.01:
+			frappe.throw(
+				_("Schedule {0} has outdated rate {1}; Lease Item rate is {2}. "
+				  "Reconcile the schedule before invoicing.").format(
+					schedule.name, schedule.rate, current.amount
+				)
+			)
+
+
 def _lock_lease(lease):
 	"""Serialize manual and scheduled generators until this transaction commits."""
 	lease_table = frappe.qb.DocType("Lease")
@@ -105,6 +171,7 @@ def makeInvoice(
 		)
 		if existing:
 			return existing
+		_assert_no_period_overlap(doctype, lease, str(customer), schedule_start_date, subs_end_date, items_data)
 		is_accrued = any(item.get("enable_deferred_revenue") for item in items_data)
 		invoice_posting_date = date if (is_accrued and date) else today()
 		doc = frappe.get_doc(
@@ -238,8 +305,12 @@ def _create_schedule_group(lease_name, schedule_names):
 	if len(pending) != len(schedules):
 		frappe.throw(_("Partially linked invoice group requires review for Lease {0}").format(lease_name))
 
-	lease_end_date = frappe.get_value("Lease", lease_name, "end_date")
-	company = frappe.get_value("Lease", lease_name, "company")
+	lease_doc = frappe.get_doc("Lease", lease_name)
+	if lease_doc.docstatus == 2 or lease_doc.lease_status in ("Closed", "Terminated"):
+		frappe.throw(_("Lease {0} is closed, terminated or cancelled; invoicing is blocked").format(lease_name))
+	_assert_schedule_rates_current(lease_doc, pending)
+	lease_end_date = lease_doc.end_date
+	company = lease_doc.company
 	items = []
 	for row in pending:
 		start_date = row.schedule_start_date or row.date_to_invoice
