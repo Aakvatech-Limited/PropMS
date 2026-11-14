@@ -146,51 +146,23 @@ frappe.ui.form.on('Issue', {
             }
         });
     },
-    property_name: function (frm, cdt, cdn) {
-        // frappe.msgprint(__("Testing"))
-        frappe.model.set_value(cdt, cdn, 'customer', '');
-        if (frm.doc.property_name) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Property',
-                    fieldname: 'status',
-                    filters: {
-                        name: frm.doc.property_name
-                    },
-                },
-                async: false,
-                callback: function (r, rt) {
-                    if (r.message) {
-                        if (r.message.status.toLowerCase() == 'on lease' || r.message.status.toLowerCase() == 'off lease in 3 months') {
-                            frappe.call({
-                                method: 'frappe.client.get_value',
-                                args: {
-                                    doctype: 'Lease',
-                                    fieldname: ['name', 'customer'],
-                                    filters: {
-                                        property: frm.doc.property_name,
-                                        start_date: ["<=", frappe.datetime.nowdate()],
-                                        end_date: [">=", frappe.datetime.nowdate()]
-                                    },
-                                },
-                                async: false,
-                                callback: function (r, rt) {
-                                    if (r.message) {
-                                        frm.set_value("customer", r.message.customer);
-                                        refresh_field("customer")
-                                    }
-                                }
-                            });
-                        } else {
-                            frappe.db.get_value("Property", frm.doc.property_name, "unit_owner", (r) => {
-                                frm.set_value("customer", r.unit_owner);
-                            });
-                        }
-                    }
+    property_name: function (frm) {
+        if (!frm.doc.property_name) return;
+        frappe.call({
+            method: "propms.property_status_utils.get_current_property_lease",
+            args: { property_name: frm.doc.property_name },
+            callback: function (r) {
+                if (r.message && r.message.customer) {
+                    frm.set_value("customer", r.message.customer);
+                } else {
+                    // Facility management can have no rental lease; use owner only
+                    // for the maintenance issue's customer reference, not lease billing.
+                    frappe.db.get_value("Property", frm.doc.property_name, "unit_owner", (owner) => {
+                        if (owner && owner.unit_owner) frm.set_value("customer", owner.unit_owner);
+                    });
                 }
-            });
-        }
+            }
+        });
     },
 });
 
