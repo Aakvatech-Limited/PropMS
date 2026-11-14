@@ -1,10 +1,10 @@
-from propms.lease_status_utils import get_active_lease_statuses
 import frappe
 from frappe import _
 from frappe.query_builder import DocType
 from frappe.utils import add_days, add_months, get_first_day, get_last_day, getdate, today
 
 from propms.auto_custom import app_error_log, makeInvoiceSchedule
+from propms.lease_status_utils import get_active_lease_statuses
 
 
 def get_aligned_invoice_date(date):
