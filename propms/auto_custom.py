@@ -13,7 +13,11 @@ from frappe.utils import add_days, add_months, date_diff, getdate, now_datetime,
 from pypika import Order
 
 from propms.lease_invoice import getDueDate
-from propms.lease_status_utils import get_active_lease_statuses, get_active_leases_for_property, get_latest_active_lease as _get_latest_active_lease
+from propms.lease_status_utils import (
+	get_active_lease_statuses,
+	get_active_leases_for_property,
+	get_latest_active_lease as _get_latest_active_lease,
+)
 
 
 @frappe.whitelist()
