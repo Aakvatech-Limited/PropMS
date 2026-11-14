@@ -9,16 +9,12 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from frappe.query_builder import DocType
-from frappe.utils import add_days, add_months, date_diff, getdate, now_datetime, today
+from frappe.utils import add_days, add_months, date_diff, getdate, today
 from pypika import Order
 
 from propms.lease_invoice import getDueDate
-from propms.property_status_utils import reconcile_property_status, get_statuses_for_category
-from propms.lease_status_utils import (
-	get_active_lease_statuses,
-	get_active_leases_for_property,
-	get_latest_active_lease as _get_latest_active_lease,
-)
+from propms.property_status_utils import reconcile_property_status
+from propms.lease_status_utils import get_latest_active_lease as _get_latest_active_lease
 
 
 @frappe.whitelist()
