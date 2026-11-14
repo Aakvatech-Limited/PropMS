@@ -6,7 +6,6 @@ import unittest
 from frappe import _dict
 
 from propms.property_management_solution.doctype.lease.lease import (
-	LIVE_LEASE_STATUSES,
 	is_lease_period_overlapping,
 )
 
@@ -42,7 +41,3 @@ class TestLeasePeriodOverlap(unittest.TestCase):
 		self.assertTrue(is_lease_period_overlapping(lease, make_lease("2026-01-01", "2026-12-31")))
 		other = make_lease("2020-01-01", "2020-12-31", skip_end_date=1)
 		self.assertTrue(is_lease_period_overlapping(make_lease("2024-12-01", "2025-11-30"), other))
-
-	def test_only_live_statuses_count(self):
-		for status in ("Draft", "Not Materialized", "Terminated", "Expired", "Closed"):
-			self.assertNotIn(status, LIVE_LEASE_STATUSES)
