@@ -6,7 +6,8 @@
  "title_field": "category_name",
  "field_order": [
   "category_name",
-  "counts_as_occupied"
+  "counts_as_occupied",
+  "counts_as_available"
  ],
  "fields": [
   {
@@ -24,6 +25,13 @@
    "default": "0",
    "in_list_view": 1,
    "description": "Portfolio occupied reporting even if there is no rental lease; does not authorize lease invoicing."
+  },
+  {
+   "fieldname": "counts_as_available",
+   "fieldtype": "Check",
+   "label": "Counts as Available",
+   "default": "0",
+   "description": "Properties in this category can appear as available, provided they have no active lease or restrictions."
   }
  ],
  "permissions": [
