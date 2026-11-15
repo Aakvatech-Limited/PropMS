@@ -64,3 +64,41 @@ class TestLeaseStatusClassification(unittest.TestCase):
 		self.assertTrue(is_active_lease_status("Adendum to Previous Lease"))
 		get_value.assert_called_once_with("Lease Status", "Adendum to Previous Lease", "is_active_lease")
 		self.assertFalse(is_active_lease_status(None))
+
+
+class TestRenewalAttachmentLinks(unittest.TestCase):
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.get_all")
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.get_doc")
+	def test_reuses_file_url_and_skips_existing_links(self, get_doc, get_all):
+		from propms.property_management_solution.doctype.lease.lease import copy_renewal_attachment_links
+
+		source = _dict(company="Homestay", lease_customer="Customer A")
+		renewal = _dict(company="Homestay", lease_customer="Customer A", renewed_from="OLD")
+		file = unittest.mock.MagicMock()
+		file.name = "FILE-NEW"
+		get_doc.side_effect = lambda doctype, name: {
+			("Lease", "OLD"): source,
+			("Lease", "NEW"): renewal,
+			("File", "FILE-NEW"): file,
+		}[(doctype, name)]
+		get_all.side_effect = [
+			[_dict(name="FILE-OLD", file_url="/private/files/old.pdf", attached_to_field=None),
+			 _dict(name="FILE-NEW", file_url="/private/files/new.pdf", attached_to_field=None)],
+			[_dict(file_url="/private/files/old.pdf", attached_to_field=None)],
+		]
+		self.assertEqual(copy_renewal_attachment_links("OLD", "NEW"), 1)
+		file.create_attachment_copy.assert_called_once_with(
+			"Lease", "NEW", attached_to_field=None, ignore_permissions=True
+		)
+
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.get_doc")
+	def test_rejects_cross_customer_renewal(self, get_doc):
+		import frappe
+		from propms.property_management_solution.doctype.lease.lease import copy_renewal_attachment_links
+
+		get_doc.side_effect = [
+			_dict(company="Homestay", lease_customer="Customer A"),
+			_dict(company="Homestay", lease_customer="Customer B", renewed_from="OLD"),
+		]
+		with self.assertRaises(frappe.ValidationError):
+			copy_renewal_attachment_links("OLD", "NEW")
