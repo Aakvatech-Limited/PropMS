@@ -22,6 +22,11 @@ class Lease(Document):
 				properties.add(item.property_unit)
 		return list(properties)
 
+	def after_insert(self):
+		"""Attach existing source URLs to every new renewal, regardless of creation path."""
+		if self.renewed_from:
+			copy_renewal_attachment_links(self.renewed_from, self.name)
+
 	def on_update(self):
 		for prop in self.get_all_properties():
 			reconcile_property_status(prop)
@@ -446,6 +451,51 @@ def make_lease_invoice_schedule(leasedoc):
 	except Exception as e:
 		frappe.msgprint(_("Exception error! Check app error log."))
 		app_error_log(frappe.session.user, str(e))
+
+
+
+def copy_renewal_attachment_links(source_lease_name, renewal_lease_name):
+	"""Create File links pointing to the existing bytes; never copy or re-upload files.
+
+	Safe to call repeatedly, including in a migration patch: duplicate URLs and
+	attachment field links on the renewal are skipped. Source files stay intact.
+	"""
+	if not source_lease_name or source_lease_name == renewal_lease_name:
+		return 0
+
+	source_lease = frappe.get_doc("Lease", source_lease_name)
+	renewal_lease = frappe.get_doc("Lease", renewal_lease_name)
+	if renewal_lease.renewed_from != source_lease_name:
+		frappe.throw(_("Renewal must reference its source Lease before attachments are linked"))
+	if source_lease.company != renewal_lease.company or source_lease.lease_customer != renewal_lease.lease_customer:
+		frappe.throw(_("Cannot inherit attachments across different lease companies or customers"))
+
+	files = frappe.get_all(
+		"File",
+		filters={"attached_to_doctype": "Lease", "attached_to_name": source_lease_name, "is_folder": 0},
+		fields=["name", "file_url", "attached_to_field"],
+		order_by="creation asc",
+	)
+	existing = frappe.get_all(
+		"File",
+		filters={"attached_to_doctype": "Lease", "attached_to_name": renewal_lease_name, "is_folder": 0},
+		fields=["file_url", "attached_to_field"],
+	)
+	links = {(row.file_url, row.attached_to_field or "") for row in existing if row.file_url}
+	created = 0
+	for file in files:
+		key = (file.file_url, file.attached_to_field or "")
+		if not file.file_url or key in links:
+			continue
+		# Frappe v16 create_attachment_copy reuses file_url/content rather
+		# than copying binary content. The original File remains untouched.
+		frappe.get_doc("File", file.name).create_attachment_copy(
+			"Lease", renewal_lease_name, attached_to_field=file.attached_to_field,
+			ignore_permissions=True,
+		)
+		links.add(key)
+		created += 1
+	return created
 
 
 @frappe.whitelist()
