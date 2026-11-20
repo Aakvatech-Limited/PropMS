@@ -98,9 +98,9 @@ def make_lease_invoice_schedule():
 				item_amount = item.amount
 
 				# Start on the original lease date, even for mid-month contracts.
-			invoice_date = lease_start
+				invoice_date = lease_start
 
-			# Generate invoice schedules up to next month
+				# Generate invoice schedules up to next month
 				while schedule_end >= invoice_date and invoice_date <= next_month_end:
 					# Calculate period end as last day of the month after freq months
 					invoice_period_end = get_last_day(add_months(invoice_date, freq - 1))
