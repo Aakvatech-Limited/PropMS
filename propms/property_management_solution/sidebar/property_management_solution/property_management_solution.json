@@ -9,7 +9,7 @@
  "items": [
   {
    "type": "Link",
-   "label": "Home",
+   "label": "Real Estate Management",
    "link_type": "Workspace",
    "link_to": "Real Estate Management",
    "child": 0,
@@ -17,9 +17,17 @@
   },
   {
    "type": "Link",
-   "label": "Facilities Operations",
+   "label": "Property Facilities",
    "link_type": "Workspace",
    "link_to": "Property Facilities",
+   "child": 0,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Portfolio Dashboard",
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
    "child": 0,
    "hidden": 0
   },
@@ -43,6 +51,14 @@
    "label": "Lease Exits",
    "link_type": "DocType",
    "link_to": "Exit",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease Invoice Schedule",
+   "link_type": "DocType",
+   "link_to": "Lease Invoice Schedule",
    "child": 1,
    "hidden": 0
   },
@@ -72,7 +88,54 @@
   },
   {
    "type": "Section Break",
-   "label": "Facilities Transactions",
+   "label": "Property Portfolio",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Property",
+   "link_type": "DocType",
+   "link_to": "Property",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Unit",
+   "link_type": "DocType",
+   "link_to": "Property Unit",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status",
+   "link_type": "DocType",
+   "link_to": "Property Status",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Category",
+   "link_type": "DocType",
+   "link_to": "Property Status Category",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Insurance",
+   "link_type": "DocType",
+   "link_to": "Insurance",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Facilities Operations",
    "collapsible": 1,
    "keep_closed": 0,
    "indent": 1
@@ -127,77 +190,6 @@
   },
   {
    "type": "Link",
-   "label": "Key Issue & Return",
-   "link_type": "DocType",
-   "link_to": "Key Set Detail",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Tool Issue & Return",
-   "link_type": "DocType",
-   "link_to": "Tool Item Record",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Section Break",
-   "label": "Masters",
-   "collapsible": 1,
-   "keep_closed": 0,
-   "indent": 1
-  },
-  {
-   "type": "Link",
-   "label": "Properties & Units",
-   "link_type": "DocType",
-   "link_to": "Property",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Unit Type",
-   "link_type": "DocType",
-   "link_to": "Unit Type",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Tenants & Owners",
-   "link_type": "DocType",
-   "link_to": "Customer",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Contact",
-   "link_type": "DocType",
-   "link_to": "Contact",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Billing Items",
-   "link_type": "DocType",
-   "link_to": "Item",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Meter",
-   "link_type": "DocType",
-   "link_to": "Meter",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
    "label": "Key Set",
    "link_type": "DocType",
    "link_to": "Key Set",
@@ -229,17 +221,25 @@
   },
   {
    "type": "Link",
-   "label": "Property Status",
+   "label": "Active Leases",
    "link_type": "Report",
-   "link_to": "Property Status",
+   "link_to": "Active Leases",
    "child": 1,
    "hidden": 0
   },
   {
    "type": "Link",
-   "label": "Pending Signed Agreement",
+   "label": "Available Properties",
    "link_type": "Report",
-   "link_to": "Pending Signed Agreement",
+   "link_to": "Available Properties",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Report",
+   "link_type": "Report",
+   "link_to": "Property Status Report",
    "child": 1,
    "hidden": 0
   },
@@ -261,14 +261,6 @@
   },
   {
    "type": "Link",
-   "label": "Security Deposit",
-   "link_type": "Report",
-   "link_to": "Security Deposit",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
    "label": "Security Attendance Report",
    "link_type": "Report",
    "link_to": "Security Attendance Report",
@@ -285,22 +277,7 @@
   },
   {
    "type": "Section Break",
-   "label": "Dashboards",
-   "collapsible": 1,
-   "keep_closed": 0,
-   "indent": 1
-  },
-  {
-   "type": "Link",
-   "label": "Property Portfolio Dashboard",
-   "link_type": "Workspace",
-   "link_to": "Property Portfolio Dashboard",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Section Break",
-   "label": "Administration",
+   "label": "Settings",
    "collapsible": 1,
    "keep_closed": 0,
    "indent": 1
