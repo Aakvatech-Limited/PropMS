@@ -19,6 +19,7 @@
   "submit_maintenance_invoice",
   "make_single_invoice_on_lease",
   "make_invoice_schedule_up_to_tomorrow_only",
+  "allow_backdated_lease_invoice_schedule",
   "use_valid_from_date",
   "auto_submit_sales_order",
   "auto_submit_sales_invoice",
@@ -150,6 +151,13 @@
    "fieldname": "make_invoice_schedule_up_to_tomorrow_only",
    "fieldtype": "Check",
    "label": "Make Invoice Schedule up to tomorrow only"
+  },
+  {
+   "default": "0",
+   "description": "When enabled, allow manual and bulk lease invoice schedule generation for past lease periods, provided their invoice dates are on or after Invoice Start Date. Does not create Sales Invoices.",
+   "fieldname": "allow_backdated_lease_invoice_schedule",
+   "fieldtype": "Check",
+   "label": "Allow Backdated Lease Invoice Schedule"
   },
   {
    "default": "0",
