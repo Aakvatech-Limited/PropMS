@@ -20,6 +20,14 @@
   },
   {
    "link_type": "Workspace",
+   "link_to": "Real Estate Management",
+   "title": "Leasing & Billing",
+   "icon": "building-2",
+   "hidden": 0,
+   "added": 0
+  },
+  {
+   "link_type": "Workspace",
    "link_to": "Property Facilities",
    "title": "Facilities",
    "icon": "wrench",
@@ -29,7 +37,7 @@
   {
    "link_type": "Workspace",
    "link_to": "Property Portfolio Dashboard",
-   "title": "Portfolio Dashboard",
+   "title": "Portfolio Analytics",
    "icon": "layout-dashboard",
    "hidden": 0,
    "added": 0
