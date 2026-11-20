@@ -51,13 +51,20 @@ def make_lease_invoice_schedule():
 			if not schedule_start:
 				continue  # skip if no start_date
 
-			# Clean up schedule entries for removed lease items
-			lease_item_names = [li.lease_item for li in lease.lease_item]
+			# Clean up obsolete schedules only when no Sales Invoice or Sales Order
+			# is linked, matching the protection in the manual lease generator.
+			lease_item_names = {li.lease_item for li in lease.lease_item}
 			schedule_items = frappe.get_all(
-				"Lease Invoice Schedule", filters={"parent": lease.name}, fields=["name", "lease_item"]
+				"Lease Invoice Schedule",
+				filters={"parent": lease.name},
+				fields=["name", "lease_item", "invoice_number", "sales_order_number"],
 			)
 			for s in schedule_items:
-				if s.lease_item not in lease_item_names:
+				if (
+					s.lease_item not in lease_item_names
+					and not s.invoice_number
+					and not s.sales_order_number
+				):
 					frappe.delete_doc("Lease Invoice Schedule", s.name)
 
 			# Frequency map
