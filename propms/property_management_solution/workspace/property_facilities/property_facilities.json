@@ -24,8 +24,8 @@
  "links": [
   {
    "type": "Card Break",
-   "label": "Operations",
-   "link_count": 6,
+   "label": "Facilities Transactions",
+   "link_count": 8,
    "hidden": 0
   },
   {
@@ -39,7 +39,7 @@
   },
   {
    "type": "Link",
-   "label": "Maintenance Job Cards",
+   "label": "Issue",
    "link_type": "DocType",
    "link_to": "Issue",
    "hidden": 0,
@@ -83,14 +83,8 @@
    "is_query_report": 0
   },
   {
-   "type": "Card Break",
-   "label": "Custody Transactions",
-   "link_count": 2,
-   "hidden": 0
-  },
-  {
    "type": "Link",
-   "label": "Key Issue & Return",
+   "label": "Key Set Detail",
    "link_type": "DocType",
    "link_to": "Key Set Detail",
    "hidden": 0,
@@ -99,7 +93,7 @@
   },
   {
    "type": "Link",
-   "label": "Tool Issue & Return",
+   "label": "Tool Item Record",
    "link_type": "DocType",
    "link_to": "Tool Item Record",
    "hidden": 0,
@@ -108,8 +102,8 @@
   },
   {
    "type": "Card Break",
-   "label": "Masters",
-   "link_count": 5,
+   "label": "Facilities Masters",
+   "link_count": 7,
    "hidden": 0
   },
   {
@@ -158,12 +152,6 @@
    "is_query_report": 0
   },
   {
-   "type": "Card Break",
-   "label": "Custody Masters",
-   "link_count": 2,
-   "hidden": 0
-  },
-  {
    "type": "Link",
    "label": "Key Set",
    "link_type": "DocType",
@@ -183,7 +171,7 @@
   },
   {
    "type": "Card Break",
-   "label": "Reports & Analytics",
+   "label": "Facilities Reports",
    "link_count": 3,
    "hidden": 0
   },
@@ -194,17 +182,17 @@
    "link_to": "Security Attendance Report",
    "hidden": 0,
    "onboard": 0,
-   "is_query_report": 1,
+   "is_query_report": 0,
    "report_ref_doctype": "Security Attendance"
   },
   {
    "type": "Link",
-   "label": "Outsourcing Attendance Report",
+   "label": "Outsourcing Attendance",
    "link_type": "Report",
    "link_to": "Outsourcing Attendance",
    "hidden": 0,
    "onboard": 0,
-   "is_query_report": 1,
+   "is_query_report": 0,
    "report_ref_doctype": "Outsourcing Attendance"
   },
   {
@@ -214,8 +202,32 @@
    "link_to": "Self Consumption in Maintenance Job Card",
    "hidden": 0,
    "onboard": 0,
-   "is_query_report": 1,
+   "is_query_report": 0,
    "report_ref_doctype": "Issue"
+  },
+  {
+   "type": "Card Break",
+   "label": "Related Workspaces",
+   "link_count": 2,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Real Estate Management",
+   "link_type": "Workspace",
+   "link_to": "Real Estate Management",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Portfolio Dashboard",
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
   }
  ],
  "shortcuts": [
@@ -297,7 +309,7 @@
   }
  ],
  "quick_lists": [],
- "content": "[{\"id\":\"property_facilities-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Facilities</span>\",\"col\":12}},{\"id\":\"property_facilities-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_facilities-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Checklist\",\"col\":4}},{\"id\":\"property_facilities-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Meter Reading\",\"col\":4}},{\"id\":\"property_facilities-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Security Attendance\",\"col\":4}},{\"id\":\"property_facilities-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outsourcing Attendance\",\"col\":4}},{\"id\":\"property_facilities-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Keys in Possession\",\"col\":4}},{\"id\":\"property_facilities-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Keys\",\"col\":4}},{\"id\":\"property_facilities-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Keys\",\"col\":4}},{\"id\":\"property_facilities-10\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tools in Possession\",\"col\":4}},{\"id\":\"property_facilities-11\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Tools\",\"col\":4}},{\"id\":\"property_facilities-12\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Tools\",\"col\":4}},{\"id\":\"property_facilities-13\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"property_facilities-14\",\"type\":\"card\",\"data\":{\"card_name\":\"Custody Transactions\",\"col\":4}},{\"id\":\"property_facilities-15\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"property_facilities-16\",\"type\":\"card\",\"data\":{\"card_name\":\"Custody Masters\",\"col\":4}},{\"id\":\"property_facilities-17\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports & Analytics\",\"col\":4}}]",
+ "content": "[{\"id\":\"propms-h-0\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Facilities</span>\",\"col\":12}},{\"id\":\"propms-h-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions</span>\",\"col\":12}},{\"id\":\"propms-s-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Checklist\",\"col\":4}},{\"id\":\"propms-s-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Meter Reading\",\"col\":4}},{\"id\":\"propms-s-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Security Attendance\",\"col\":4}},{\"id\":\"propms-s-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Outsourcing Attendance\",\"col\":4}},{\"id\":\"propms-s-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Keys in Possession\",\"col\":4}},{\"id\":\"propms-s-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Keys\",\"col\":4}},{\"id\":\"propms-s-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Keys\",\"col\":4}},{\"id\":\"propms-s-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tools in Possession\",\"col\":4}},{\"id\":\"propms-s-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Tools\",\"col\":4}},{\"id\":\"propms-s-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Tools\",\"col\":4}},{\"id\":\"propms-c-0\",\"type\":\"card\",\"data\":{\"card_name\":\"Facilities Transactions\",\"col\":4}},{\"id\":\"propms-c-1\",\"type\":\"card\",\"data\":{\"card_name\":\"Facilities Masters\",\"col\":4}},{\"id\":\"propms-c-2\",\"type\":\"card\",\"data\":{\"card_name\":\"Facilities Reports\",\"col\":4}},{\"id\":\"propms-c-3\",\"type\":\"card\",\"data\":{\"card_name\":\"Related Workspaces\",\"col\":4}}]",
  "standard": 1,
  "type": "Workspace"
 }
