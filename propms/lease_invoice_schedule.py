@@ -22,6 +22,7 @@ def make_lease_invoice_schedule():
 
 	# Proceed with other computations only if the setting is enabled
 	use_valid_from_date = settings.use_valid_from_date
+	allow_backdated = bool(settings.get("allow_backdated_lease_invoice_schedule", 0))
 	today_date = getdate(today())
 	next_month_end = get_last_day(add_months(today_date, 1))  # End of next month
 	invoice_start_date = getdate(settings.get("invoice_start_date", None))
@@ -30,13 +31,13 @@ def make_lease_invoice_schedule():
 		frappe.throw(_("Please set Invoice Start Date in Property Management Settings"))
 
 	Lease = DocType("Lease")
+	eligible_statuses = list(get_active_lease_statuses() or [])
+	if allow_backdated:
+		eligible_statuses.append("Expired")
 	query = (
 		frappe.qb.from_(Lease)
 		.select(Lease.name)
-		.where(
-			(Lease.start_date <= today_date)
-			& (Lease.lease_status.isin(get_active_lease_statuses() or [""]))
-		)
+		.where(Lease.lease_status.isin(eligible_statuses or [""]))
 	)
 	lease_names = [row[0] for row in query.run()]
 
@@ -46,10 +47,18 @@ def make_lease_invoice_schedule():
 			lease_start = getdate(lease.start_date)
 			schedule_end = getdate(lease.end_date) if lease.end_date else next_month_end
 
-			# Use the later date between lease_start and invoice_start_date
-			schedule_start = max(lease_start, invoice_start_date) if lease_start else invoice_start_date
-			if not schedule_start:
-				continue  # skip if no start_date
+			# Retain the original billing cycle; filter on actual invoice date.
+			if not lease_start:
+				continue
+
+			# A future lease becomes eligible on its first invoice date,
+			# not on the rental commencement date. This permits invoices
+			# to be raised in advance without scheduling all future leases.
+			first_invoice_date = getdate(add_days(
+				lease_start, -(lease.days_to_invoice_in_advance or 0)
+			))
+			if first_invoice_date > today_date:
+				continue
 
 			# Clean up obsolete schedules only when no Sales Invoice or Sales Order
 			# is linked, matching the protection in the manual lease generator.
@@ -94,43 +103,52 @@ def make_lease_invoice_schedule():
 				# Default to base amount
 				item_amount = item.amount
 
-				# Get the latest active lease item that has valid_from date
-				lease_items = frappe.get_all(
-					"Lease Item",
-					filters={
-						"parent": lease.name,
-						"lease_item": item.lease_item,
-						"valid_from": ("<=", today_date),
-					},
-					fields=["amount", "valid_from"],
-					order_by="valid_from desc",
-					limit=1,
-				)
-
-				# Use amount from the most recent active lease item if found
-				if use_valid_from_date and lease_items:
-					item_amount = lease_items[0].amount
-
-				# Get the first day of the month in which schedule_start falls
-				invoice_date = get_first_day(schedule_start)
+				# Start on the original lease date, even for mid-month contracts.
+				invoice_date = lease_start
 
 				# Generate invoice schedules up to next month
 				while schedule_end >= invoice_date and invoice_date <= next_month_end:
 					# Calculate period end as last day of the month after freq months
 					invoice_period_end = get_last_day(add_months(invoice_date, freq - 1))
 
-					# Only create schedule if date_to_invoice is between invoice start date and today + next month
-					if schedule_start <= invoice_date <= next_month_end:
+					# The cutoff and duplicate checks use the invoice date
+					# after applying invoice-in-advance days.
+					date_to_invoice = getdate(add_days(
+						invoice_date, -(lease.days_to_invoice_in_advance or 0)
+					))
+					if date_to_invoice >= invoice_start_date:
 						exists = frappe.db.exists(
 							"Lease Invoice Schedule",
 							{
 								"parent": lease.name,
 								"lease_item": item.lease_item,
-								"date_to_invoice": invoice_date,
+								"schedule_start_date": invoice_date,
 							},
-						)
-
+							) or frappe.db.exists(
+							"Lease Invoice Schedule",
+							{
+								"parent": lease.name,
+								"lease_item": item.lease_item,
+								"date_to_invoice": date_to_invoice,
+							},
+							)
 						if not exists:
+							item_amount = item.amount
+							if use_valid_from_date:
+								# Rate valid for the rental period, not today's rate.
+								lease_items = frappe.get_all(
+									"Lease Item",
+									filters={
+										"parent": lease.name,
+										"lease_item": item.lease_item,
+										"valid_from": ("<=", invoice_date),
+									},
+									fields=["amount", "valid_from"],
+									order_by="valid_from desc",
+									limit=1,
+								)
+								if lease_items:
+									item_amount = lease_items[0].amount
 							makeInvoiceSchedule(
 								invoice_date,
 								item.lease_item,
