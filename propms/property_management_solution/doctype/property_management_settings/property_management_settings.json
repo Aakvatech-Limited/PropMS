@@ -24,6 +24,7 @@
   "auto_submit_sales_invoice",
   "submit_maintenance_stock_entry",
   "max_active_leases",
+  "auto_expire_leases",
   "column_break_14",
   "maintenance_item_group",
   "allow_end_of_the_month",
@@ -163,6 +164,13 @@
    "fieldname": "max_active_leases",
    "fieldtype": "Int",
    "label": "Max Active Leases Per Property"
+  },
+  {
+   "default": "1",
+   "description": "Automatically set a lease to Expired when its end date has passed, both on save and in the daily status scheduler. Disable to retain the current status until changed manually. Other automatic status transitions remain enabled.",
+   "fieldname": "auto_expire_leases",
+   "fieldtype": "Check",
+   "label": "Automatically Expire Leases"
   }
  ],
  "index_web_pages_for_search": 1,

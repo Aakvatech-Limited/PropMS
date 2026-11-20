@@ -102,3 +102,53 @@ class TestRenewalAttachmentLinks(unittest.TestCase):
 		]
 		with self.assertRaises(frappe.ValidationError):
 			copy_renewal_attachment_links("OLD", "NEW")
+
+
+class TestAutomaticLeaseExpiryFlag(unittest.TestCase):
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.db.get_single_value")
+	def test_default_enabled_for_existing_sites(self, get_single_value):
+		from propms.property_management_solution.doctype.lease.lease import is_automatic_lease_expiry_enabled
+
+		get_single_value.return_value = None
+		self.assertTrue(is_automatic_lease_expiry_enabled())
+		get_single_value.return_value = "1"
+		self.assertTrue(is_automatic_lease_expiry_enabled())
+		get_single_value.return_value = "0"
+		self.assertFalse(is_automatic_lease_expiry_enabled())
+
+	@patch("propms.property_management_solution.doctype.lease.lease.is_automatic_lease_expiry_enabled", return_value=False)
+	def test_save_does_not_expire_when_disabled(self, _flag):
+		from propms.property_management_solution.doctype.lease.lease import Lease
+
+		lease = Lease.__new__(Lease)
+		lease.lease_status = "Active"
+		lease.start_date = "2020-01-01"
+		lease.end_date = "2020-12-31"
+		lease.skip_end_date = 0
+		lease.set_lease_status()
+		self.assertEqual(lease.lease_status, "Active")
+
+	@patch("propms.property_management_solution.doctype.lease.lease.is_automatic_lease_expiry_enabled", return_value=True)
+	def test_save_expires_when_enabled(self, _flag):
+		from propms.property_management_solution.doctype.lease.lease import Lease
+
+		lease = Lease.__new__(Lease)
+		lease.lease_status = "Active"
+		lease.start_date = "2020-01-01"
+		lease.end_date = "2020-12-31"
+		lease.skip_end_date = 0
+		lease.set_lease_status()
+		self.assertEqual(lease.lease_status, "Expired")
+
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.db.commit")
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.db.set_value")
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.get_all")
+	@patch("propms.property_management_solution.doctype.lease.lease.is_automatic_lease_expiry_enabled", return_value=False)
+	def test_daily_scheduler_skips_expiry_when_disabled(self, _flag, get_all, set_value, _commit):
+		from propms.property_management_solution.doctype.lease.lease import update_lease_statuses
+
+		get_all.return_value = [
+			_dict(name="LEASE-001", lease_status="Active", start_date="2020-01-01", end_date="2020-12-31", skip_end_date=0)
+		]
+		update_lease_statuses()
+		set_value.assert_not_called()
