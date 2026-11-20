@@ -277,6 +277,8 @@ def getAllLease():
 		_("The task of making lease invoice schedule for all users has been sent for background processing.")
 	)
 	invoice_start_date = frappe.db.get_single_value("Property Management Settings", "invoice_start_date")
+	if not invoice_start_date:
+		frappe.throw(_("Please set Invoice Start Date in Property Management Settings"))
 	lease_list = frappe.get_all("Lease", filters={"end_date": (">=", invoice_start_date)}, fields=["name"])
 	# frappe.msgprint("Working on lease_list" + str(lease_list))
 	lease_list_len = len(lease_list)
@@ -311,14 +313,26 @@ def make_lease_invoice_schedule(leasedoc):
 				or lease_invoice_schedule.get("sales_order_number")
 			):
 				frappe.delete_doc("Lease Invoice Schedule", lease_invoice_schedule.name)
-		# Only process lease that items and is current
-		if len(lease.lease_item) >= 1 and lease.end_date >= getdate(today()):
+		# Historical leases are explicitly opt-in; invoice cutoff is always enforced.
+		allow_backdated = cint(frappe.db.get_single_value(
+			"Property Management Settings", "allow_backdated_lease_invoice_schedule"
+		))
+		invoice_start_date = frappe.db.get_single_value(
+			"Property Management Settings", "invoice_start_date"
+		)
+		invoice_start_date = getdate(invoice_start_date) if invoice_start_date else None
+		if allow_backdated and not invoice_start_date:
+			frappe.throw(_("Please set Invoice Start Date in Property Management Settings"))
+		if (
+			lease.lease_item
+			and lease.start_date
+			and lease.end_date
+			and getdate(lease.end_date) >= getdate(lease.start_date)
+			and (allow_backdated or getdate(lease.end_date) >= getdate(today()))
+		):
 			# Clean up records that are no longer required, i.e. of unnecessary lease items and unnecessary dates
 			# Records before Invoice Start Date
-			invoice_start_date = frappe.db.get_single_value(
-				"Property Management Settings", "invoice_start_date"
-			)
-			invoice_start_date = getdate(invoice_start_date) if invoice_start_date else None
+
 			if invoice_start_date:
 				lease_invoice_schedule_list = frappe.get_list(
 					"Lease Invoice Schedule",
@@ -442,6 +456,14 @@ def make_lease_invoice_schedule(leasedoc):
 					invoice_qty = float(frequency_factor)
 					if invoice_period_end > end_date:
 						invoice_qty = getDateMonthDiff(invoice_date, end_date, 1)
+					# Invoice Start Date applies to the actual invoice date,
+					# not just the start of the rental period.
+					date_to_invoice = getdate(add_days(
+						invoice_date, -(lease.days_to_invoice_in_advance or 0)
+					))
+					if invoice_start_date and date_to_invoice < invoice_start_date:
+						invoice_date = getdate(add_days(invoice_period_end, 1))
+						continue
 					makeInvoiceSchedule(
 						invoice_date,
 						item.lease_item,
