@@ -27,15 +27,18 @@ frappe.ui.form.on('Lease', {
 		});
 	},
 	refresh: function(frm) {
+		frm.trigger("custom_set_intro");
+
+
 		cur_frm.add_custom_button(__("Make Invoice Schedule"), function() {
 			make_lease_invoice_schedule(cur_frm);
-		});
+		}, __("Actions"));
 		cur_frm.add_custom_button(__("Generate Pending Invoice"), function() {
 			generate_pending_invoice();
-		});
+		}, __("Actions"));
 		cur_frm.add_custom_button(__("Make Invoice Schedule for all Lease"), function() {
 			getAllLease(cur_frm);
-		});
+		}, __("Actions"));
 
         // Add custom buttons for Accounts Receivable and Accounting Ledger
         if (!frm.doc.__islocal) {
@@ -62,6 +65,39 @@ frappe.ui.form.on('Lease', {
                 },
                 __("View")
             );
+
+            // Add "Renew Lease" custom button
+            if (
+                ["Active", "Expired"].includes(frm.doc.lease_status) &&
+                (frappe.user.has_role("Property Manager") ||
+                    frappe.user.has_role("System Manager"))
+            ) {
+                frm.add_custom_button(
+                    __("Renew Lease"),
+                    function () {
+                        frappe.confirm(__("Are you sure you want to renew this lease?"), function () {
+                            frappe.call({
+                                method: "propms.property_management_solution.doctype.lease.lease.initiate_lease_renewal",
+                                args: {
+                                    source_lease_name: frm.doc.name,
+                                },
+                                freeze: true,
+                                freeze_message: __("Initiating Lease Renewal..."),
+                                callback: function (r) {
+                                    if (r.message) {
+                                        frappe.show_alert({
+                                            message: __("Lease renewal draft created successfully: {0}", [r.message]),
+                                            indicator: "green",
+                                        });
+                                        frappe.set_route("Form", "Lease", r.message);
+                                    }
+                                },
+                            });
+                        });
+                    },
+                    __("Actions")
+                );
+            }
         }
 	},
 	skip_end_date: function(frm) {
@@ -111,7 +147,50 @@ frappe.ui.form.on('Lease', {
 				}
 			});
 		}
-    }
+    },
+
+    custom_set_intro: function (frm) {
+        // Show intro banner if this is a renewal lease
+        if (frm.doc.renewed_from) {
+            frappe.db
+                .get_value("Lease", frm.doc.name, ["renewal_initiated_by", "creation"])
+                .then((r) => {
+                    if (r.message) {
+                        let d = r.message;
+                        let created_on = moment(d.creation).format("DD-MM-YYYY hh:mm A");
+
+                        frm.set_intro(
+                            __("This lease is a renewal of {0}, initiated by {1} on {2}.", [
+                                `<a href="/app/lease/${frm.doc.renewed_from}"><b>${frm.doc.renewed_from}</b></a>`,
+                                `<b>${d.renewal_initiated_by || __("Unknown")}</b>`,
+                                `<b>${created_on}</b>`,
+                            ]),
+                            "blue"
+                        );
+                    }
+                });
+        }
+
+        // Show intro banner if this lease has already been renewed
+        frappe.db
+            .get_value("Lease", { renewed_from: frm.doc.name }, ["name", "renewal_initiated_by", "creation"])
+            .then((r) => {
+                if (r && r.message && r.message.name) {
+                    let d = r.message;
+
+                    let creation_time = moment(d.creation).format("DD-MM-YYYY hh:mm A");
+
+                    frm.set_intro(
+                        __("This lease has been renewed: {0} by {1} on {2}.", [
+                            `<a href="/app/lease/${d.name}"><b>${d.name}</b></a>`,
+                            `<b>${d.renewal_initiated_by || ""}</b>`,
+                            `<b>${creation_time}</b>`,
+                        ]),
+                        "green"
+                    );
+                }
+            });
+    },
 });
 
 var make_lease_invoice_schedule = function(frm){
@@ -121,6 +200,10 @@ var make_lease_invoice_schedule = function(frm){
 		args: {leasedoc: doc.name},
 		callback: function(){
 			cur_frm.reload_doc();
+			frappe.show_alert({
+				message: __("Completed making of invoice schedule."),
+				indicator: "green"
+			}, 5);
 		}
 	});
 };

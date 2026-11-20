@@ -1,527 +1,431 @@
 {
- "charts": [],
- "content": "[{\"id\":\"HaSFT_63sT\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Summary Tables <br></b></span>\",\"col\":12}},{\"id\":\"ocKJbkl7Uq\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Properties\",\"col\":4}},{\"id\":\"74IgMjpDlT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Leases\",\"col\":4}},{\"id\":\"7IQ5o5tu3V\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shortcuts</span>\",\"col\":12}},{\"id\":\"mmDDbmrwfx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Active Leases\",\"col\":4}},{\"id\":\"Ko3y3DNVaO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vacting Leases\",\"col\":4}},{\"id\":\"lAcUHIxxmt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Unmaterialised Leases\",\"col\":4}},{\"id\":\"Lvkou7FPSj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Available Properties\",\"col\":4}},{\"id\":\"OCXSFF46BT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vacating Properties\",\"col\":4}},{\"id\":\"l-d27Twl0h\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Booked Properties\",\"col\":4}},{\"id\":\"TFO4ffcN4B\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expired Leases\",\"col\":4}},{\"id\":\"8StaNmlZu7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Terminated Leases\",\"col\":4}},{\"id\":\"ce2zDTCx9A\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pre-mature Lease Exits\",\"col\":4}},{\"id\":\"Kcd7OKvXzM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Keys\",\"col\":4}},{\"id\":\"zSgvRHZOiy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Keys in Posession\",\"col\":4}},{\"id\":\"Dpf3B4OldR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Keys\",\"col\":4}},{\"id\":\"R5oN93DdB9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lost Tools\",\"col\":4}},{\"id\":\"bArhtanAEk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tools in Posession\",\"col\":4}},{\"id\":\"lqYekUAd7m\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assigned Tools\",\"col\":4}},{\"id\":\"nt1DT-vX4o\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Documents</b></span>\",\"col\":12}},{\"id\":\"4OvHczRAAh\",\"type\":\"card\",\"data\":{\"card_name\":\"Property Management\",\"col\":4}},{\"id\":\"bjKUDrqDcX\",\"type\":\"card\",\"data\":{\"card_name\":\"Utilities and Tools\",\"col\":4}},{\"id\":\"-bjzyOR-Eh\",\"type\":\"card\",\"data\":{\"card_name\":\"Keys and Security\",\"col\":4}},{\"id\":\"5Dhgd1tVx2\",\"type\":\"card\",\"data\":{\"card_name\":\"Outsourcing\",\"col\":4}},{\"id\":\"a4xwDEBSQp\",\"type\":\"card\",\"data\":{\"card_name\":\"Monitoring and Maintanance\",\"col\":4}},{\"id\":\"mzh_YnVPt5\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reports <br></b></span>\",\"col\":12}},{\"id\":\"vPLCvgOuuL\",\"type\":\"card\",\"data\":{\"card_name\":\"Monitoring Reports\",\"col\":4}},{\"id\":\"UDhmPoiQbA\",\"type\":\"card\",\"data\":{\"card_name\":\"Attendance Reports\",\"col\":4}}]",
- "creation": "2025-03-12 16:48:28.235868",
- "custom_blocks": [],
- "docstatus": 0,
  "doctype": "Workspace",
+ "name": "Real Estate Management",
+ "label": "Real Estate Management",
+ "title": "Real Estate Management",
+ "module": "Property Management Solution",
+ "public": 1,
  "for_user": "",
- "hide_custom": 0,
+ "parent_page": "",
+ "sequence_id": 1,
  "icon": "retail",
- "idx": 0,
  "indicator_color": "",
  "is_hidden": 0,
- "label": "Real Estate Management",
+ "hide_custom": 0,
+ "docstatus": 0,
+ "creation": "2025-03-12 16:48:28.235868",
+ "modified": "2026-10-09 09:42:55.580968",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "charts": [],
+ "number_cards": [],
+ "custom_blocks": [],
+ "roles": [],
  "links": [
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Property Management",
+   "type": "Card Break",
+   "label": "Masters",
    "link_count": 5,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
+   "hidden": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Leases",
-   "link_count": 0,
-   "link_to": "Lease",
+   "type": "Link",
+   "label": "Properties & Units",
    "link_type": "DocType",
+   "link_to": "Property",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Exits",
-   "link_count": 0,
-   "link_to": "Exit",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
+   "type": "Link",
    "label": "Unit Type",
-   "link_count": 0,
+   "link_type": "DocType",
    "link_to": "Unit Type",
-   "link_type": "DocType",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Apartment Status",
-   "link_count": 0,
-   "link_to": "Apartment Status",
+   "type": "Link",
+   "label": "Tenants & Owners",
    "link_type": "DocType",
+   "link_to": "Customer",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Property Management Settings",
-   "link_count": 0,
-   "link_to": "Property Management Settings",
+   "type": "Link",
+   "label": "Contact",
    "link_type": "DocType",
+   "link_to": "Contact",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Utilities and Tools",
-   "link_count": 5,
+   "type": "Link",
+   "label": "Billing Items",
    "link_type": "DocType",
+   "link_to": "Item",
+   "hidden": 0,
    "onboard": 0,
-   "type": "Card Break"
+   "is_query_report": 0
   },
   {
+   "type": "Card Break",
+   "label": "Transactions",
+   "link_count": 6,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease",
+   "link_type": "DocType",
+   "link_to": "Lease",
    "hidden": 0,
-   "is_query_report": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease Exits",
+   "link_type": "DocType",
+   "link_to": "Exit",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
    "label": "Insurance",
-   "link_count": 0,
+   "link_type": "DocType",
    "link_to": "Insurance",
-   "link_type": "DocType",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Meter",
-   "link_count": 0,
-   "link_to": "Meter",
+   "type": "Link",
+   "label": "Sales Order",
    "link_type": "DocType",
+   "link_to": "Sales Order",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Meter Reading",
-   "link_count": 0,
-   "link_to": "Meter Reading",
+   "type": "Link",
+   "label": "Sales Invoice",
    "link_type": "DocType",
+   "link_to": "Sales Invoice",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tool Item Set",
-   "link_count": 0,
-   "link_to": "Tool Item Set",
+   "type": "Link",
+   "label": "Payment Entry",
    "link_type": "DocType",
+   "link_to": "Payment Entry",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tool Item Record",
-   "link_count": 0,
-   "link_to": "Tool Item Record",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "type": "Card Break",
+   "label": "Lease & Occupancy Reports",
+   "link_count": 6,
+   "hidden": 0
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Keys and Security",
-   "link_count": 4,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Key Set",
-   "link_count": 0,
-   "link_to": "Key Set",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Key Set Detail",
-   "link_count": 0,
-   "link_to": "Key Set Detail",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Guard Shift",
-   "link_count": 0,
-   "link_to": "Guard Shift",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Security Attendance",
-   "link_count": 0,
-   "link_to": "Security Attendance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Monitoring and Maintanance",
-   "link_count": 3,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Daily Checklist",
-   "link_count": 0,
-   "link_to": "Daily Checklist",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Checklist Checkup Area",
-   "link_count": 0,
-   "link_to": "Checklist Checkup Area",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Custom Error Log",
-   "link_count": 0,
-   "link_to": "Custom Error Log",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Monitoring Reports",
-   "link_count": 5,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Customer Reports",
-   "link_count": 0,
-   "link_to": "Customer Report",
+   "type": "Link",
+   "label": "Lease Information",
    "link_type": "Report",
-   "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Lease",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Property Status Reports",
-   "link_count": 0,
-   "link_to": "Property Status",
-   "link_type": "Report",
-   "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Lease",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Lease Information Reports",
-   "link_count": 0,
    "link_to": "Lease Information",
-   "link_type": "Report",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Lease",
-   "type": "Link"
+   "is_query_report": 1,
+   "report_ref_doctype": "Lease"
   },
   {
+   "type": "Link",
+   "label": "Property Status",
+   "link_type": "Report",
+   "link_to": "Property Status",
    "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Register",
+   "link_type": "Report",
+   "link_to": "Property Status Report",
+   "hidden": 0,
+   "onboard": 0,
    "is_query_report": 0,
-   "label": "Pending Signed Agreement Reports",
-   "link_count": 0,
+   "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Link",
+   "label": "Lease Customer Register",
+   "link_type": "Report",
+   "link_to": "Customer Report",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0,
+   "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Link",
+   "label": "Pending Signed Agreement",
+   "link_type": "Report",
    "link_to": "Pending Signed Agreement",
-   "link_type": "Report",
+   "hidden": 0,
    "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Lease",
-   "type": "Link"
+   "is_query_report": 0,
+   "report_ref_doctype": "Lease"
   },
   {
+   "type": "Link",
+   "label": "Lease Notifications",
+   "link_type": "Report",
+   "link_to": "Notification Report",
    "hidden": 0,
+   "onboard": 0,
    "is_query_report": 0,
-   "label": "Stamp Duty Paid by Tenant Reports",
-   "link_count": 0,
+   "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Card Break",
+   "label": "Billing & Income Reports",
+   "link_count": 6,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Rent Invoices Details",
+   "link_type": "Report",
+   "link_to": "Rent Invoices Details",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Rent Invoices Details USD",
+   "link_type": "Report",
+   "link_to": "Rent Invoices Details USD",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Invoice Details",
+   "link_type": "Report",
+   "link_to": "Invoice Details",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Income Breakdown",
+   "link_type": "Report",
+   "link_to": "Mis-Income Break Up",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Subscription Service Report",
+   "link_type": "Report",
+   "link_to": "Subscription Service Report",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Utility Invoices",
+   "link_type": "Report",
+   "link_to": "Utility Invoices",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Card Break",
+   "label": "Collections & Tax Reports",
+   "link_count": 5,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Debtors Report",
+   "link_type": "Report",
+   "link_to": "Debtors Report",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Creditors Report",
+   "link_type": "Report",
+   "link_to": "Creditors Report",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Purchase Invoice"
+  },
+  {
+   "type": "Link",
+   "label": "Security Deposit",
+   "link_type": "Report",
+   "link_to": "Security Deposit",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 1,
+   "report_ref_doctype": "Journal Entry"
+  },
+  {
+   "type": "Link",
+   "label": "Stamp Duty Paid by Tenant",
+   "link_type": "Report",
    "link_to": "Stamp Duty Paid by Tenant",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0,
+   "report_ref_doctype": "Lease"
+  },
+  {
+   "type": "Link",
+   "label": "Property Withholding Tax",
    "link_type": "Report",
-   "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Lease",
-   "type": "Link"
-  },
-  {
+   "link_to": "Withholding Tax Summary on Sales for Properties",
    "hidden": 0,
-   "is_query_report": 0,
-   "label": "Attendance Reports",
-   "link_count": 2,
-   "link_type": "DocType",
    "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Security Attendance Report",
-   "link_count": 0,
-   "link_to": "Security Attendance Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Security Attendance",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing Attendance Reports",
-   "link_count": 0,
-   "link_to": "Outsourcing Attendance",
-   "link_type": "Report",
-   "onboard": 0,
-   "only_for": "",
-   "report_ref_doctype": "Outsourcing Attendance",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing",
-   "link_count": 3,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing Shift",
-   "link_count": 0,
-   "link_to": "Outsourcing Shift",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing Category",
-   "link_count": 0,
-   "link_to": "Outsourcing Category",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing Attendance",
-   "link_count": 0,
-   "link_to": "Outsourcing Attendance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
+   "is_query_report": 1,
+   "report_ref_doctype": "Sales Invoice"
   }
  ],
- "modified": "2025-04-09 10:05:11.346682",
- "modified_by": "Administrator",
- "module": "Property Management Solution",
- "name": "Real Estate Management",
- "number_cards": [],
- "owner": "Administrator",
- "parent_page": "",
- "public": 1,
+ "shortcuts": [
+  {
+   "label": "Properties & Units",
+   "type": "DocType",
+   "link_to": "Property",
+   "doc_view": "Tree",
+   "color": "Grey"
+  },
+  {
+   "label": "Active Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Active\",false]]"
+  },
+  {
+   "label": "Upcoming Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Upcoming\",false]]"
+  },
+  {
+   "label": "Vacating Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Vacating\",false]]"
+  },
+  {
+   "label": "Unmaterialised Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Not Materialized\",false]]"
+  },
+  {
+   "label": "Expired Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Expired\",false]]"
+  },
+  {
+   "label": "Terminated Leases",
+   "type": "DocType",
+   "link_to": "Lease",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Terminated\",false]]"
+  },
+  {
+   "label": "Available Properties",
+   "type": "DocType",
+   "link_to": "Property",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Available\",false]]"
+  },
+  {
+   "label": "Booked Properties",
+   "type": "DocType",
+   "link_to": "Property",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Booked\",false]]"
+  },
+  {
+   "label": "Vacating Properties",
+   "type": "DocType",
+   "link_to": "Property",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Vacating\",false]]"
+  },
+  {
+   "label": "Pre-mature Lease Exits",
+   "type": "DocType",
+   "link_to": "Exit",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"Exit\",\"exit_type\",\"=\",\"Pre-mature\",false]]"
+  },
+  {
+   "label": "Facilities Operations",
+   "type": "URL",
+   "url": "/app/property-facilities",
+   "color": "Grey"
+  }
+ ],
  "quick_lists": [
   {
    "document_type": "Property",
-   "label": "Properties",
-   "quick_list_filter": "[]"
+   "label": "Properties"
   },
   {
    "document_type": "Lease",
-   "label": "Leases",
-   "quick_list_filter": "[]"
+   "label": "Leases"
   }
  ],
- "roles": [],
- "sequence_id": 374.0,
- "shortcuts": [
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Expired Leases",
-   "link_to": "Exit",
-   "stats_filter": "[[\"Exit\",\"exit_type\",\"=\",\"Expiry\",false]]",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "",
-   "label": "Active Leases",
-   "link_to": "Lease",
-   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Active\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Terminated Leases",
-   "link_to": "Exit",
-   "stats_filter": "[[\"Exit\",\"exit_type\",\"=\",\"Termination\",false]]",
-   "type": "DocType"
-  },
-  {
-   "doc_view": "",
-   "label": "Vacting Leases",
-   "link_to": "Lease",
-   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Vacating\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Pre-mature Lease Exits",
-   "link_to": "Exit",
-   "stats_filter": "[[\"Exit\",\"exit_type\",\"=\",\"Pre-mature\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Unmaterialised Leases",
-   "link_to": "Lease",
-   "stats_filter": "[[\"Lease\",\"lease_status\",\"=\",\"Not Materialized\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Available Properties",
-   "link_to": "Property",
-   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Available\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Booked Properties",
-   "link_to": "Property",
-   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Booked\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Vacating Properties",
-   "link_to": "Property",
-   "stats_filter": "[[\"Property\",\"status\",\"=\",\"Vacating\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Lost Keys",
-   "link_to": "Key Set",
-   "stats_filter": "[[\"Key Set\",\"status\",\"=\",\"Lost\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Keys in Posession",
-   "link_to": "Tool Item Set",
-   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"In\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Assigned Keys",
-   "link_to": "Key Set",
-   "stats_filter": "[[\"Key Set\",\"status\",\"=\",\"Out\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Lost Tools",
-   "link_to": "Tool Item Set",
-   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"Lost\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Tools in Posession",
-   "link_to": "Tool Item Set",
-   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"In\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Assigned Tools",
-   "link_to": "Tool Item Set",
-   "stats_filter": "[[\"Tool Item Set\",\"status\",\"=\",\"Out\",false]]",
-   "type": "DocType"
-  }
- ],
- "title": "Real Estate Management"
+ "content": "[{\"id\":\"real_estate_management-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Real Estate Management</span>\",\"col\":12}},{\"id\":\"real_estate_management-2\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Properties\",\"col\":6}},{\"id\":\"real_estate_management-3\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Leases\",\"col\":6}},{\"id\":\"real_estate_management-4\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"real_estate_management-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Properties & Units\",\"col\":4}},{\"id\":\"real_estate_management-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Active Leases\",\"col\":4}},{\"id\":\"real_estate_management-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Upcoming Leases\",\"col\":4}},{\"id\":\"real_estate_management-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vacating Leases\",\"col\":4}},{\"id\":\"real_estate_management-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Unmaterialised Leases\",\"col\":4}},{\"id\":\"real_estate_management-10\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Expired Leases\",\"col\":4}},{\"id\":\"real_estate_management-11\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Terminated Leases\",\"col\":4}},{\"id\":\"real_estate_management-12\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Available Properties\",\"col\":4}},{\"id\":\"real_estate_management-13\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Booked Properties\",\"col\":4}},{\"id\":\"real_estate_management-14\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vacating Properties\",\"col\":4}},{\"id\":\"real_estate_management-15\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pre-mature Lease Exits\",\"col\":4}},{\"id\":\"real_estate_management-16\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Facilities Operations\",\"col\":4}},{\"id\":\"real_estate_management-17\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"real_estate_management-18\",\"type\":\"card\",\"data\":{\"card_name\":\"Transactions\",\"col\":4}},{\"id\":\"real_estate_management-19\",\"type\":\"card\",\"data\":{\"card_name\":\"Lease & Occupancy Reports\",\"col\":4}},{\"id\":\"real_estate_management-20\",\"type\":\"card\",\"data\":{\"card_name\":\"Billing & Income Reports\",\"col\":4}},{\"id\":\"real_estate_management-21\",\"type\":\"card\",\"data\":{\"card_name\":\"Collections & Tax Reports\",\"col\":4}}]"
 }

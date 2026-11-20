@@ -13,6 +13,3 @@ frappe.ui.form.on('Meter', {
 
 	}
 });
-
-
-

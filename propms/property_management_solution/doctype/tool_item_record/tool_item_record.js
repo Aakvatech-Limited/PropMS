@@ -25,4 +25,3 @@ cur_frm.set_query("tool_item_set", function () {
 		}
 	}
 });
-

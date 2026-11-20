@@ -8,51 +8,76 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: linters-${{ github.repository }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  linter:
-    name: 'Frappe Linter'
+  semgrep:
+    name: Frappe Linter
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.11"
           cache: pip
-      - name: Install pre-commit
-        run: pip install pre-commit
-      - name: Run pre-commit on changed files
+
+      - name: Detect Frappe app package
+        id: app
+        shell: bash
         run: |
-          pre-commit run \
-            --show-diff-on-failure \
-            --color=always \
-            --from-ref origin/${{ github.base_ref }} \
-            --to-ref HEAD
+          set -euo pipefail
+          mapfile -t hooks < <(find . -mindepth 2 -maxdepth 3 -type f -name hooks.py -not -path './.git/*' -print)
+          if [ "${#hooks[@]}" -ne 1 ]; then
+            echo "Expected exactly one Frappe hooks.py, found ${#hooks[@]}" >&2
+            printf '%s\n' "${hooks[@]}" >&2
+            exit 1
+          fi
+          app_dir="$(dirname "${hooks[0]}")"
+          echo "app_dir=${app_dir#./}" >> "$GITHUB_OUTPUT"
 
       - name: Download Semgrep rules
         run: git clone --depth 1 https://github.com/frappe/semgrep-rules.git frappe-semgrep-rules
 
+      - name: Install Semgrep
+        run: pip install semgrep
+
       - name: Run Semgrep rules
+        env:
+          # Keep existing findings visible in manual full scans, but block PRs on new findings.
+          SEMGREP_BASELINE_REF: ${{ github.event.pull_request.base.sha || '' }}
+        shell: bash
         run: |
-          pip install semgrep
-          semgrep ci --config ./frappe-semgrep-rules/rules --config r/python.lang.correctness
+          set -euo pipefail
+          baseline_args=()
+          if [ -n "$SEMGREP_BASELINE_REF" ]; then
+            baseline_args=(--baseline-commit "$SEMGREP_BASELINE_REF")
+          fi
+          semgrep scan --config ./frappe-semgrep-rules/rules \
+            --config r/python.lang.security \
+            --severity=ERROR --error "${baseline_args[@]}" "${{ steps.app.outputs.app_dir }}"
+
+      - name: Semgrep warnings (non-blocking)
+        if: always()
+        run: |
+          semgrep scan --config ./frappe-semgrep-rules/rules \
+            --config r/python.lang.security \
+            --severity=WARNING "${{ steps.app.outputs.app_dir }}" || true
 
   deps-vulnerable-check:
-    name: 'Vulnerable Dependency Check'
+    name: Vulnerable Dependency Check
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-
-      - uses: actions/checkout@v4
+          python-version: "3.11"
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -66,5 +91,4 @@ jobs:
       - name: Install and run pip-audit
         run: |
           pip install pip-audit
-          cd ${GITHUB_WORKSPACE}
           pip-audit --desc on .

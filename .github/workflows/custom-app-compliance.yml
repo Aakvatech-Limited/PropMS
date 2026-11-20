@@ -1,0 +1,11 @@
+name: Custom App Compliance
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compliance:
+    uses: Aakvatech-Limited/frappe-maintenance/.github/workflows/custom-app-compliance-reusable.yml@main

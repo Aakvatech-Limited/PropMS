@@ -10,7 +10,7 @@ frappe.query_reports["Security Deposit"] = {
 				"label": __("Account"),
 				"fieldtype": "Link",
 				"options": "Account",
-				"default": "21401 - Security Deposit Commercial - VPL",	
+				"default": "21401 - Security Deposit Commercial - VPL",
 				"get_query": function() {
 					return {
 						"query": "erpnext.controllers.queries.get_account_list",

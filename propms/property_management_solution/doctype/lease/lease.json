@@ -53,7 +53,11 @@
   "witness_2",
   "witness_1",
   "section_break_36",
-  "amended_from"
+  "amended_from",
+  "lease_renewal_details_section",
+  "renewed_from",
+  "column_break_renewal",
+  "renewal_initiated_by"
  ],
  "fields": [
   {
@@ -325,6 +329,32 @@
    "fieldname": "skip_end_date",
    "fieldtype": "Check",
    "label": "Skip End Date"
+  },
+  {
+   "fieldname": "lease_renewal_details_section",
+   "fieldtype": "Section Break",
+   "label": "Lease Renewal Details",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "renewed_from",
+   "fieldtype": "Link",
+   "label": "Renewed From",
+   "options": "Lease",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "column_break_renewal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "renewal_initiated_by",
+   "fieldtype": "Link",
+   "label": "Renewal Initiated By",
+   "options": "User",
+   "read_only": 1,
+   "no_copy": 1
   }
  ],
  "links": [],

@@ -1,0 +1,15 @@
+{
+  "doctype": "Number Card",
+  "name": "Occupied Properties KPI",
+  "label": "Occupied Properties KPI",
+  "is_standard": 1,
+  "is_public": 1,
+  "module": "Property Management Solution",
+  "type": "Document Type",
+  "document_type": "Property",
+  "function": "Count",
+  "filters_json": "[[\"Property\",\"status\",\"=\",\"On Lease\"],[\"Property\",\"is_group\",\"=\",0]]",
+  "dynamic_filters_json": "[]",
+  "show_percentage_stats": 0,
+  "show_full_number": 0
+}

@@ -37,6 +37,7 @@
   "smoking",
   "furnished",
   "status",
+  "max_active_leases",
   "section_break_22",
   "unit_assets",
   "column_break_24",
@@ -192,6 +193,13 @@
    "fieldtype": "Select",
    "label": "Status",
    "options": "Available\nBooked\nCommon Area (Not for lease)\nManaged for Customer\nOff Lease in 3 Months\nOn Lease\nOn Sale\nRemoved\nRenewal\nSold\nVacating\nIn Renovation"
+  },
+  {
+   "default": "0",
+   "description": "Max active leases allowed for this property. If 0, system setting will be used (default: 1).",
+   "fieldname": "max_active_leases",
+   "fieldtype": "Int",
+   "label": "Max Active Leases"
   },
   {
    "bold": 1,

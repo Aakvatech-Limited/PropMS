@@ -4,3 +4,6 @@
 *.swp
 tags
 propms/docs/current
+
+# Cloned by the frappe-semgrep-rules pre-commit hook
+frappe-semgrep-rules/

@@ -18,7 +18,7 @@ frappe.query_reports["Subscription Service Report"] = {
 						}
 					}
 				}
-			},	
+			},
 			{
 				"fieldname":"to_date",
 				"label": __("To Date"),

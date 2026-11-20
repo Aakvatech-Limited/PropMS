@@ -1,0 +1,16 @@
+{
+  "doctype": "Dashboard Chart",
+  "name": "Property Status Mix",
+  "chart_name": "Property Status Mix",
+  "chart_type": "Group By",
+  "document_type": "Property",
+  "is_standard": 1,
+  "is_public": 1,
+  "module": "Property Management Solution",
+  "type": "Donut",
+  "timeseries": 0,
+  "filters_json": "{\"is_group\":0}",
+  "number_of_groups": 0,
+  "group_by_based_on": "status",
+  "group_by_type": "Count"
+}

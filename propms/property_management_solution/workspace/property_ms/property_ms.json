@@ -1,287 +1,35 @@
 {
- "category": "Domains",
- "charts": [],
- "creation": "2021-08-03 15:46:41.730961",
- "developer_mode_only": 0,
- "disable_user_customization": 0,
- "docstatus": 0,
  "doctype": "Workspace",
- "extends_another_page": 0,
- "hide_custom": 0,
- "idx": 0,
- "is_default": 0,
- "is_standard": 1,
+ "name": "Property MS",
  "label": "Property MS",
- "links": [
+ "title": "Property MS",
+ "module": "Property Management Solution",
+ "public": 1,
+ "for_user": "",
+ "parent_page": "",
+ "sequence_id": 4,
+ "icon": "retail",
+ "indicator_color": "",
+ "is_hidden": 1,
+ "hide_custom": 0,
+ "docstatus": 0,
+ "creation": "2021-08-03 15:46:41.730961",
+ "modified": "2026-10-09 09:42:55.580968",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "charts": [],
+ "number_cards": [],
+ "custom_blocks": [],
+ "roles": [],
+ "links": [],
+ "shortcuts": [
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Masters",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Properties",
-   "link_to": "Property",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Unit Type",
-   "link_to": "Unit Type",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Checkup Area",
-   "link_to": "Checklist Checkup Area",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Guard Shift",
-   "link_to": "Guard Shift",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Key Set",
-   "link_to": "Key Set",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tool Item Set",
-   "link_to": "Tool Item Set",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Oursource Category",
-   "link_to": "Outsourcing Category",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Property Amenity",
-   "link_to": "Property Amenity",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Meter",
-   "link_to": "Meter",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Documents",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Lease",
-   "link_to": "Lease",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Keys Sets",
-   "link_to": "Key Set Detail",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tool Item Record",
-   "link_to": "Tool Item Record",
-   "link_type": "DocType",
-   "onboard": 0,
-   "only_for": "",
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Daily Checklist",
-   "link_to": "Daily Checklist",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Exit",
-   "link_to": "Exit",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Meter Reading",
-   "link_to": "Meter Reading",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Insurance",
-   "link_to": "Insurance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Outsourcing Attendance",
-   "link_to": "Outsourcing Attendance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Security Attendance",
-   "link_to": "Security Attendance",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Property Management Settings",
-   "link_to": "Property Management Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Reports and Analytics",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Outsourcing Attendance",
-   "link_to": "Outsourcing Attendance",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Security Attendance",
-   "link_to": "Security Attendance Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Security Deposit",
-   "link_to": "Security Deposit",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Debtors Report",
-   "link_to": "Debtors Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Creditors Report",
-   "link_to": "Creditors Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Property Status",
-   "link_to": "Property Status",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
+   "label": "Open Real Estate Management",
+   "type": "URL",
+   "url": "/app/real-estate-management",
+   "color": "Grey"
   }
  ],
- "modified": "2022-05-16 16:58:39.426498",
- "modified_by": "Administrator",
- "module": "Property Management Solution",
- "name": "Property MS",
- "owner": "Administrator",
- "pin_to_bottom": 0,
- "pin_to_top": 0,
- "shortcuts": []
+ "quick_lists": [],
+ "content": "[{\"id\":\"property_ms-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property MS</span>\",\"col\":12}},{\"id\":\"property_ms-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_ms-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Real Estate Management\",\"col\":4}}]"
 }

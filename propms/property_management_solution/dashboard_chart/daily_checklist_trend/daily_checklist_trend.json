@@ -1,0 +1,17 @@
+{
+  "doctype": "Dashboard Chart",
+  "name": "Daily Checklist Trend",
+  "chart_name": "Daily Checklist Trend",
+  "chart_type": "Count",
+  "document_type": "Daily Checklist",
+  "is_standard": 1,
+  "is_public": 1,
+  "module": "Property Management Solution",
+  "type": "Line",
+  "timeseries": 1,
+  "filters_json": "{}",
+  "number_of_groups": 0,
+  "based_on": "checkup_date",
+  "time_interval": "Monthly",
+  "timespan": "Last Year"
+}

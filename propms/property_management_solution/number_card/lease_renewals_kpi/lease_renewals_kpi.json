@@ -1,0 +1,15 @@
+{
+  "doctype": "Number Card",
+  "name": "Lease Renewals KPI",
+  "label": "Lease Renewals KPI",
+  "is_standard": 1,
+  "is_public": 1,
+  "module": "Property Management Solution",
+  "type": "Document Type",
+  "document_type": "Lease",
+  "function": "Count",
+  "filters_json": "[[\"Lease\",\"lease_status\",\"=\",\"Renewal to Previous Lease\"]]",
+  "dynamic_filters_json": "[]",
+  "show_percentage_stats": 0,
+  "show_full_number": 0
+}

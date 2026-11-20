@@ -1,205 +1,198 @@
-import frappe, calendar
-from frappe import _
+import calendar
 from datetime import date, timedelta
+
+import frappe
+from frappe import _
+from frappe.query_builder import Order
 
 
 def get_residential_columns(year):
-    columns = [
-        {
-            "fieldname": "apartment_no",
-            "label": _("Apartment No."),
-            "fieldtype": "Data",
-            "width": 150,
-        },
-        {
-            "fieldname": "client",
-            "label": _("Client"),
-            "fieldtype": "Data",
-            "width": 150,
-        },
-        {
-            "fieldname": "advance_prev_year",
-            "label": _("Advance RECD in 2019"),
-            "fieldtype": "Data",
-            "width": 150,
-        },
-        {
-            "fieldname": "invoice_no",
-            "label": _("Invoice No."),
-            "fieldtype": "Link",
-            "options": "Sales Invoice",
-            "width": 150,
-        },
-        {"fieldname": "from", "label": _("From"), "fieldtype": "Data", "width": 150},
-        {"fieldname": "to", "label": _("To"), "fieldtype": "Data", "width": 150},
-        {
-            "fieldname": "invoice_amount",
-            "label": _("Invoice Amount"),
-            "fieldtype": "Data",
-            "width": 150,
-        },
-    ]
-    months = months_array()
-    for i in months:
-        columns.append(
-            {
-                "fieldname": i.lower(),
-                "label": i + " " + str(year),
-                "fieldtype": "Data",
-                "width": 150,
-            }
-        )
+	columns = [
+		{
+			"fieldname": "apartment_no",
+			"label": _("Apartment No."),
+			"fieldtype": "Data",
+			"width": 150,
+		},
+		{
+			"fieldname": "client",
+			"label": _("Client"),
+			"fieldtype": "Data",
+			"width": 150,
+		},
+		{
+			"fieldname": "advance_prev_year",
+			"label": _("Advance RECD in 2019"),
+			"fieldtype": "Data",
+			"width": 150,
+		},
+		{
+			"fieldname": "invoice_no",
+			"label": _("Invoice No."),
+			"fieldtype": "Link",
+			"options": "Sales Invoice",
+			"width": 150,
+		},
+		{"fieldname": "from", "label": _("From"), "fieldtype": "Data", "width": 150},
+		{"fieldname": "to", "label": _("To"), "fieldtype": "Data", "width": 150},
+		{
+			"fieldname": "invoice_amount",
+			"label": _("Invoice Amount"),
+			"fieldtype": "Data",
+			"width": 150,
+		},
+	]
+	months = months_array()
+	for i in months:
+		columns.append(
+			{
+				"fieldname": i.lower(),
+				"label": i + " " + str(year),
+				"fieldtype": "Data",
+				"width": 150,
+			}
+		)
 
-    return columns
+	return columns
 
 
 def get_utility_sales_invoice(data, from_other=None, months=None):
-    total = {}
-    lease_item = "'Utility Charges' "
-    query = """ SELECT * FROM `tabSales Invoice` AS SI WHERE EXISTS (SELECT * FROM `tabSales Invoice Item` AS SIT WHERE SIT.item_code = {0} and SIT.parent = SI.name )
-                and SI.docstatus=%s
-                ORDER by SI.customer,SI.from_date ASC""".format(
-        lease_item
-    ) % (
-        1
-    )
+	total = {}
+	sales_invoice = frappe.qb.DocType("Sales Invoice")
+	sales_invoice_item = frappe.qb.DocType("Sales Invoice Item")
+	matching_invoices = (
+		frappe.qb.from_(sales_invoice_item)
+		.select(sales_invoice_item.parent)
+		.where(sales_invoice_item.item_code == "Utility Charges")
+	)
+	sales_invoices = (
+		frappe.qb.from_(sales_invoice)
+		.select(sales_invoice.star)
+		.where(sales_invoice.name.isin(matching_invoices))
+		.where(sales_invoice.docstatus == 1)
+		.orderby(sales_invoice.customer)
+		.orderby(sales_invoice.from_date, order=Order.asc)
+	).run(as_dict=True)
 
-    sales_invoices = frappe.db.sql(query, as_dict=True)
-    previuos_customer = ""
-    for i in sales_invoices:
-        lease = frappe.get_value("Lease", i.lease, "property")
-        obj = {
-            "apartment_no": lease,
-            "client": i.customer,
-            "advance_prev_year": "",
-            "invoice_no": i.name,
-            "from": i.from_date if i.from_date else i.posting_date,
-            "to": i.to_date - timedelta(days=1) if i.to_date else i.posting_date,
-            "invoice_amount": i.total,
-        }
-        set_monthly_amount(
-            i.from_date,
-            i.to_date - timedelta(days=1) if i.to_date else "",
-            obj,
-            total,
-            months,
-        )
-        if previuos_customer != i.customer:
-            data.append({})
-        previuos_customer = i.customer
-        data.append(obj)
-        if from_other:
-            data.append(total)
+	previuos_customer = ""
+	for i in sales_invoices:
+		lease = frappe.get_value("Lease", i.lease, "property")
+		obj = {
+			"apartment_no": lease,
+			"client": i.customer,
+			"advance_prev_year": "",
+			"invoice_no": i.name,
+			"from": i.from_date if i.from_date else i.posting_date,
+			"to": i.to_date - timedelta(days=1) if i.to_date else i.posting_date,
+			"invoice_amount": i.total,
+		}
+		set_monthly_amount(
+			i.from_date,
+			i.to_date - timedelta(days=1) if i.to_date else "",
+			obj,
+			total,
+			months,
+		)
+		if previuos_customer != i.customer:
+			data.append({})
+		previuos_customer = i.customer
+		data.append(obj)
+		if from_other:
+			data.append(total)
 
 
 def set_monthly_amount(start_date, end_date, obj, total, months):
-    rate = get_rate(obj["invoice_no"])
-    if end_date and rate:
-        check_dates(start_date, end_date, rate, obj, total, months)
+	rate = get_rate(obj["invoice_no"])
+	if end_date and rate:
+		check_dates(start_date, end_date, rate, obj, total, months)
 
 
 def check_dates(start_date, end_date, rate, obj, total, months):
-    start = start_date
-    no_minus = 0
-    while start < end_date:
-        month_string = start.strftime("%b")
-        month_no_of_days = calendar.monthrange(start.year, start.month)[1]
-        last_date = date(start.year, start.month, month_no_of_days)
-        if (last_date - start).days >= 29 or (
-            month_string == "Feb" and (last_date - start).days >= 27
-        ):
-            if start.year == start_date.year:
-                obj[month_string.lower()] = round(rate, 2)
-                if months and month_string.lower() in months:
-                    total[month_string.lower()] = (
-                        round(rate, 2) + round(total[month_string.lower()], 2)
-                        if month_string.lower() in total
-                        else round(rate, 2)
-                    )
-        else:
-            if start.year == start_date.year:
-                obj[month_string.lower()] = round(
-                    round(rate / month_no_of_days, 2)
-                    * (month_no_of_days - int(start.day)),
-                    2,
-                )
-                if months and month_string.lower() in months:
-                    total[month_string.lower()] = (
-                        round(
-                            round(rate / month_no_of_days, 2)
-                            * (month_no_of_days - int(start.day)),
-                            2,
-                        )
-                        + round(total[month_string.lower()], 2)
-                        if month_string.lower() in total
-                        else round(
-                            round(rate / month_no_of_days, 2)
-                            * (month_no_of_days - int(start.day)),
-                            2,
-                        )
-                    )
-        no_minus = month_no_of_days
-        start += timedelta(days=month_no_of_days)
+	start = start_date
+	no_minus = 0
+	while start < end_date:
+		month_string = start.strftime("%b")
+		month_no_of_days = calendar.monthrange(start.year, start.month)[1]
+		last_date = date(start.year, start.month, month_no_of_days)
+		if (last_date - start).days >= 29 or (month_string == "Feb" and (last_date - start).days >= 27):
+			if start.year == start_date.year:
+				obj[month_string.lower()] = round(rate, 2)
+				if months and month_string.lower() in months:
+					total[month_string.lower()] = (
+						round(rate, 2) + round(total[month_string.lower()], 2)
+						if month_string.lower() in total
+						else round(rate, 2)
+					)
+		else:
+			if start.year == start_date.year:
+				obj[month_string.lower()] = round(
+					round(rate / month_no_of_days, 2) * (month_no_of_days - int(start.day)),
+					2,
+				)
+				if months and month_string.lower() in months:
+					total[month_string.lower()] = (
+						round(
+							round(rate / month_no_of_days, 2) * (month_no_of_days - int(start.day)),
+							2,
+						)
+						+ round(total[month_string.lower()], 2)
+						if month_string.lower() in total
+						else round(
+							round(rate / month_no_of_days, 2) * (month_no_of_days - int(start.day)),
+							2,
+						)
+					)
+		no_minus = month_no_of_days
+		start += timedelta(days=month_no_of_days)
 
-    start_last = start - timedelta(days=no_minus)
+	start_last = start - timedelta(days=no_minus)
 
-    if (end_date - start_last).days > 0:
-        if start_last.year == start_date.year:
-            month_string = end_date.strftime("%b")
-            month_no_of_days = calendar.monthrange(end_date.year, end_date.month)[1]
-            if int(end_date.day) >= 29 or (
-                month_string == "Feb" and (end_date - start_last).days >= 27
-            ):
-                obj[month_string.lower()] = round(rate, 2)
-                if months and month_string.lower() in months:
-                    total[month_string.lower()] = (
-                        round(rate, 2) + round(total[month_string.lower()], 2)
-                        if month_string.lower() in total
-                        else round(rate, 2)
-                    )
-            else:
-                obj[month_string.lower()] = round(
-                    round(rate / month_no_of_days, 2) * (int(end_date.day)), 2
-                )
-                if months and month_string.lower() in months:
-                    total[month_string.lower()] = (
-                        round(
-                            round(rate / month_no_of_days, 2) * (int(end_date.day)), 2
-                        )
-                        + round(total[month_string.lower()], 2)
-                        if month_string.lower() in total
-                        else round(
-                            round(rate / month_no_of_days, 2) * (int(end_date.day)), 2
-                        )
-                    )
+	if (end_date - start_last).days > 0:
+		if start_last.year == start_date.year:
+			month_string = end_date.strftime("%b")
+			month_no_of_days = calendar.monthrange(end_date.year, end_date.month)[1]
+			if int(end_date.day) >= 29 or (month_string == "Feb" and (end_date - start_last).days >= 27):
+				obj[month_string.lower()] = round(rate, 2)
+				if months and month_string.lower() in months:
+					total[month_string.lower()] = (
+						round(rate, 2) + round(total[month_string.lower()], 2)
+						if month_string.lower() in total
+						else round(rate, 2)
+					)
+			else:
+				obj[month_string.lower()] = round(round(rate / month_no_of_days, 2) * (int(end_date.day)), 2)
+				if months and month_string.lower() in months:
+					total[month_string.lower()] = (
+						round(round(rate / month_no_of_days, 2) * (int(end_date.day)), 2)
+						+ round(total[month_string.lower()], 2)
+						if month_string.lower() in total
+						else round(round(rate / month_no_of_days, 2) * (int(end_date.day)), 2)
+					)
 
 
 def months_array():
-    return [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+	return [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	]
 
 
 def get_rate(invoice_name):
-    filters_value = "and item_code = 'Utility Charges'"
-    query = """ SELECT rate FROM `tabSales Invoice Item` WHERE {0} {1}""".format(
-        "parent = '" + invoice_name + "' ", filters_value
-    )
-    print(query)
-
-    return (
-        frappe.db.sql(query, as_dict=True)[0].rate
-        if len(frappe.db.sql(query, as_dict=True)) > 0
-        else ""
-    )
+	invoice_item = frappe.qb.DocType("Sales Invoice Item")
+	rows = (
+		frappe.qb.from_(invoice_item)
+		.select(invoice_item.rate)
+		.where(invoice_item.parent == invoice_name)
+		.where(invoice_item.item_code == "Utility Charges")
+	).run(as_dict=True)
+	return rows[0].rate if rows else ""
