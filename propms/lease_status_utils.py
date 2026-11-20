@@ -1,6 +1,7 @@
 """Central status classifications for operational lease queries."""
 
 import frappe
+from frappe.query_builder.functions import Count
 from frappe.utils import getdate, nowdate
 
 
@@ -51,7 +52,7 @@ def active_leases_kpi():
 	as_on = getdate(nowdate())
 	result = (
 		frappe.qb.from_(Lease)
-		.select(frappe.qb.functions.Count(Lease.name).as_("value"))
+		.select(Count(Lease.name).as_("value"))
 		.where(Lease.lease_status.isin(statuses))
 		.where(Lease.docstatus < 2)
 		.where((Lease.start_date <= as_on) | Lease.start_date.isnull())
