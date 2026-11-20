@@ -143,8 +143,17 @@ class Lease(Document):
 
 		status = get_status_for_lease(self)
 
+		if status == "Expired" and not is_automatic_lease_expiry_enabled():
+			return
+
 		if status:
 			self.lease_status = status
+
+
+def is_automatic_lease_expiry_enabled():
+	"""Keep legacy expiry behavior when the setting has not been saved yet."""
+	setting = frappe.db.get_single_value("Property Management Settings", "auto_expire_leases")
+	return bool(cint(setting)) if setting is not None else True
 
 
 def is_lease_period_overlapping(lease, other):
@@ -200,9 +209,12 @@ def update_lease_statuses():
 		],
 	)
 
+	auto_expire = is_automatic_lease_expiry_enabled()
 	for lease in leases:
 		old_status = lease.lease_status
 		new_status = get_status_for_lease(lease, today_date)
+		if new_status == "Expired" and not auto_expire:
+			continue
 
 		if not new_status or new_status == old_status:
 			continue
