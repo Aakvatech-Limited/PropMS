@@ -139,3 +139,16 @@ class TestAutomaticLeaseExpiryFlag(unittest.TestCase):
 		lease.skip_end_date = 0
 		lease.set_lease_status()
 		self.assertEqual(lease.lease_status, "Expired")
+
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.db.commit")
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.db.set_value")
+	@patch("propms.property_management_solution.doctype.lease.lease.frappe.get_all")
+	@patch("propms.property_management_solution.doctype.lease.lease.is_automatic_lease_expiry_enabled", return_value=False)
+	def test_daily_scheduler_skips_expiry_when_disabled(self, _flag, get_all, set_value, _commit):
+		from propms.property_management_solution.doctype.lease.lease import update_lease_statuses
+
+		get_all.return_value = [
+			_dict(name="LEASE-001", lease_status="Active", start_date="2020-01-01", end_date="2020-12-31", skip_end_date=0)
+		]
+		update_lease_statuses()
+		set_value.assert_not_called()
