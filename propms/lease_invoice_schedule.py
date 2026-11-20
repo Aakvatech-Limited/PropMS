@@ -37,10 +37,7 @@ def make_lease_invoice_schedule():
 	query = (
 		frappe.qb.from_(Lease)
 		.select(Lease.name)
-		.where(
-			(Lease.start_date <= today_date)
-			& (Lease.lease_status.isin(eligible_statuses or [""]))
-		)
+		.where(Lease.lease_status.isin(eligible_statuses or [""]))
 	)
 	lease_names = [row[0] for row in query.run()]
 
@@ -52,6 +49,15 @@ def make_lease_invoice_schedule():
 
 			# Retain the original billing cycle; filter on actual invoice date.
 			if not lease_start:
+				continue
+
+			# A future lease becomes eligible on its first invoice date,
+			# not on the rental commencement date. This permits invoices
+			# to be raised in advance without scheduling all future leases.
+			first_invoice_date = getdate(add_days(
+				lease_start, -(lease.days_to_invoice_in_advance or 0)
+			))
+			if first_invoice_date > today_date:
 				continue
 
 			# Clean up obsolete schedules only when no Sales Invoice or Sales Order
