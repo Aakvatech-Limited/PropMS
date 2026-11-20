@@ -252,6 +252,8 @@ def getAllLease():
 		_("The task of making lease invoice schedule for all users has been sent for background processing.")
 	)
 	invoice_start_date = frappe.db.get_single_value("Property Management Settings", "invoice_start_date")
+	if not invoice_start_date:
+		frappe.throw(_("Please set Invoice Start Date in Property Management Settings"))
 	lease_list = frappe.get_all("Lease", filters={"end_date": (">=", invoice_start_date)}, fields=["name"])
 	# frappe.msgprint("Working on lease_list" + str(lease_list))
 	lease_list_len = len(lease_list)
@@ -290,6 +292,12 @@ def make_lease_invoice_schedule(leasedoc):
 		allow_backdated = frappe.db.get_single_value(
 			"Property Management Settings", "allow_backdated_lease_invoice_schedule"
 		)
+		invoice_start_date = frappe.db.get_single_value(
+			"Property Management Settings", "invoice_start_date"
+		)
+		invoice_start_date = getdate(invoice_start_date) if invoice_start_date else None
+		if allow_backdated and not invoice_start_date:
+			frappe.throw(_("Please set Invoice Start Date in Property Management Settings"))
 		if (
 			lease.lease_item
 			and lease.start_date
@@ -299,10 +307,6 @@ def make_lease_invoice_schedule(leasedoc):
 		):
 			# Clean up records that are no longer required, i.e. of unnecessary lease items and unnecessary dates
 			# Records before Invoice Start Date
-			invoice_start_date = frappe.db.get_single_value(
-				"Property Management Settings", "invoice_start_date"
-			)
-			invoice_start_date = getdate(invoice_start_date) if invoice_start_date else None
 			if invoice_start_date:
 				lease_invoice_schedule_list = frappe.get_list(
 					"Lease Invoice Schedule",
