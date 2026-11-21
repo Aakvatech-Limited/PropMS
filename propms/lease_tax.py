@@ -50,4 +50,13 @@ def resolve_item_tax_template(item_code, company, transaction_date, explicit=Non
 	resolved = get_item_tax_template(ctx)
 	if resolved:
 		validate_company_tax_template("Item Tax Template", resolved, company)
-	return resolved
+		return resolved
+	# Some installations define a custom Item.default_tax_template used by
+	# regional integrations such as VFD. Only use this fallback when the
+	# field exists and the template belongs to this invoice's company.
+	if frappe.get_meta("Item").has_field("default_tax_template"):
+		fallback = frappe.db.get_value("Item", item_code, "default_tax_template")
+		if fallback:
+			validate_company_tax_template("Item Tax Template", fallback, company)
+			return fallback
+	return None
