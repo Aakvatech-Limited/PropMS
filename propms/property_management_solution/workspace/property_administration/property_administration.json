@@ -31,8 +31,8 @@
  "links": [
   {
    "type": "Card Break",
-   "label": "Settings",
-   "link_count": 1,
+   "label": "Core Property Configuration",
+   "link_count": 6,
    "hidden": 0
   },
   {
@@ -45,10 +45,40 @@
    "is_query_report": 0
   },
   {
-   "type": "Card Break",
-   "label": "Legacy Registers",
-   "link_count": 2,
-   "hidden": 0
+   "type": "Link",
+   "label": "Property Status",
+   "link_type": "DocType",
+   "link_to": "Property Status",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Category",
+   "link_type": "DocType",
+   "link_to": "Property Status Category",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease Status",
+   "link_type": "DocType",
+   "link_to": "Lease Status",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Unit Type",
+   "link_type": "DocType",
+   "link_to": "Unit Type",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
   },
   {
    "type": "Link",
@@ -60,10 +90,127 @@
    "is_query_report": 0
   },
   {
+   "type": "Card Break",
+   "label": "Facilities Configuration",
+   "link_count": 7,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Checklist Checkup Area",
+   "link_type": "DocType",
+   "link_to": "Checklist Checkup Area",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Guard Shift",
+   "link_type": "DocType",
+   "link_to": "Guard Shift",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Category",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Category",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Shift",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Shift",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Meter",
+   "link_type": "DocType",
+   "link_to": "Meter",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Key Set",
+   "link_type": "DocType",
+   "link_to": "Key Set",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Tool Item Set",
+   "link_type": "DocType",
+   "link_to": "Tool Item Set",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Administrative Registers",
+   "link_count": 2,
+   "hidden": 0
+  },
+  {
    "type": "Link",
    "label": "Security Deposit Details",
    "link_type": "DocType",
    "link_to": "Security Deposit Details",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Custom Error Log",
+   "link_type": "DocType",
+   "link_to": "Custom Error Log",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Card Break",
+   "label": "Related Workspaces",
+   "link_count": 3,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Real Estate Management",
+   "link_type": "Workspace",
+   "link_to": "Real Estate Management",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Facilities",
+   "link_type": "Workspace",
+   "link_to": "Property Facilities",
+   "hidden": 0,
+   "onboard": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Portfolio Dashboard",
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
    "hidden": 0,
    "onboard": 0,
    "is_query_report": 0
@@ -79,7 +226,7 @@
   }
  ],
  "quick_lists": [],
- "content": "[{\"id\":\"property_administration-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Administration</span>\",\"col\":12}},{\"id\":\"property_administration-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions & Work Queues</span>\",\"col\":12}},{\"id\":\"property_administration-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property Management Settings\",\"col\":4}},{\"id\":\"property_administration-4\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}},{\"id\":\"property_administration-5\",\"type\":\"card\",\"data\":{\"card_name\":\"Legacy Registers\",\"col\":4}}]",
+ "content": "[{\"id\":\"propms-h-0\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Property Administration</span>\",\"col\":12}},{\"id\":\"propms-h-1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Actions</span>\",\"col\":12}},{\"id\":\"propms-s-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Property Management Settings\",\"col\":4}},{\"id\":\"propms-c-0\",\"type\":\"card\",\"data\":{\"card_name\":\"Core Property Configuration\",\"col\":4}},{\"id\":\"propms-c-1\",\"type\":\"card\",\"data\":{\"card_name\":\"Facilities Configuration\",\"col\":4}},{\"id\":\"propms-c-2\",\"type\":\"card\",\"data\":{\"card_name\":\"Administrative Registers\",\"col\":4}},{\"id\":\"propms-c-3\",\"type\":\"card\",\"data\":{\"card_name\":\"Related Workspaces\",\"col\":4}}]",
  "standard": 1,
  "type": "Workspace"
 }
