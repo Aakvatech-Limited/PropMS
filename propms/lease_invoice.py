@@ -185,6 +185,7 @@ def makeInvoice(
 			item["item_tax_template"] = resolve_item_tax_template(
 				item["item_code"], company, invoice_posting_date,
 				explicit=item.get("item_tax_template"),
+				base_net_rate=flt(item.get("rate")) * flt(item.get("qty")),
 			) or item.get("item_tax_template")
 		doc = frappe.get_doc(
 			dict(
