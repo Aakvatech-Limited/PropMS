@@ -57,6 +57,9 @@ def resolve_item_tax_template(item_code, company, transaction_date, explicit=Non
 	if frappe.get_meta("Item").has_field("default_tax_template"):
 		fallback = frappe.db.get_value("Item", item_code, "default_tax_template")
 		if fallback:
-			validate_company_tax_template("Item Tax Template", fallback, company)
-			return fallback
+			values = frappe.db.get_value(
+				"Item Tax Template", fallback, ["company", "disabled"], as_dict=True
+			)
+			if values and values.company == company and not values.disabled:
+				return fallback
 	return None
