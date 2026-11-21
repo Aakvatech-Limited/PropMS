@@ -4,6 +4,12 @@
 frappe.ui.form.on('Lease', {
 	setup: function(frm) {
 		frm.add_fetch('property', 'unit_owner', 'property_owner');
+		frm.set_query("sales_taxes_and_charges_template", () => ({
+			filters: { company: frm.doc.company || "", disabled: 0 }
+		}));
+		frm.set_query("item_tax_template", "lease_item", () => ({
+			filters: { company: frm.doc.company || "", disabled: 0 }
+		}));
 		frm.set_query("lease_item", "lease_item", function() {
 			return {
 				"filters": [
