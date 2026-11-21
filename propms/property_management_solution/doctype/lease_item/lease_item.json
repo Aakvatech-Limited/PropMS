@@ -13,6 +13,7 @@
   "currency_code",
   "charge_basis",
   "charge_rate",
+  "item_tax_template",
   "witholding_tax",
   "paid_by",
   "invoice_item_group",
@@ -72,6 +73,13 @@
    "fieldname": "charge_rate",
    "fieldtype": "Data",
    "label": "Charge Rate"
+  },
+  {
+   "fieldname": "item_tax_template",
+   "fieldtype": "Link",
+   "label": "Item Tax Template",
+   "options": "Item Tax Template",
+   "description": "Optional. Overrides the ERPNext item tax selection for this Lease Item."
   },
   {
    "columns": 1,

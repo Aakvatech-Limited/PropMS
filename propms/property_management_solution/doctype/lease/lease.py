@@ -66,6 +66,7 @@ class Lease(Document):
 	def validate(self):
 		self.set_lease_status()
 		self.validate_days_to_invoice_in_advance()
+		self.validate_lease_tax_templates()
 		try:
 			properties = self.get_all_properties()
 			# Lease Status Validation: Prevent multiple active leases per property
@@ -105,6 +106,22 @@ class Lease(Document):
 			raise
 		except Exception as e:
 			app_error_log(frappe.session.user, str(e))
+
+	def validate_lease_tax_templates(self):
+		"""Only explicit selections impose new validation; blanks preserve legacy behavior."""
+		from propms.lease_tax import validate_company_tax_template
+
+		if self.sales_taxes_and_charges_template:
+			validate_company_tax_template(
+				"Sales Taxes and Charges Template",
+				self.sales_taxes_and_charges_template,
+				self.company,
+			)
+		for row in self.lease_item or []:
+			if row.item_tax_template:
+				validate_company_tax_template(
+					"Item Tax Template", row.item_tax_template, self.company
+				)
 
 	def validate_days_to_invoice_in_advance(self):
 		"""Prevent changing 'Days to Invoice in Advance' once invoices have been generated."""

@@ -30,6 +30,7 @@
   "skip_end_date",
   "end_date",
   "frequency",
+  "sales_taxes_and_charges_template",
   "lease_item_table_section",
   "lease_item",
   "section_break_11",
@@ -181,6 +182,13 @@
    "hidden": 1,
    "label": "Frequency",
    "options": "Monthly\nBi-Monthly\nQuarterly\nAnnually\n6 months"
+  },
+  {
+   "fieldname": "sales_taxes_and_charges_template",
+   "fieldtype": "Link",
+   "label": "Sales Taxes and Charges Template",
+   "options": "Sales Taxes and Charges Template",
+   "description": "Optional. Blank retains the existing Company default for invoice generation."
   },
   {
    "fieldname": "lease_item_table_section",
