@@ -29,7 +29,7 @@ def validate_company_tax_template(doctype, template_name, company):
 		frappe.throw(_("{0} {1} is disabled").format(doctype, template_name))
 
 
-def resolve_item_tax_template(item_code, company, transaction_date, explicit=None, tax_category=None):
+def resolve_item_tax_template(item_code, company, transaction_date, explicit=None, tax_category=None, base_net_rate=None):
 	"""Resolve native ERPNext item/group taxes; preserve legacy blanks.
 
 	Explicit overrides are validated but native item/group rules retain their
@@ -46,6 +46,7 @@ def resolve_item_tax_template(item_code, company, transaction_date, explicit=Non
 		posting_date=getdate(transaction_date),
 		transaction_date=getdate(transaction_date),
 		tax_category=tax_category,
+		base_net_rate=base_net_rate,
 	)
 	resolved = get_item_tax_template(ctx)
 	if resolved:
