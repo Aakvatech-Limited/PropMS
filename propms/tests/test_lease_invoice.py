@@ -45,7 +45,10 @@ class TestLeaseInvoiceTaxes(TestCase):
 
 	def test_blank_and_explicit_item_tax_resolution(self):
 		from propms.lease_tax import resolve_item_tax_template
-		with patch("propms.lease_tax.get_item_tax_template", return_value=None):
+		with patch("propms.lease_tax.get_item_tax_template", return_value=None), patch(
+			"propms.lease_tax.frappe.get_meta"
+		) as meta:
+			meta.return_value.has_field.return_value = False
 			self.assertIsNone(resolve_item_tax_template("_Test Item", "_Test Company", nowdate()))
 		with patch("propms.lease_tax.get_item_tax_template", return_value="Company Item Tax"), patch(
 			"propms.lease_tax.validate_company_tax_template"
