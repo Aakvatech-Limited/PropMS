@@ -43,6 +43,38 @@ class TestLeaseInvoiceTaxes(TestCase):
 		self.assertEqual([row.idx for row in invoice.taxes], [1, 2])
 
 
+	def test_blank_and_explicit_item_tax_resolution(self):
+		from propms.lease_tax import resolve_item_tax_template
+		with patch("propms.lease_tax.get_item_tax_template", return_value=None):
+			self.assertIsNone(resolve_item_tax_template("_Test Item", "_Test Company", nowdate()))
+		with patch("propms.lease_tax.get_item_tax_template", return_value="Company Item Tax"), patch(
+			"propms.lease_tax.validate_company_tax_template"
+		) as validate:
+			self.assertEqual(
+				resolve_item_tax_template("_Test Item", "_Test Company", nowdate()),
+				"Company Item Tax",
+			)
+			validate.assert_called_once_with("Item Tax Template", "Company Item Tax", "_Test Company")
+
+	def test_explicit_item_tax_template_takes_precedence(self):
+		from propms.lease_tax import resolve_item_tax_template
+		with patch("propms.lease_tax.get_item_tax_template") as native, patch(
+			"propms.lease_tax.validate_company_tax_template"
+		):
+			self.assertEqual(
+				resolve_item_tax_template("_Test Item", "_Test Company", nowdate(), explicit="Chosen Tax"),
+				"Chosen Tax",
+			)
+			native.assert_not_called()
+
+	def test_company_tax_template_rejects_mismatch(self):
+		from propms.lease_tax import validate_company_tax_template
+		with patch("propms.lease_tax.frappe.db.get_value", return_value=frappe._dict(company="Other", disabled=0)):
+			with self.assertRaises(frappe.ValidationError):
+				validate_company_tax_template("Item Tax Template", "Wrong Company", "_Test Company")
+
+
+
 class TestLeaseInvoice(IntegrationTestCase):
 	def setUp(self):
 		set_settings(
