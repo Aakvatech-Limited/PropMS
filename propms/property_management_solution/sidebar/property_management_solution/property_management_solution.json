@@ -24,6 +24,14 @@
    "hidden": 0
   },
   {
+   "type": "Link",
+   "label": "Portfolio Analytics",
+   "link_type": "Workspace",
+   "link_to": "Property Portfolio Dashboard",
+   "child": 0,
+   "hidden": 0
+  },
+  {
    "type": "Section Break",
    "label": "Leasing & Billing",
    "collapsible": 1,
@@ -32,7 +40,7 @@
   },
   {
    "type": "Link",
-   "label": "Lease",
+   "label": "Leases",
    "link_type": "DocType",
    "link_to": "Lease",
    "child": 1,
@@ -48,7 +56,15 @@
   },
   {
    "type": "Link",
-   "label": "Sales Order",
+   "label": "Insurance",
+   "link_type": "DocType",
+   "link_to": "Insurance",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Sales Orders",
    "link_type": "DocType",
    "link_to": "Sales Order",
    "child": 1,
@@ -56,7 +72,7 @@
   },
   {
    "type": "Link",
-   "label": "Sales Invoice",
+   "label": "Sales Invoices",
    "link_type": "DocType",
    "link_to": "Sales Invoice",
    "child": 1,
@@ -64,9 +80,80 @@
   },
   {
    "type": "Link",
-   "label": "Payment Entry",
+   "label": "Payment Entries",
    "link_type": "DocType",
    "link_to": "Payment Entry",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Property & Leasing Masters",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
+   "label": "Property",
+   "link_type": "DocType",
+   "link_to": "Property",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Unit Type",
+   "link_type": "DocType",
+   "link_to": "Unit Type",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status",
+   "link_type": "DocType",
+   "link_to": "Property Status",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Status Category",
+   "link_type": "DocType",
+   "link_to": "Property Status Category",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Lease Status",
+   "link_type": "DocType",
+   "link_to": "Lease Status",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Customer",
+   "link_type": "DocType",
+   "link_to": "Customer",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Contact",
+   "link_type": "DocType",
+   "link_to": "Contact",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Item",
+   "link_type": "DocType",
+   "link_to": "Item",
    "child": 1,
    "hidden": 0
   },
@@ -143,48 +230,16 @@
   },
   {
    "type": "Section Break",
-   "label": "Masters",
+   "label": "Facilities Masters",
    "collapsible": 1,
    "keep_closed": 0,
    "indent": 1
   },
   {
    "type": "Link",
-   "label": "Properties & Units",
+   "label": "Checklist Checkup Area",
    "link_type": "DocType",
-   "link_to": "Property",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Unit Type",
-   "link_type": "DocType",
-   "link_to": "Unit Type",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Tenants & Owners",
-   "link_type": "DocType",
-   "link_to": "Customer",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Contact",
-   "link_type": "DocType",
-   "link_to": "Contact",
-   "child": 1,
-   "hidden": 0
-  },
-  {
-   "type": "Link",
-   "label": "Billing Items",
-   "link_type": "DocType",
-   "link_to": "Item",
+   "link_to": "Checklist Checkup Area",
    "child": 1,
    "hidden": 0
   },
@@ -193,6 +248,30 @@
    "label": "Meter",
    "link_type": "DocType",
    "link_to": "Meter",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Guard Shift",
+   "link_type": "DocType",
+   "link_to": "Guard Shift",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Category",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Category",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Outsourcing Shift",
+   "link_type": "DocType",
+   "link_to": "Outsourcing Shift",
    "child": 1,
    "hidden": 0
   },
@@ -214,16 +293,40 @@
   },
   {
    "type": "Section Break",
-   "label": "Reports",
+   "label": "Lease & Portfolio Reports",
    "collapsible": 1,
    "keep_closed": 0,
    "indent": 1
   },
   {
    "type": "Link",
+   "label": "Active Leases",
+   "link_type": "Report",
+   "link_to": "Active Leases",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Available Properties",
+   "link_type": "Report",
+   "link_to": "Available Properties",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
    "label": "Lease Information",
    "link_type": "Report",
    "link_to": "Lease Information",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Customer Report",
+   "link_type": "Report",
+   "link_to": "Customer Report",
    "child": 1,
    "hidden": 0
   },
@@ -237,6 +340,14 @@
   },
   {
    "type": "Link",
+   "label": "Property Status Report",
+   "link_type": "Report",
+   "link_to": "Property Status Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
    "label": "Pending Signed Agreement",
    "link_type": "Report",
    "link_to": "Pending Signed Agreement",
@@ -245,9 +356,64 @@
   },
   {
    "type": "Link",
+   "label": "Notification Report",
+   "link_type": "Report",
+   "link_to": "Notification Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Billing & Tax Reports",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
+  },
+  {
+   "type": "Link",
    "label": "Rent Invoices Details",
    "link_type": "Report",
    "link_to": "Rent Invoices Details",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Rent Invoices Details USD",
+   "link_type": "Report",
+   "link_to": "Rent Invoices Details USD",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Invoice Details",
+   "link_type": "Report",
+   "link_to": "Invoice Details",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Mis-Income Break Up",
+   "link_type": "Report",
+   "link_to": "Mis-Income Break Up",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Subscription Service Report",
+   "link_type": "Report",
+   "link_to": "Subscription Service Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Utility Invoices",
+   "link_type": "Report",
+   "link_to": "Utility Invoices",
    "child": 1,
    "hidden": 0
   },
@@ -261,11 +427,50 @@
   },
   {
    "type": "Link",
+   "label": "Creditors Report",
+   "link_type": "Report",
+   "link_to": "Creditors Report",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
    "label": "Security Deposit",
    "link_type": "Report",
    "link_to": "Security Deposit",
    "child": 1,
    "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Stamp Duty Paid by Tenant",
+   "link_type": "Report",
+   "link_to": "Stamp Duty Paid by Tenant",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Withholding Tax Summary on Sales (Properties)",
+   "link_type": "Report",
+   "link_to": "Withholding Tax Summary on Sales (Properties)",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Withholding Tax Summary on Sales for Properties",
+   "link_type": "Report",
+   "link_to": "Withholding Tax Summary on Sales for Properties",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Section Break",
+   "label": "Facilities Reports",
+   "collapsible": 1,
+   "keep_closed": 0,
+   "indent": 1
   },
   {
    "type": "Link",
@@ -277,30 +482,23 @@
   },
   {
    "type": "Link",
-   "label": "Outsourcing Attendance Report",
+   "label": "Outsourcing Attendance",
    "link_type": "Report",
    "link_to": "Outsourcing Attendance",
    "child": 1,
    "hidden": 0
   },
   {
-   "type": "Section Break",
-   "label": "Dashboards",
-   "collapsible": 1,
-   "keep_closed": 0,
-   "indent": 1
-  },
-  {
    "type": "Link",
-   "label": "Property Portfolio Dashboard",
-   "link_type": "Workspace",
-   "link_to": "Property Portfolio Dashboard",
+   "label": "Self Consumption in Maintenance Job Card",
+   "link_type": "Report",
+   "link_to": "Self Consumption in Maintenance Job Card",
    "child": 1,
    "hidden": 0
   },
   {
    "type": "Section Break",
-   "label": "Administration",
+   "label": "Settings & Administration",
    "collapsible": 1,
    "keep_closed": 0,
    "indent": 1
@@ -310,6 +508,38 @@
    "label": "Property Administration",
    "link_type": "Workspace",
    "link_to": "Property Administration",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Property Management Settings",
+   "link_type": "DocType",
+   "link_to": "Property Management Settings",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Apartment Status",
+   "link_type": "DocType",
+   "link_to": "Apartment Status",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Security Deposit Details",
+   "link_type": "DocType",
+   "link_to": "Security Deposit Details",
+   "child": 1,
+   "hidden": 0
+  },
+  {
+   "type": "Link",
+   "label": "Custom Error Log",
+   "link_type": "DocType",
+   "link_to": "Custom Error Log",
    "child": 1,
    "hidden": 0
   }
