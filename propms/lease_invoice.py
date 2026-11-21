@@ -9,6 +9,8 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
 from frappe.utils import add_days, add_months, flt, getdate, today
 
+from propms.lease_tax import resolve_item_tax_template, validate_company_tax_template
+
 
 def _item_signature(items):
 	"""Compare billable lines, including repeated items and their service periods."""
@@ -156,8 +158,13 @@ def makeInvoice(
 	try:
 		if not customer:
 			frappe.throw(_("Please select a Customer in Lease {0}").format(lease))
-		company = frappe.get_value("Lease", lease, "company")
+		lease_doc = frappe.get_doc("Lease", lease)
+		company = lease_doc.company
 		default_tax_template = frappe.get_value("Company", company, "default_tax_template")
+		lease_tax_template = lease_doc.get("sales_taxes_and_charges_template")
+		if lease_tax_template:
+			validate_company_tax_template("Sales Taxes and Charges Template", lease_tax_template, company)
+		invoice_tax_template = lease_tax_template or default_tax_template
 		if qty != int(qty):
 			# it means the last invoice for the lease that may have fraction of months
 			subs_end_date = frappe.get_value("Lease", lease, "end_date")
@@ -174,6 +181,12 @@ def makeInvoice(
 		_assert_no_period_overlap(doctype, lease, str(customer), schedule_start_date, subs_end_date, items_data)
 		is_accrued = any(item.get("enable_deferred_revenue") for item in items_data)
 		invoice_posting_date = date if (is_accrued and date) else today()
+		for item in items_data:
+			item["item_tax_template"] = resolve_item_tax_template(
+				item["item_code"], company, invoice_posting_date,
+				explicit=item.get("item_tax_template"),
+				base_net_rate=flt(item.get("rate")) * flt(item.get("qty")),
+			) or item.get("item_tax_template")
 		doc = frappe.get_doc(
 			dict(
 				doctype=doctype,
@@ -186,7 +199,7 @@ def makeInvoice(
 				currency=currency,
 				lease=lease,
 				lease_item=lease_item,
-				taxes_and_charges=default_tax_template,
+				taxes_and_charges=invoice_tax_template,
 				from_date=schedule_start_date,
 				to_date=subs_end_date,
 				cost_center=getCostCenter(lease),
@@ -200,6 +213,11 @@ def makeInvoice(
 			if not doc.due_date or getdate(doc.due_date) < getdate(sales_order_date):
 				doc.due_date = sales_order_date
 		doc.set_missing_values()
+		# Ensure an explicitly selected Lease Item template is not lost when
+		# ERPNext fills missing values before tax calculation and submission.
+		for source, invoice_item in zip(items_data, doc.items):
+			if source.get("item_tax_template"):
+				invoice_item.item_tax_template = source["item_tax_template"]
 		if doc.taxes_and_charges:
 			getTax(doc)
 		doc.calculate_taxes_and_totals()
@@ -327,6 +345,16 @@ def _create_schedule_group(lease_name, schedule_names):
 			"service_start_date": str(start_date),
 			"service_end_date": str(end_date),
 		}
+		# An effective Lease Item may differ between successive billing periods.
+		matching = [lease_item for lease_item in lease_doc.lease_item if lease_item.lease_item == row.lease_item]
+		if frappe.db.get_single_value("Property Management Settings", "use_valid_from_date"):
+			matching = [
+				lease_item for lease_item in matching
+				if not lease_item.valid_from or getdate(lease_item.valid_from) <= getdate(start_date)
+			]
+			matching.sort(key=lambda lease_item: str(lease_item.valid_from or ""), reverse=True)
+		if matching and matching[0].item_tax_template:
+			item["item_tax_template"] = matching[0].item_tax_template
 		item_doc = frappe.get_cached_doc("Item", row.lease_item)
 		item["enable_deferred_revenue"] = int(bool(item_doc.enable_deferred_revenue))
 		if item_doc.enable_deferred_revenue:
