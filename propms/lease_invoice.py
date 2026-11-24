@@ -280,6 +280,7 @@ def leaseInvoiceAutoCreate():
 			"date_to_invoice": ["between", (invoice_start_date, today())],
 			"invoice_number": ["is", "not set"],
 			"sales_order_number": ["is", "not set"],
+			"rate": ["!=", 0],
 		},
 		fields=[
 			"name", "parent", "paid_by", "invoice_item_group",
