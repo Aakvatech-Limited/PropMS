@@ -9,7 +9,7 @@ from erpnext.controllers.accounts_controller import get_taxes_and_charges
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from frappe.query_builder import DocType
-from frappe.utils import add_days, add_months, date_diff, getdate, today
+from frappe.utils import add_days, add_months, date_diff, flt, getdate, today
 from pypika import Order
 
 from propms.lease_invoice import getDueDate
@@ -340,6 +340,10 @@ def makeInvoiceSchedule(
 	invoice_item_group=None,
 	document_type="Sales Invoice",
 ):
+	# Complimentary lease units remain part of occupancy, but are not billable.
+	# Guard the shared schedule creator so manual and nightly paths agree.
+	if not flt(rate):
+		return
 	if not document_type:
 		document_type = "Sales Invoice"
 	try:
