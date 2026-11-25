@@ -12,14 +12,17 @@ from frappe.utils import add_days, add_months, getdate, today
 
 @frappe.whitelist()
 def app_error_log(title, error):
+	error_traceback = traceback.format_exc()
 	d = frappe.get_doc(
 		{
 			"doctype": "Custom Error Log",
 			"title": "User:" + str(title),
-			"error": traceback.format_exc(),
+			"error": error_traceback,
 		}
 	)
 	d = d.insert(ignore_permissions=True)
+	# Also write to the standard Error Log, so that site monitoring sees the failure
+	frappe.log_error(title="PropMS: " + str(error)[:120], message=error_traceback)
 	return d
 
 
