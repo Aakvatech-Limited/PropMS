@@ -128,11 +128,120 @@ def getCostCenter(name):
 	return frappe.db.get_value("Property", property_name, "cost_center")
 
 
+def get_invoice_group_key(row):
+	"""Schedule rows sharing this key are billed on one invoice."""
+	return (row.parent, row.paid_by, row.invoice_item_group, row.date_to_invoice, row.currency)
+
+
+def group_schedule_rows(rows):
+	"""Split the ordered schedule rows into invoice groups, keeping their order."""
+	groups = []
+	for row in rows:
+		if groups and get_invoice_group_key(groups[-1][-1]) == get_invoice_group_key(row):
+			groups[-1].append(row)
+		else:
+			groups.append([row])
+	return groups
+
+
+def get_group_skip_reason(rows, existing_leases):
+	"""Return why an invoice group cannot be billed, or None if it can.
+
+	A group is skipped as a whole: billing only some of its rows would leave the
+	rest to be picked up by a later run as a second invoice for the same period.
+	"""
+	lease = rows[0].parent
+	if lease not in existing_leases:
+		return _("Lease {0} does not exist").format(lease)
+	missing_item = [row.name for row in rows if not row.lease_item]
+	if missing_item:
+		return _("Lease Invoice Schedule rows without Lease Item: {0}").format(", ".join(missing_item))
+	return None
+
+
+def log_skipped_invoice_group(rows, reason):
+	frappe.get_doc(
+		{
+			"doctype": "Custom Error Log",
+			"method": "propms.lease_invoice.leaseInvoiceAutoCreate",
+			"error": _("Skipped invoice for Lease {0}, date {1}: {2}").format(
+				rows[0].parent, rows[0].date_to_invoice, reason
+			),
+		}
+	).insert(ignore_permissions=True)
+
+
+def create_invoice_for_group(rows):
+	"""Create one invoice for a group of schedule rows and link the rows to it."""
+	item_dict = []
+	item_json = {}
+	lease_invoice_schedule_list = []
+	invoice_item = None
+	for row in rows:
+		invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
+		if not (invoice_item.schedule_start_date):
+			invoice_item.schedule_start_date = invoice_item.date_to_invoice
+		lease_end_date = frappe.get_value("Lease", invoice_item.parent, "end_date")
+		item_json["item_code"] = invoice_item.lease_item
+		item_json["qty"] = invoice_item.qty
+		item_json["rate"] = invoice_item.rate
+		item_json["cost_center"] = getCostCenter(invoice_item.parent)
+		item_json["withholding_tax_rate"] = invoice_item.tax
+
+		# Fetch deferred revenue configuration from Item Master and Item Defaults / Company
+		item_doc = frappe.get_cached_doc("Item", invoice_item.lease_item)
+		if item_doc.enable_deferred_revenue:
+			item_json["enable_deferred_revenue"] = 1
+			company = frappe.get_value("Lease", invoice_item.parent, "company")
+			deferred_account = frappe.get_cached_value(
+				"Item Default",
+				{"parent": invoice_item.lease_item, "company": company},
+				"deferred_revenue_account",
+			) or frappe.get_cached_value("Company", company, "default_deferred_revenue_account")
+			if deferred_account:
+				item_json["deferred_revenue_account"] = deferred_account
+		else:
+			item_json["enable_deferred_revenue"] = 0
+
+		item_json["service_start_date"] = str(invoice_item.schedule_start_date)
+		if invoice_item.qty != int(invoice_item.qty):
+			# it means the last invoice for the lease that may have fraction of months
+			subs_end_date = lease_end_date
+		else:
+			# month qty is not fractional
+			subs_end_date = add_days(add_months(invoice_item.schedule_start_date, invoice_item.qty), -1)
+		item_json["service_end_date"] = str(subs_end_date)
+		# Append to the dictionary as a dict() so that the values for the new row can be set
+		item_dict.append(dict(item_json))
+		lease_invoice_schedule_list.append(invoice_item.name)
+
+	res = makeInvoice(
+		invoice_item.date_to_invoice,
+		invoice_item.paid_by,
+		json.dumps(item_dict),
+		invoice_item.currency,
+		invoice_item.parent,
+		invoice_item.lease_item,
+		invoice_item.qty,
+		invoice_item.schedule_start_date,
+		doctype=invoice_item.document_type,
+	)
+	if res:
+		# Update all schedule rows of the group with the same invoice number
+		for lease_invoice_schedule_name in lease_invoice_schedule_list:
+			frappe.db.set_value(
+				"Lease Invoice Schedule",
+				lease_invoice_schedule_name,
+				"invoice_number" if res.doctype == "Sales Invoice" else "sales_order_number",
+				res.name,
+			)
+	return res
+
+
 @frappe.whitelist()
 def leaseInvoiceAutoCreate():
 	"""Prepare data to create sales invoice from lease invoice schedule. This is called from form button as well as daily schedule"""
 	try:
-		# frappe.msgprint("Started")
 		invoice_start_date = frappe.db.get_single_value("Property Management Settings", "invoice_start_date")
 		lease_invoice = frappe.get_all(
 			"Lease Invoice Schedule",
@@ -158,135 +267,35 @@ def leaseInvoiceAutoCreate():
 		)
 		if not lease_invoice:
 			return
-		# frappe.msgprint("Lease being generated for " + str(lease_invoice))
-		row_num = 1  # to identify the 1st line of the list
-		prev_parent = ""
-		prev_customer = ""
-		prev_invoice_item_group = ""
-		prev_date_to_invoice = ""
-		lease_invoice_schedule_name = ""
-		prev_currency = ""
-		invoice_item = None  # previous row, used to flush a completed group
-		lease_invoice_schedule_list = []
-		item_dict = []
-		item_json = {}
-		# frappe.msgprint(str(lease_invoice))
-		for row in lease_invoice:
-			# frappe.msgprint(str(invoice_item.name) + " " + str(invoice_item.lease_item))
-			# Check if same lease, customer, invoice_item_group and date_to_invoice.
-			# Also should not be 1st row of the list
-			# frappe.msgprint(row.parent + " -- " + prev_parent + " -- " + row.paid_by + " -- " + prev_customer + " -- " + row.invoice_item_group + " -- " + prev_invoice_item_group + " -- " + str(row.date_to_invoice) + " -- " + str(prev_date_to_invoice) + " -- " + row.currency + " -- " + prev_currency)
-			if (
-				not (
-					row.parent == prev_parent
-					and row.paid_by == prev_customer
-					and row.invoice_item_group == prev_invoice_item_group
-					and row.date_to_invoice == prev_date_to_invoice
-					and row.currency == prev_currency
-				)
-				and row_num != 1
-			):
-				# frappe.msgprint("Creating invoice for: " + str(item_dict))
-				res = makeInvoice(
-					invoice_item.date_to_invoice,
-					invoice_item.paid_by,
-					json.dumps(item_dict),
-					invoice_item.currency,
-					invoice_item.parent,
-					invoice_item.lease_item,
-					invoice_item.qty,
-					invoice_item.schedule_start_date,
-					doctype=invoice_item.document_type,
-				)
-				# frappe.msgprint("Result: " + str(res))
-				if res:
-					# Loop through all list invoice names that were created and update them with same invoice number
-					for lease_invoice_schedule_name in lease_invoice_schedule_list:
-						# frappe.msgprint("---")
-						# frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name) )
-						frappe.db.set_value(
-							"Lease Invoice Schedule",
-							lease_invoice_schedule_name,
-							"invoice_number" if res.doctype == "Sales Invoice" else "sales_order_number",
-							res.name,
-						)
-					frappe.db.commit()  # commit the changes to the database
-					frappe.msgprint(_("Lease Invoice generated with number: {0}").format(res.name))
-				item_dict = []
-				lease_invoice_schedule_list = []  # reset the list of names of lease_invoice_schedule
-				item_json = {}
-			# Now that the invoice would be created if required, load the record for preparing item_dict
-			invoice_item = frappe.get_doc("Lease Invoice Schedule", row.name)
-			if not (invoice_item.schedule_start_date):
-				invoice_item.schedule_start_date = invoice_item.date_to_invoice
-			lease_end_date = frappe.get_value("Lease", invoice_item.parent, "end_date")
-			item_json["item_code"] = invoice_item.lease_item
-			item_json["qty"] = invoice_item.qty
-			item_json["rate"] = invoice_item.rate
-			item_json["cost_center"] = getCostCenter(invoice_item.parent)
-			item_json["withholding_tax_rate"] = invoice_item.tax
-
-			# Fetch deferred revenue configuration from Item Master and Item Defaults / Company
-			item_doc = frappe.get_cached_doc("Item", invoice_item.lease_item)
-			if item_doc.enable_deferred_revenue:
-				item_json["enable_deferred_revenue"] = 1
-				company = frappe.get_value("Lease", invoice_item.parent, "company")
-				deferred_account = frappe.get_cached_value(
-					"Item Default",
-					{"parent": invoice_item.lease_item, "company": company},
-					"deferred_revenue_account",
-				) or frappe.get_cached_value("Company", company, "default_deferred_revenue_account")
-				if deferred_account:
-					item_json["deferred_revenue_account"] = deferred_account
-			else:
-				item_json["enable_deferred_revenue"] = 0
-
-			item_json["service_start_date"] = str(invoice_item.schedule_start_date)
-			if invoice_item.qty != int(invoice_item.qty):
-				# it means the last invoice for the lease that may have fraction of months
-				subs_end_date = lease_end_date
-			else:
-				# month qty is not fractional
-				subs_end_date = add_days(add_months(invoice_item.schedule_start_date, invoice_item.qty), -1)
-			item_json["service_end_date"] = str(subs_end_date)
-			# Append to the dictionary as a dict() so that the values for the new row can be set
-			item_dict.append(dict(item_json))
-			lease_invoice_schedule_list.append(invoice_item.name)
-
-			# Remember the values for the next round
-			prev_parent = invoice_item.parent
-			prev_customer = invoice_item.paid_by
-			prev_invoice_item_group = invoice_item.invoice_item_group
-			prev_date_to_invoice = invoice_item.date_to_invoice
-			prev_currency = invoice_item.currency
-			row_num += 1  # increment by 1
-		# Create the last invoice
-		res = makeInvoice(
-			invoice_item.date_to_invoice,
-			invoice_item.paid_by,
-			json.dumps(item_dict),
-			invoice_item.currency,
-			invoice_item.parent,
-			invoice_item.lease_item,
-			invoice_item.qty,
-			invoice_item.schedule_start_date,
-			doctype=invoice_item.document_type,
+		existing_leases = set(
+			frappe.get_all(
+				"Lease",
+				filters={"name": ["in", list({row.parent for row in lease_invoice})]},
+				pluck="name",
+			)
 		)
-		if res:
-			# Loop through all list invoice names that were created and update them with same invoice number
-			for lease_invoice_schedule_name in lease_invoice_schedule_list:
-				# frappe.msgprint("The lease invoice schedule " + str(lease_invoice_schedule_name) + " would be updated with invoice number " + str(res.name))
-				frappe.db.set_value(
-					"Lease Invoice Schedule",
-					lease_invoice_schedule_name,
-					"invoice_number" if res.doctype == "Sales Invoice" else "sales_order_number",
-					res.name,
-				)
-			frappe.db.commit()  # commit the changes to the database
-			frappe.msgprint(_("Lease Invoice generated with number: {0}").format(res.name))
-
 	except Exception as e:
 		app_error_log(frappe.session.user, str(e))
+		return
+
+	# One invoice per group. A group that cannot be billed is logged and skipped,
+	# so a single bad schedule row no longer stops invoicing for all other leases.
+	for rows in group_schedule_rows(lease_invoice):
+		frappe.db.savepoint("lease_invoice_group")
+		try:
+			reason = get_group_skip_reason(rows, existing_leases)
+			if reason:
+				log_skipped_invoice_group(rows, reason)
+				frappe.db.commit()
+				continue
+			res = create_invoice_for_group(rows)
+			frappe.db.commit()  # commit the changes to the database
+			if res:
+				frappe.msgprint(_("Lease Invoice generated with number: {0}").format(res.name))
+		except Exception as e:
+			frappe.db.rollback(save_point="lease_invoice_group")
+			app_error_log(frappe.session.user, str(e))
+			frappe.db.commit()
 
 
 @frappe.whitelist()
